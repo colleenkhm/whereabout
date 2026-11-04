@@ -1,0 +1,44 @@
+name: Release check
+
+# A dev -> main PR is a release: version bumped, CHANGELOG entry present.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  version-bumped:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compare version against main
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          git fetch --depth=1 origin "$BASE_REF"
+          ver() { grep -m1 '^version:' | awk '{print $2}'; }
+          base=$(git show "origin/$BASE_REF:pubspec.yaml" | ver)
+          head=$(ver < pubspec.yaml)
+          base_name=${base%+*}; base_build=${base#*+}
+          head_name=${head%+*}; head_build=${head#*+}
+          echo "main: $base  PR: $head"
+
+          fail=0
+          highest=$(printf '%s\n%s\n' "$base_name" "$head_name" | sort -V | tail -1)
+          if [ "$head_name" = "$base_name" ] || [ "$highest" != "$head_name" ]; then
+            echo "::error file=pubspec.yaml::Version $head_name must be higher than main's $base_name. Run /release."
+            fail=1
+          fi
+          if [ "$head_build" -le "$base_build" ]; then
+            echo "::error file=pubspec.yaml::Build number +$head_build must be higher than main's +$base_build."
+            fail=1
+          fi
+          if ! grep -q "^## \[$head_name\]" CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::No '## [$head_name]' entry in CHANGELOG.md."
+            fail=1
+          fi
+          exit $fail
