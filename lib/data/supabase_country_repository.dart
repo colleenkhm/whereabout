@@ -25,50 +25,23 @@ const stateDeptStaleAfter = Duration(days: 30);
 class SupabaseCountryRepository {
   SupabaseClient get _client => Supabase.instance.client;
 
-  Future<CountryBundle?> fetchCountryBundle(String isoCode) async {
-    final countryRow = await _client
-        .from('countries')
-        .select()
-        .eq('iso_code', isoCode)
-        .maybeSingle();
+  // One request: country row plus every related table embedded.
+  Future<CountryBundle?> fetchCountryBundle(String isoCode, {String passportIso = 'US'}) async {
+    var countryRow = await _fetchCountryRow(isoCode, passportIso);
     if (countryRow == null) return null;
 
-    final countryId = countryRow['id'] as String;
-
-    final factsRow = await _client
-        .from('country_facts')
-        .select()
-        .eq('country_id', countryId)
-        .maybeSingle();
-
-    final cityRows = await _client.from('cities').select().eq('country_id', countryId);
-
-    final guideRow = await _client
-        .from('country_guides')
-        .select()
-        .eq('country_id', countryId)
-        .maybeSingle();
-
-    // `languages(name)` pulls the joined language name through the FK —
-    // percent_speakers/is_official/usage_note live on country_languages
-    // itself (see migration 023).
-    final languageRows = await _client
-        .from('country_languages')
-        .select('is_official, percent_speakers, percent_status, percent_speakers_source, percent_source_url, usage_note, languages(name)')
-        .eq('country_id', countryId);
-
-    var advisoryRows = await _fetchAdvisoryRows(countryId);
-    var visa = await _fetchUsVisa(countryId);
-    if (_isStateDeptStale(isoCode, advisoryRows, visa) && await _refreshStateDept(isoCode)) {
-      advisoryRows = await _fetchAdvisoryRows(countryId);
-      visa = await _fetchUsVisa(countryId);
+    if (_isStateDeptStale(isoCode, passportIso, _rows(countryRow['travel_advisories']), _visa(countryRow, passportIso)) &&
+        await _refreshStateDept(isoCode)) {
+      countryRow = await _fetchCountryRow(isoCode, passportIso) ?? countryRow;
     }
 
-    final wordRows = await _client
-        .from('words')
-        .select()
-        .eq('country_id', countryId)
-        .limit(1); // only the word-of-the-day card reads this today
+    final factsRow = countryRow['country_facts'] as Map<String, dynamic>?;
+    final cityRows = _rows(countryRow['cities']);
+    final guideRow = countryRow['country_guides'] as Map<String, dynamic>?;
+    final languageRows = _rows(countryRow['country_languages']);
+    final advisoryRows = _rows(countryRow['travel_advisories']);
+    final visa = _visa(countryRow, passportIso);
+    final wordRows = _rows(countryRow['words']);
 
     final guide = CountryGuide.fromJson(_guideJson(guideRow));
     final advisories = advisoryRows.map((r) => TravelAdvisory.fromJson(_advisoryJson(r))).toList();
@@ -98,11 +71,31 @@ class SupabaseCountryRepository {
     );
   }
 
-  Future<List<Map<String, dynamic>>> _fetchAdvisoryRows(String countryId) =>
-      _client.from('travel_advisories').select().eq('country_id', countryId);
+  // country_facts/country_guides are keyed by country_id, so they embed
+  // as single objects. Visa join names its FK (two point at countries).
+  Future<Map<String, dynamic>?> _fetchCountryRow(String isoCode, String passportIso) => _client
+      .from('countries')
+      .select('''
+        id, iso_code, name_common, name_official, content_status,
+        country_facts(*),
+        cities(*),
+        country_guides(*),
+        country_languages(is_official, percent_speakers, percent_status, percent_speakers_source, percent_source_url, usage_note, languages(name)),
+        travel_advisories(*),
+        visa_requirements!destination_country_id(*),
+        words(*)
+      ''')
+      .eq('iso_code', isoCode)
+      // countries.id is the ISO code (migration 007).
+      .eq('visa_requirements.nationality_country_id', passportIso)
+      .limit(1, referencedTable: 'words') // only the word-of-the-day card reads this
+      .maybeSingle();
+
+  List<Map<String, dynamic>> _rows(Object? embedded) =>
+      (embedded as List?)?.cast<Map<String, dynamic>>() ?? const [];
 
   // Missing or older than 30 days. Server re-checks and rate-limits.
-  bool _isStateDeptStale(String isoCode, List<Map<String, dynamic>> advisoryRows, VisaInfo? visa) {
+  bool _isStateDeptStale(String isoCode, String passportIso, List<Map<String, dynamic>> advisoryRows, VisaInfo? visa) {
     final cutoff = DateTime.now().subtract(stateDeptStaleAfter);
     bool isStale(Object? verifiedAt) {
       final parsed = verifiedAt is String ? DateTime.tryParse(verifiedAt) : null;
@@ -113,7 +106,7 @@ class SupabaseCountryRepository {
         .where((r) => r['issuing_authority'] == 'US State Department')
         .firstOrNull;
     if (isStale(usAdvisory?['last_verified_at'])) return true;
-    return isoCode != 'US' && (visa == null || visa.lastVerifiedAt.isBefore(cutoff));
+    return isoCode != passportIso && (visa == null || visa.lastVerifiedAt.isBefore(cutoff));
   }
 
   // True if anything was refetched. Failure keeps the cached rows.
@@ -132,28 +125,9 @@ class SupabaseCountryRepository {
     }
   }
 
-  // Visa requirements are nationality-specific — US only, matching the
-  // rest of the app's "US State Dept only" restriction (see
-  // CountryHeaderPreviewScreen._usAdvisories).
-  Future<VisaInfo?> _fetchUsVisa(String destinationCountryId) async {
-    final usCountry = await _client
-        .from('countries')
-        .select('id')
-        .eq('iso_code', 'US')
-        .maybeSingle();
-    if (usCountry == null) return null;
-
-    // `.limit(1)` off a list, not `.maybeSingle()` — the curated importer's
-    // plain `.insert()` (no upsert key, see HANDOFF.md) can leave duplicate
-    // rows for the same destination/nationality pair, and `.maybeSingle()`
-    // throws on more than one match. One bad duplicate shouldn't take the
-    // whole country page down; take the first and move on.
-    final rows = await _client
-        .from('visa_requirements')
-        .select()
-        .eq('destination_country_id', destinationCountryId)
-        .eq('nationality_country_id', usCountry['id'])
-        .limit(1);
+  // Embed is pre-filtered to [passportIso]; at most one row.
+  VisaInfo? _visa(Map<String, dynamic> countryRow, String passportIso) {
+    final rows = _rows(countryRow['visa_requirements']);
     if (rows.isEmpty) return null;
     final row = rows.first;
     // Unverified placeholder rows count as no data.
@@ -171,7 +145,7 @@ class SupabaseCountryRepository {
       'officialUrl': row['official_url'],
       'applicationUrl': row['application_url'],
       'lastVerifiedAt': row['last_verified_at'],
-      'nationalityIsoCode': 'US',
+      'nationalityIsoCode': passportIso,
       'prohibitedOnEntry': row['prohibited_on_entry'],
       'prohibitedOnExit': row['prohibited_on_exit'],
     });
