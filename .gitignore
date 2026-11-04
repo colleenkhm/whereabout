@@ -90,3 +90,6 @@ apps/*/macos/Flutter/ephemeral/
 apps/*/linux/flutter/ephemeral/
 apps/*/windows/flutter/ephemeral/
 packages/*/pubspec.lock
+
+# Local Claude Code skills
+.claude/skills/

@@ -18,6 +18,8 @@ A hand-curated travel database, with a Flutter app as its reader.
 4. **Release:** bump `version:` in `pubspec.yaml`, add a `CHANGELOG.md`
    entry, open a PR from `dev` into `main`. Apply any new migrations and
    imports to prod (below) before merging. Merging deploys production.
+   `/release` in Claude Code drafts the bump and CHANGELOG entry for
+   approval. The `Release check` workflow fails the PR if either is missing.
 
 ### Environments
 
