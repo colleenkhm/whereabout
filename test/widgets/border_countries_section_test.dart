@@ -42,6 +42,7 @@ void main() {
     await pump(
       tester,
       BorderCountriesSection(
+        countryCode: 'CR',
         borderingCountryCodes: const ['PA', 'NI'],
         allCountries: allCountries,
         accent: _accent,
@@ -60,6 +61,7 @@ void main() {
     await pump(
       tester,
       BorderCountriesSection(
+        countryCode: 'CR',
         borderingCountryCodes: const ['PA', 'ZZ'],
         allCountries: allCountries,
         accent: _accent,
@@ -79,6 +81,7 @@ void main() {
     await pump(
       tester,
       BorderCountriesSection(
+        countryCode: 'CR',
         borderingCountryCodes: const ['PA'],
         allCountries: allCountries,
         accent: _accent,
@@ -92,10 +95,11 @@ void main() {
     expect(tapped?.countryCode, 'PA');
   });
 
-  testWidgets('empty list renders nothing', (tester) async {
+  testWidgets('empty list shows the landform', (tester) async {
     await pump(
       tester,
       BorderCountriesSection(
+        countryCode: 'JP',
         borderingCountryCodes: const [],
         allCountries: allCountries,
         accent: _accent,
@@ -104,6 +108,12 @@ void main() {
     );
 
     expect(tester.takeException(), isNull);
-    expect(find.byType(BorderCountriesSection), findsOneWidget);
+    expect(find.text('Archipelago'), findsOneWidget);
+  });
+
+  test('landform lookup', () {
+    expect(Landform.forCountry('IS'), Landform.island);
+    expect(Landform.forCountry('ph'), Landform.archipelago);
+    expect(Landform.forCountry('AU'), Landform.islandContinent);
   });
 }

@@ -181,7 +181,7 @@ class SupabaseCountryRepository {
     // All-or-nothing: a partly verified country reads "coming soon".
     final verified = languageRows.isNotEmpty && languageRows.every((r) => r['percent_status'] == 'verified');
     final languages = verified ? languageRows.map(_languageJson).toList() : <Map<String, dynamic>>[];
-    if (row == null) return {'languages': languages};
+    if (row == null) return {'languages': languages, 'borderingCountryCodes': null};
     return {
       'flagSvgUrl': null,
       'capital': row['capital'],

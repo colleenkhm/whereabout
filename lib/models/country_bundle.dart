@@ -108,9 +108,8 @@ class CountryFacts {
   final String? emergencyNumber;
 
   /// ISO alpha-2 codes of every bordering country (e.g. `["PA", "NI"]`).
-  /// Empty, not nullable — an island nation genuinely has none. Commodity
-  /// field (REST Countries' `borders`), hand-set until the importer exists.
-  final List<String> borderingCountryCodes;
+  /// Empty = no land borders (island); null = no facts imported yet.
+  final List<String>? borderingCountryCodes;
 
   /// Köppen climate zones. Commodity, no importer yet.
   final List<Climate> climates;
@@ -130,7 +129,7 @@ class CountryFacts {
     this.accentColorHex,
     this.lastImportedAt,
     this.emergencyNumber,
-    this.borderingCountryCodes = const [],
+    this.borderingCountryCodes,
     this.climates = const [],
   });
 
@@ -154,10 +153,9 @@ class CountryFacts {
           ? null
           : DateTime.parse(json['lastImportedAt'] as String),
       emergencyNumber: json['emergencyNumber'] as String?,
-      borderingCountryCodes:
-          (json['borderingCountryCodes'] as List<dynamic>? ?? [])
-              .map((e) => e as String)
-              .toList(),
+      borderingCountryCodes: (json['borderingCountryCodes'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList(),
       climates: (json['climates'] as List<dynamic>? ?? [])
           .map((e) => Climate.fromJson(e as Map<String, dynamic>))
           .toList(),
