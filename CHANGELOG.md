@@ -21,6 +21,16 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+## [0.8.0] — 2026-11-09
+
+### Added
+- Countries with no land borders now show "Island" or "Archipelago"
+  (or "Island continent" for Australia, "Continent" for Antarctica) with
+  a small drawing, instead of "Coming soon."
+
+### Changed
+- Country pages load faster.
+
 ## [0.7.0] — 2026-10-27
 
 ### Added

@@ -391,14 +391,17 @@ class _CountryHeaderPreviewScreenState
       title: 'Border Countries',
       tint: colors.tint,
       textColor: colors.textColor,
-      hasData: codes.isNotEmpty,
-      meta: codes.isEmpty
+      hasData: codes != null,
+      meta: codes == null
           ? null
-          : '${codes.length} bordering ${codes.length == 1 ? 'country' : 'countries'}',
+          : codes.isEmpty
+              ? Landform.forCountry(bundle.country.isoCode).label
+              : '${codes.length} bordering ${codes.length == 1 ? 'country' : 'countries'}',
       expanded: _expanded[_Section.borderCountries]!,
       onToggle: () => _toggle(_Section.borderCountries),
       contentBuilder: (_) => BorderCountriesSection(
-        borderingCountryCodes: codes,
+        countryCode: bundle.country.isoCode,
+        borderingCountryCodes: codes ?? const [],
         allCountries: allCountries,
         accent: colors.accentOnWhite,
         onTapBorderCountry: (country) {
