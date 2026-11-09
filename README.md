@@ -36,7 +36,7 @@ CHANGELOG entry.
    ```sh
    git commit -am "Bump to X.Y.Z+N"
    git push origin dev
-   gh pr create --base main --head dev --title "Release X.Y.Z" --body "<CHANGELOG entry>"
+   gh pr create --base main --head dev --title "Release X.Y.Z" --body-file <file with the CHANGELOG entry>
    ```
 
 3. If the release includes new migrations, edge functions, or data
