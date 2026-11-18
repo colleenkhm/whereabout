@@ -100,7 +100,8 @@ const _credits = [
         'Ouverte 2.0, Kyrgyzstan\'s National Statistical Committee, '
         'CC BY-NC-SA 4.0, and the ABS and Stats NZ, CC BY 4.0), linked under '
         'each country\'s Languages card. Percentages are calculated from the '
-        'published tables. Contains public sector information licensed under '
+        'published tables. Percentages derived from Kyrgyzstan\'s figures are '
+        'shared under CC BY-NC-SA 4.0. Contains public sector information licensed under '
         'the Open Government Licence v3.0 (ONS, NISRA).',
     [
       _cc,

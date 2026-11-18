@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/travel_info.dart';
 import '../../theme/accordion_theme.dart';
 import '../../utils/format_date.dart';
-import 'external_link.dart';
+import 'section_source.dart';
 
 /// The "Travel Advisory" [AccordionSection]'s expanded content, including
 /// the top-right "Emergency" stamp.
@@ -102,33 +102,13 @@ class _AdvisoryRow extends StatelessWidget {
           const SizedBox(height: 6),
           Text(advisory.summary!, style: AccordionTheme.sBody),
         ],
-        const SizedBox(height: 10),
-        // Dates on one line, "Full advisory" right-aligned below.
-        Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 12,
-          runSpacing: 4,
-          children: [
-            if (advisory.issuedAt != null)
-              Text(
-                'Issued ${formatShortDate(advisory.issuedAt!)}',
-                style: AccordionTheme.srcRow,
-              ),
-            Text(
-              'Checked ${formatShortDate(advisory.lastVerifiedAt)}',
-              style: AccordionTheme.srcRow,
-            ),
+        SectionSource(
+          notes: [
+            if (advisory.issuedAt != null) 'Issued ${formatShortDate(advisory.issuedAt!)}',
+            'Checked ${formatShortDate(advisory.lastVerifiedAt)}',
           ],
-        ),
-        const SizedBox(height: 4),
-        Align(
-          alignment: Alignment.centerRight,
-          child: ExternalLink(
-            label: 'Full advisory',
-            url: advisory.officialUrl,
-            color: accent,
-            fontFamily: AccordionTheme.dmMono,
-          ),
+          links: [('Full advisory', advisory.officialUrl)],
+          color: accent,
         ),
       ],
     );

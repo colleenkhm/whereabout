@@ -17,7 +17,14 @@ refactors/doc updates unless they're worth calling out.
 
 ## [Unreleased]
 
+### Removed
+- "When to Visit" now shows only hand-written best times (Brazil, Canada,
+  Germany, Greece, Ireland). Other countries show "Coming soon" until theirs
+  are written.
+
 ### Added
+- Cities and Border Countries show their data source. Every section's
+  source line now looks the same.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 

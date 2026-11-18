@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/country_bundle.dart';
 import '../../theme/accordion_theme.dart';
-import 'external_link.dart';
+import 'section_source.dart';
 
 /// The "Language" [AccordionSection]'s expanded content: a country's
 /// languages with speaker percentages. Content-only, no card chrome.
@@ -117,19 +117,11 @@ class _LanguagesCard extends StatelessWidget {
                 ),
               _LanguageRow(entry: display[i], textColor: textColor),
             ],
-            if (sources.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Container(height: 1, color: textColor.withValues(alpha: 0.15)),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 12,
-                runSpacing: 4,
-                children: [
-                  for (final MapEntry(key: url, value: label) in sources.entries)
-                    ExternalLink(label: label, url: url, color: textColor, fontFamily: AccordionTheme.dmMono),
-                ],
+            if (sources.isNotEmpty)
+              SectionSource(
+                links: [for (final MapEntry(key: url, value: label) in sources.entries) (label, url)],
+                color: textColor,
               ),
-            ],
           ],
         ),
       ),
