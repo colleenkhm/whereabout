@@ -22,7 +22,7 @@ import '../widgets/country_page/additional_resources_section.dart';
 import '../widgets/country_page/best_times_section.dart';
 import '../widgets/country_page/cities_section.dart';
 import '../widgets/country_page/country_header.dart';
-import '../widgets/country_page/language_pair_section.dart';
+import '../widgets/country_page/language_section.dart';
 import '../widgets/country_page/border_countries_section.dart';
 import '../widgets/country_page/paper_texture.dart';
 import '../widgets/country_page/practical_norms_section.dart';
@@ -359,24 +359,21 @@ class _CountryHeaderPreviewScreenState
 
   Widget _languageSection(CountryBundle bundle) {
     final languages = bundle.facts.languages;
-    final featuredWord = bundle.words.isEmpty ? null : bundle.words.first;
-    // Verified languages only (see repository); a word alone isn't enough.
     final hasData = languages.isNotEmpty;
     final colors = _palette.language;
     return AccordionSection(
-      title: 'Language',
+      title: 'Languages',
       tint: colors.tint,
       textColor: colors.textColor,
       hasData: hasData,
       meta: languages.isEmpty ? null : languages.map((l) => l.name).join(' · '),
       expanded: _expanded[_Section.language]!,
       onToggle: () => _toggle(_Section.language),
-      contentBuilder: (_) => LanguagePairSection(
+      contentBuilder: (_) => LanguageSection(
         languages: languages,
-        featuredWord: featuredWord,
+        countryCode: bundle.country.isoCode,
         tint: colors.tint,
         textColor: colors.textColor,
-        accentOnWhite: colors.accentOnWhite,
       ),
     );
   }

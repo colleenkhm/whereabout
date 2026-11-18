@@ -489,7 +489,7 @@ async function importAdvisories() {
 // ---------------------------------------------------------------
 // Languages (per-country speaker percentages + verification state)
 // ---------------------------------------------------------------
-// Only percent fields and is_official are written; usage_note/is_primary
+// Only percent fields, is_official and display_rank are written; usage_note/is_primary
 // stay as hand-set in Supabase. See migration 030 for the status values.
 const PERCENT_STATUSES = new Set(['verified', 'unverified', 'no_source', 'needs_research']);
 
@@ -522,6 +522,7 @@ async function importLanguages() {
       percent_source_url: r.source_url ?? null,
       percent_speakers_source: r.source_citation ?? null,
       ...(typeof r.is_official === 'boolean' ? { is_official: r.is_official } : {}),
+      ...(r.display_rank !== undefined ? { display_rank: typeof r.display_rank === 'number' ? r.display_rank : null } : {}),
     };
 
     const { data: updated, error } = await supabase.from('country_languages')
