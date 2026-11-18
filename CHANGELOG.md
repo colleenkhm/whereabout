@@ -17,9 +17,53 @@ refactors/doc updates unless they're worth calling out.
 
 ## [Unreleased]
 
+### Removed
+- "When to Visit" now shows only hand-written best times (Brazil, Canada,
+  Germany, Greece, Ireland). Other countries show "Coming soon" until theirs
+  are written.
+
 ### Added
+- Cities and Border Countries show their data source. Every section's
+  source line now looks the same.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
+
+### Changed
+- The Languages card now shows a country's three most-spoken languages, or
+  every language spoken by 30% or more if there are more than three.
+  English is always listed. South Africa, India, China, Russia and
+  Switzerland show five, since they have many large language groups.
+- Every country now lists its languages. Percentage bars appear only where
+  the figure has been checked against its original source.
+- Hong Kong shows Cantonese, English and Putonghua speaker percentages.
+- India, Sri Lanka, Turkmenistan and the US show speaker percentages.
+  Russian is no longer marked official in Turkmenistan.
+- Arabic is no longer marked official in Israel (it has special status
+  under the 2018 Nation-State law).
+- Mexico shows Spanish and Nahuatl speaker percentages. Guaraní is no
+  longer marked official in Argentina, where it is official only in
+  Corrientes.
+- Australia, New Zealand and the UK show English speaker percentages from
+  their censuses, and New Zealand also shows te reo Māori and NZ Sign
+  Language. India lists Bengali, Marathi and Telugu, and Tamil is no longer
+  marked official.
+- Switzerland shows how many people regularly use German, Swiss German,
+  French, Italian, Romansh and English. German is now listed, and Swiss
+  German is no longer marked official.
+- Kyrgyzstan (Kyrgyz, Russian, Uzbek) and Mozambique (Portuguese) show
+  speaker percentages.
+- Armenia, Georgia and Azerbaijan show more speaker percentages: Armenian
+  and Georgian from each census, and Russian and English from the CRRC
+  Caucasus Barometer. Armenia and Georgia now list Russian. Russian is no
+  longer marked official in Azerbaijan.
+- African countries list their main local languages (e.g. Wolof in Senegal,
+  Mooré in Burkina Faso, Mali's 13 national languages). Official labels now
+  match current constitutions: French is a working language in Mali,
+  Burkina Faso and Niger, not an official one. Réunion and Mayotte show
+  Creole, Shimaore and French speaker percentages.
+
+### Removed
+- "Word of the day" card in the Language section, for now. It will return later.
 
 ## [0.8.0] — 2026-11-09
 

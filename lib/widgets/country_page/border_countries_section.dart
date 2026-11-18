@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/country.dart';
 import '../../theme/accordion_theme.dart';
+import 'section_source.dart';
 
 /// The "Border Countries" [AccordionSection]'s expanded content — every
 /// country this one shares a land border with, on the section's plain
@@ -51,6 +52,13 @@ class BorderCountriesSection extends StatelessWidget {
             accent: accent,
             onTap: onTapBorderCountry,
           ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 13),
+          child: SectionSource(
+            links: const [('mledoze/countries', 'https://github.com/mledoze/countries')],
+            color: accent,
+          ),
+        ),
       ],
     );
   }

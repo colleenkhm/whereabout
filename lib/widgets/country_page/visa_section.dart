@@ -6,6 +6,7 @@ import '../../models/travel_info.dart';
 import '../../theme/accordion_theme.dart';
 import '../../utils/format_date.dart';
 import 'external_link.dart';
+import 'section_source.dart';
 
 /// The "Visa & Entry" [AccordionSection]'s expanded content. No invented
 /// "No visa required" headline — [VisaInfo.summary] is free text only.
@@ -83,31 +84,10 @@ class VisaSection extends StatelessWidget {
                     ],
                   ),
                 ),
-              Container(
-                margin: const EdgeInsets.only(top: 11),
-                padding: const EdgeInsets.only(top: 10),
-                decoration: const BoxDecoration(
-                  border: Border(top: BorderSide(color: AccordionTheme.rule)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      'Visa & entry info verified ${formatShortDate(visa.lastVerifiedAt)}',
-                      style: AccordionTheme.srcRow,
-                    ),
-                    const SizedBox(height: 4),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ExternalLink(
-                        label: 'Source',
-                        url: visa.officialUrl,
-                        color: accent,
-                        fontFamily: AccordionTheme.dmMono,
-                      ),
-                    ),
-                  ],
-                ),
+              SectionSource(
+                notes: ['Visa & entry info verified ${formatShortDate(visa.lastVerifiedAt)}'],
+                links: [('Source', visa.officialUrl)],
+                color: accent,
               ),
             ],
           ),
