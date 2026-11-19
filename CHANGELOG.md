@@ -29,6 +29,12 @@ refactors/doc updates unless they're worth calling out.
   Nager.Date. Data is imported; the section isn't in the app yet.
 
 ### Changed
+- Belize shows English, Spanish and Kriol speaker percentages.
+- Guadeloupe and Martinique show Antillean Creole and English speaker
+  percentages, and French Guiana shows English.
+- English speaker percentages for Gibraltar, Puerto Rico, Guam, the
+  Northern Mariana Islands, American Samoa, the US Virgin Islands,
+  Christmas Island, the Cocos (Keeling) Islands and Norfolk Island.
 - The Languages card now shows a country's three most-spoken languages, or
   every language spoken by 30% or more if there are more than three.
   English is always listed. South Africa, India, China, Russia and
