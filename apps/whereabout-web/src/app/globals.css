@@ -1,0 +1,168 @@
+/* Ported from the Flutter AccordionTheme. */
+:root {
+  --page: #f0eef5;
+  --white: #ffffff;
+  --off-white: #fafaf8;
+  --sky-dark: #3a78aa;
+  --butter-dark: #b08020;
+  --rose-dark: #c45070;
+  --logo-green: #017b40;
+  --logo-sky: #97d8f5;
+  --logo-sky-pale: #edf7fc;
+  --logo-sky-rule: #c4e6f6;
+  --ink: #1a1520;
+  --ink-2: #3d3848;
+  --ink-3: #6b6578;
+  --rule: #e0dce8;
+  --rule-dark: #c8c3d4;
+  --ok: #2e7a50;
+  --warn: #8a6200;
+  --danger: #8b2020;
+
+  --card-radius: 8px;
+  --card-shadow:
+    0 1px 2px rgba(26, 21, 32, 0.1), 0 4px 12px rgba(26, 21, 32, 0.1),
+    0 12px 28px rgba(26, 21, 32, 0.07);
+
+  --fraunces: var(--font-fraunces), Georgia, serif;
+  --dm-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --dm-mono: var(--font-dm-mono), ui-monospace, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--dm-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: inherit;
+}
+
+/* --- Text styles (AccordionTheme) --- */
+
+.tk-eyebrow {
+  font-family: var(--dm-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.8px;
+}
+
+.tf-label {
+  font-family: var(--dm-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.2px;
+}
+
+.tf-val {
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 27px;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+}
+
+.tf-sub {
+  font-family: var(--dm-mono);
+  font-size: 12px;
+}
+
+.tf-link {
+  font-family: var(--dm-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.sec-name {
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 19px;
+  line-height: 1.1;
+  letter-spacing: -0.1px;
+}
+
+.s-label {
+  font-family: var(--dm-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  color: var(--ink-3);
+}
+
+.s-head {
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.s-body {
+  font-family: var(--dm-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.row-title {
+  font-family: var(--dm-sans);
+  font-weight: 600;
+  font-size: 15.5px;
+  color: var(--ink);
+}
+
+.row-meta {
+  font-family: var(--dm-mono);
+  font-size: 12.5px;
+  color: var(--ink-3);
+}
+
+.src-row {
+  font-family: var(--dm-mono);
+  font-size: 11.5px;
+  color: var(--ink-3);
+}
+
+.page-heading {
+  font-family: var(--fraunces);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+/* Perforated tear line: 5px dash, 4px gap. */
+.dashed {
+  height: 1.5px;
+  background: repeating-linear-gradient(to right, currentColor 0 5px, transparent 5px 9px);
+}
