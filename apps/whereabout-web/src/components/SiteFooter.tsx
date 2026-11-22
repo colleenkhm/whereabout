@@ -6,7 +6,7 @@ export default function SiteFooter() {
   return (
     <footer style={{ ...style, padding: "24px 0", textAlign: "center" }}>
       built by Colleen Murray&nbsp;&nbsp;·&nbsp;&nbsp;
-      <Link href="/about/" style={{ textDecoration: "underline" }}>
+      <Link href="/about" style={{ textDecoration: "underline" }}>
         Sources &amp; credits
       </Link>
     </footer>

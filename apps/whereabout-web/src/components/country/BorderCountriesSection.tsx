@@ -68,7 +68,7 @@ export default function BorderCountriesSection({
         };
         // Only a resolvable country links.
         return name ? (
-          <Link key={code} href={`/country/${code.toLowerCase()}/`} style={rowStyle}>
+          <Link key={code} href={`/country/${code.toLowerCase()}`} style={rowStyle}>
             <span className="row-title" style={{ flex: 1 }}>{name}</span>
             <MdChevronRight size={16} color={accent} aria-hidden />
           </Link>

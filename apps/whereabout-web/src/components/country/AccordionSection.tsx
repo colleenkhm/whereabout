@@ -40,7 +40,7 @@ export default function AccordionSection({
           style={{
             flex: 1,
             color: textColor,
-            textDecoration: expanded ? "underline" : "none",
+            textDecorationLine: expanded ? "underline" : "none",
             textDecorationThickness: 1.5,
             textUnderlineOffset: 3,
           }}

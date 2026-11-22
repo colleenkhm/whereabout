@@ -38,7 +38,7 @@ export default function CountrySearch({ countries }: { countries: CountrySummary
         <ul className={styles.list}>
           {results.map((c) => (
             <li key={c.isoCode} className={styles.item}>
-              <Link href={`/country/${c.isoCode.toLowerCase()}/`} className={`row-title ${styles.row}`}>
+              <Link href={`/country/${c.isoCode.toLowerCase()}`} className={`row-title ${styles.row}`}>
                 {c.nameCommon}
                 <MdChevronRight size={24} color="var(--logo-green)" aria-hidden />
               </Link>

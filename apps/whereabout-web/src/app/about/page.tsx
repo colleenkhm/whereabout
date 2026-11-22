@@ -19,8 +19,8 @@ const CREDITS: Credit[] = [
     links: [
       ["mledoze/countries", "https://github.com/mledoze/countries"],
       ["ODbL", "https://opendatacommons.org/licenses/odbl/1-0/"],
-      ["Download CSV", "https://www.whereabout.world/data/country-facts.csv"],
-      ["Data license", "https://www.whereabout.world/data/country-facts-license.txt"],
+      ["Download CSV", "/data/country-facts.csv"],
+      ["Data license", "/data/country-facts-license.txt"],
     ],
   },
   {
