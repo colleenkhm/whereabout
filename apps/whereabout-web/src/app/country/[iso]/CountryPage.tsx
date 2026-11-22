@@ -62,7 +62,7 @@ export default function CountryPage({
   return (
     <PaperTexture>
       <SiteHeader background={palette.header.tint} />
-      <main style={{ "--section-ring": palette.stub.tint } as React.CSSProperties}>
+      <main style={{ "--section-ring": palette.header.tint } as React.CSSProperties}>
         <CountryHeader
           isoCode={country.isoCode}
           name={country.nameCommon}

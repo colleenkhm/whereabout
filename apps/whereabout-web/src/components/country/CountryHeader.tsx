@@ -29,7 +29,7 @@ export default function CountryHeader(p: Props) {
     <>
       <div className={styles.masthead} style={{ background: p.header.tint }}>
         <div className={styles.titleCol}>
-          <div className="tk-eyebrow" style={{ color: soft }}>
+          <div className={`tk-eyebrow ${styles.eyebrow}`} style={{ color: soft }}>
             DESTINATION
           </div>
           <h1 className={styles.name} style={{ color: p.header.textColor }}>

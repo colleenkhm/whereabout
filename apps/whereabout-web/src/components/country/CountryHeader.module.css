@@ -2,7 +2,12 @@
   position: relative;
   display: flex;
   align-items: center;
-  padding: 6px 20px 16px;
+  padding: 0 20px 23px;
+}
+
+/* Tight line box so the gap above matches the gap below the name. */
+.eyebrow {
+  line-height: 1;
 }
 
 .titleCol {
@@ -49,11 +54,17 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
+/* Toggle sits on the fields' bottom line; wraps below when narrow. */
 .stubBody {
   padding: 13px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 16px;
 }
 
 .fields {
+  flex: 1 1 300px;
   display: flex;
   gap: 16px;
   align-items: flex-start;
@@ -65,7 +76,6 @@
 }
 
 .toggleAll {
-  margin-top: 14px;
   margin-left: auto;
   display: flex;
   align-items: center;

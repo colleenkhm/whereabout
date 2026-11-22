@@ -140,7 +140,7 @@ export function paletteFromFlagColors(colors: string[]): SectionPalette {
   const header = headerSource(colors);
   // Keep the masthead hue from also leading the section cycle.
   const source = colors.length > 1 && colors[0] === header ? [...colors.slice(1), colors[0]] : colors;
-  const s = Array.from({ length: 9 }, (_, i) => colorsFor(source[i % source.length]));
+  const s = Array.from({ length: 9 }, (_, i) => colorsFor(source[i % source.length], false));
   return {
     visa: s[0],
     cities: s[1],
@@ -151,8 +151,9 @@ export function paletteFromFlagColors(colors: string[]): SectionPalette {
     language: s[6],
     norms: s[7],
     resources: s[8],
-    header: colorsFor(deepen(header), false),
-    stub: colorsFor(midtone(header), false),
+    // Exact flag colors up top; stub takes the next distinct one.
+    header: colorsFor(header, false),
+    stub: colorsFor(colors.find((c) => c !== header) ?? header, false),
   };
 }
 
