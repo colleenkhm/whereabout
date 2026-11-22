@@ -15,12 +15,13 @@ import BorderCountriesSection from "@/components/country/BorderCountriesSection"
 import CitiesSection from "@/components/country/CitiesSection";
 import CountryHeader from "@/components/country/CountryHeader";
 import LanguageSection from "@/components/country/LanguageSection";
+import MapSection from "@/components/country/MapSection";
 import PracticalNormsSection from "@/components/country/PracticalNormsSection";
 import TravelAdvisorySection from "@/components/country/TravelAdvisorySection";
 import VisaSection from "@/components/country/VisaSection";
 
 // Accordion row order.
-const SECTIONS = ["visa", "cities", "borders", "times", "advisory", "language", "norms", "resources"] as const;
+const SECTIONS = ["visa", "cities", "map", "borders", "times", "advisory", "language", "norms", "resources"] as const;
 type Section = (typeof SECTIONS)[number];
 
 export default function CountryPage({
@@ -61,7 +62,7 @@ export default function CountryPage({
   return (
     <PaperTexture>
       <SiteHeader background={palette.header.tint} />
-      <main>
+      <main style={{ "--section-ring": palette.stub.tint } as React.CSSProperties}>
         <CountryHeader
           isoCode={country.isoCode}
           name={country.nameCommon}
@@ -81,6 +82,16 @@ export default function CountryPage({
 
         <AccordionSection title="Cities" colors={palette.cities} hasData={bundle.cities.length > 0} {...section("cities")}>
           <CitiesSection cities={bundle.cities} capital={facts.capital} accent={palette.cities.accentOnWhite} />
+        </AccordionSection>
+
+        <AccordionSection title="Map" colors={palette.map} hasData={facts.latitude != null && facts.longitude != null} {...section("map")}>
+          <MapSection
+            latitude={facts.latitude!}
+            longitude={facts.longitude!}
+            cities={bundle.cities}
+            capital={facts.capital}
+            accent={palette.map.accentOnWhite}
+          />
         </AccordionSection>
 
         <AccordionSection title="Border Countries" colors={palette.borderCountries} hasData={borders != null} {...section("borders")}>

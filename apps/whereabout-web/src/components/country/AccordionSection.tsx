@@ -31,9 +31,8 @@ export default function AccordionSection({
           padding: "14px 20px",
           background: tint,
           color: textColor,
-          // Hairline is collapsed-only.
-          borderBottom: expanded ? "none" : `1px solid ${withAlpha(textColor, 0.12)}`,
-        }}
+          // Ring color comes from --section-ring on the page.
+          boxShadow: "inset 0 0 0 2px var(--section-ring, currentColor), inset 0 0 0 3.5px rgba(255, 255, 255, 0.9)",        }}
       >
         <h2
           className="sec-name"

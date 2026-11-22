@@ -25,9 +25,18 @@ const CREDITS: Credit[] = [
   },
   {
     name: "GeoNames",
-    usedFor: "Cities and time zones",
+    usedFor: "Cities, map pins and time zones",
     notice: "Data from GeoNames, licensed under CC BY 4.0.",
     links: [["geonames.org", "https://www.geonames.org/"], CC],
+  },
+  {
+    name: "OpenStreetMap",
+    usedFor: "Map tiles",
+    notice: "Map data © OpenStreetMap contributors, available under the Open Database License (ODbL).",
+    links: [
+      ["openstreetmap.org", "https://www.openstreetmap.org/copyright"],
+      ["ODbL", "https://opendatacommons.org/licenses/odbl/1-0/"],
+    ],
   },
   {
     name: "World Bank",
