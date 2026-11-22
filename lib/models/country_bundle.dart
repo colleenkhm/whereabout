@@ -27,6 +27,9 @@ class LanguageEntry {
   final double? percentSpeakers;
   final String? usageNote;
 
+  /// Order among languages without a figure; 1 = most spoken.
+  final int? displayRank;
+
   /// Full citation for [percentSpeakers].
   final String? source;
   final String? sourceUrl;
@@ -36,6 +39,7 @@ class LanguageEntry {
     required this.isOfficial,
     this.percentSpeakers,
     this.usageNote,
+    this.displayRank,
     this.source,
     this.sourceUrl,
   });
@@ -46,6 +50,7 @@ class LanguageEntry {
       isOfficial: json['isOfficial'] as bool? ?? false,
       percentSpeakers: (json['percentSpeakers'] as num?)?.toDouble(),
       usageNote: json['usageNote'] as String?,
+      displayRank: json['displayRank'] as int?,
       source: json['source'] as String?,
       sourceUrl: json['sourceUrl'] as String?,
     );

@@ -80,7 +80,7 @@ class SupabaseCountryRepository {
         country_facts(*),
         cities(*),
         country_guides(*),
-        country_languages(is_official, percent_speakers, percent_status, percent_speakers_source, percent_source_url, usage_note, languages(name)),
+        country_languages(is_official, display_rank, percent_speakers, percent_status, percent_speakers_source, percent_source_url, usage_note, languages(name)),
         travel_advisories(*),
         visa_requirements!destination_country_id(*),
         words(*)
@@ -152,9 +152,8 @@ class SupabaseCountryRepository {
   }
 
   Map<String, dynamic> _factsJson(Map<String, dynamic>? row, List<Map<String, dynamic>> languageRows) {
-    // All-or-nothing: a partly verified country reads "coming soon".
-    final verified = languageRows.isNotEmpty && languageRows.every((r) => r['percent_status'] == 'verified');
-    final languages = verified ? languageRows.map(_languageJson).toList() : <Map<String, dynamic>>[];
+    // All languages shown; only verified rows carry a figure.
+    final languages = languageRows.map(_languageJson).toList();
     if (row == null) return {'languages': languages, 'borderingCountryCodes': null};
     return {
       'flagSvgUrl': null,
@@ -180,8 +179,9 @@ class SupabaseCountryRepository {
   Map<String, dynamic> _languageJson(Map<String, dynamic> row) => {
     'name': (row['languages'] as Map<String, dynamic>)['name'],
     'isOfficial': row['is_official'] ?? true,
-    'percentSpeakers': row['percent_speakers'],
+    'percentSpeakers': row['percent_status'] == 'verified' ? row['percent_speakers'] : null,
     'usageNote': row['usage_note'],
+    'displayRank': row['display_rank'],
     'source': row['percent_speakers_source'],
     'sourceUrl': row['percent_source_url'],
   };

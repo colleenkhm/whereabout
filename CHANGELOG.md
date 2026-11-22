@@ -21,6 +21,46 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+## [0.9.0] — 2026-11-18
+
+### Added
+- Cities and Border Countries show their data source. Every section's
+  source line now looks the same.
+
+### Changed
+- Every country now lists its languages. Percentage bars appear only where
+  the figure has been checked against its original source.
+- The Languages card now shows a country's three most-spoken languages, or
+  every language spoken by 30% or more if there are more than three.
+  English is always listed. South Africa, India, China, Russia and
+  Switzerland show five, since they have many large language groups.
+- Speaker percentages from censuses and national surveys for many more
+  countries, including Australia, New Zealand, the UK, the US, India,
+  Sri Lanka, Hong Kong, Mexico, Switzerland, Kyrgyzstan, Turkmenistan,
+  Armenia, Georgia, Azerbaijan, Mozambique, Belize, Réunion, Mayotte,
+  Guadeloupe, Martinique and French Guiana, plus English for Gibraltar,
+  Puerto Rico, Guam, the Northern Mariana Islands, American Samoa, the US
+  Virgin Islands, Christmas Island, the Cocos (Keeling) Islands and Norfolk
+  Island.
+- New language rows where a language is widely spoken: African countries'
+  main local languages (e.g. Wolof in Senegal, Mooré in Burkina Faso,
+  Mali's 13 national languages), German, Cantonese and Putonghua, Russian
+  in Armenia and Georgia, Bengali, Marathi and Telugu in India, Antillean
+  Creole, and more.
+- Official labels now match current constitutions and laws. French is a
+  working language, not an official one, in Mali, Burkina Faso and Niger.
+  Russian is no longer marked official in Turkmenistan or Azerbaijan, Swiss
+  German isn't official in Switzerland, Arabic isn't official in Israel
+  (special status under the 2018 Nation-State law), Tamil isn't official in
+  India, and Guaraní isn't official in Argentina (only in Corrientes).
+
+### Removed
+- "When to Visit" now shows only hand-written best times (Brazil, Canada,
+  Germany, Greece, Ireland). Other countries show "Coming soon" until theirs
+  are written.
+- "Word of the day" card in the Language section, for now. It will return
+  later.
+
 ## [0.8.0] — 2026-11-09
 
 ### Added

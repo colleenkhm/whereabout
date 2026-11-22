@@ -60,10 +60,10 @@ void main() {
       expect(tester.takeException(), isNull);
       expect(find.text('US State Department'), findsOneWidget);
       expect(find.textContaining('90 days'), findsOneWidget);
-      expect(find.text('Apply'), findsOneWidget);
+      expect(find.textContaining('Apply', findRichText: true), findsOneWidget);
       // 'Official source' -> 'Source', 2026-08-19, per direction received
       // (see VisaSection).
-      expect(find.text('Source'), findsOneWidget);
+      expect(find.textContaining('Source', findRichText: true), findsOneWidget);
     },
   );
 
@@ -95,7 +95,7 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.textContaining('Level 1'), findsOneWidget);
-      expect(find.text('Full advisory'), findsOneWidget);
+      expect(find.textContaining('Full advisory', findRichText: true), findsOneWidget);
     },
   );
 

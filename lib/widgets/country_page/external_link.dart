@@ -24,21 +24,24 @@ class ExternalLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontFamily: fontFamily,
-              fontWeight: FontWeight.w600,
-              fontSize: 11.5,
-              color: color,
-            ),
+      // One text run so long labels wrap.
+      child: Text.rich(
+        TextSpan(
+          text: label,
+          style: TextStyle(
+            fontFamily: fontFamily,
+            fontWeight: FontWeight.w600,
+            fontSize: 11.5,
+            color: color,
           ),
-          const SizedBox(width: 2),
-          Icon(Icons.arrow_outward, size: 11, color: color),
-        ],
+          children: [
+            const WidgetSpan(child: SizedBox(width: 2)),
+            WidgetSpan(
+              alignment: PlaceholderAlignment.middle,
+              child: Icon(Icons.arrow_outward, size: 11, color: color),
+            ),
+          ],
+        ),
       ),
     );
   }

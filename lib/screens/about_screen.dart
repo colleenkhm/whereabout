@@ -93,6 +93,24 @@ const _credits = [
     [('exchangerate-api.com', 'https://www.exchangerate-api.com/')],
   ),
   _Credit(
+    'National censuses and surveys',
+    'Language speaker percentages',
+    'Figures from each country\'s statistics office or survey (including '
+        'Eurobarometer, Morocco\'s HCP, CC BY 4.0, Insee and the French '
+        'culture ministry\'s DEPS, Licence Ouverte 2.0, Kyrgyzstan\'s National Statistical Committee, '
+        'CC BY-NC-SA 4.0, and the ABS and Stats NZ, CC BY 4.0), linked under '
+        'each country\'s Languages card. Percentages are calculated from the '
+        'published tables. Percentages derived from Kyrgyzstan\'s figures are '
+        'shared under CC BY-NC-SA 4.0. Contains public sector information licensed under '
+        'the Open Government Licence v3.0 (ONS, NISRA). Gibraltar census figures '
+        '© Crown Copyright, HM Government of Gibraltar.',
+    [
+      _cc,
+      ('CC BY-NC-SA 4.0', 'https://creativecommons.org/licenses/by-nc-sa/4.0/'),
+      ('OGL v3.0', 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'),
+    ],
+  ),
+  _Credit(
     'Flagpedia',
     'Flag images',
     'Public-domain flags served via flagcdn.com.',

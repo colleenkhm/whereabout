@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/country_bundle.dart';
 import '../../theme/accordion_theme.dart';
 import '../../utils/format_population.dart';
+import 'section_source.dart';
 
 /// The "Cities" [AccordionSection]'s expanded content — a numbered list
 /// of cities on the section's plain white background. No chevron/tap
@@ -74,6 +75,10 @@ class CitiesSection extends StatelessWidget {
             isLast: i == shown.length - 1,
             accent: accent,
           ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 13),
+          child: SectionSource(links: const [('GeoNames', 'https://www.geonames.org/')], color: accent),
+        ),
       ],
     );
   }
