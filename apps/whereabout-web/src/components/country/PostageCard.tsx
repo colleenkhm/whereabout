@@ -1,0 +1,71 @@
+import type { IconType } from "react-icons";
+import { withAlpha, type TicketColors } from "@/lib/color";
+import styles from "./PostageCard.module.css";
+
+// Small alternating tilt so the grid reads hand-placed.
+export const POSTAGE_TILTS = [-0.6, 0.5, -0.4, 0.6, -0.5, 0.4];
+
+// Pinned admission ticket: title on the body, icon on a torn-off stub. No data: muted, inert.
+export default function PostageCard({
+  title,
+  icon: Icon,
+  colors,
+  hasData,
+  tilt = 0,
+  onOpen,
+}: {
+  title: string;
+  icon: IconType;
+  colors: TicketColors;
+  hasData: boolean;
+  tilt?: number;
+  onOpen: () => void;
+}) {
+  const { body, stub } = colors;
+  const ticket = (
+    <span className={styles.frame}>
+      <span className={styles.ticket} style={{ background: body.tint, color: body.textColor }}>
+        <span className={styles.main}>
+          <span className={`sec-name ${styles.title}`} style={{ color: body.textColor }}>
+            {title}
+          </span>
+          {!hasData && (
+            <span className="src-row" style={{ fontSize: 11, marginTop: 3, color: withAlpha(body.textColor, 0.7) }}>
+              Coming soon
+            </span>
+          )}
+        </span>
+        <span className={styles.perf} aria-hidden />
+        <span className={styles.stub} style={{ background: stub.tint, color: stub.textColor }}>
+          <Icon className={styles.icon} aria-hidden />
+        </span>
+      </span>
+    </span>
+  );
+
+  const style = { "--tilt": `${tilt}deg` } as React.CSSProperties;
+  return hasData ? (
+    <button className={`${styles.card} ${styles.open}`} style={style} onClick={onOpen}>
+      {ticket}
+      <span className={styles.pin} aria-hidden />
+    </button>
+  ) : (
+    <div className={`${styles.card} ${styles.empty}`} style={style}>
+      {ticket}
+      <span className={styles.pin} aria-hidden />
+    </div>
+  );
+}
+
+// "Tap"/"Click" hint plus the 2/3-column grid.
+export function PostageGrid({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={styles.wrap}>
+      <div className={`tk-eyebrow ${styles.hint}`}>
+        <span className={styles.touch}>TAP</span>
+        <span className={styles.mouse}>CLICK</span> A CARD FOR DETAILS
+      </div>
+      <div className={styles.grid}>{children}</div>
+    </div>
+  );
+}

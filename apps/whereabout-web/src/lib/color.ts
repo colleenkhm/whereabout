@@ -74,7 +74,7 @@ export function accentReadableOnWhite(hex: string): string {
   return candidate;
 }
 
-// --- Section palette ---
+// --- Palettes ---
 
 export interface SectionColors {
   tint: string;
@@ -82,41 +82,21 @@ export interface SectionColors {
   accentOnWhite: string;
 }
 
-export interface SectionPalette {
-  visa: SectionColors;
-  cities: SectionColors;
-  borderCountries: SectionColors;
-  times: SectionColors;
-  advisory: SectionColors;
-  language: SectionColors;
-  norms: SectionColors;
-  resources: SectionColors;
-  header: SectionColors;
+export interface TicketColors {
+  body: SectionColors;
   stub: SectionColors;
 }
 
-export const paletteCycle = (p: SectionPalette): SectionColors[] => [
-  p.visa,
-  p.cities,
-  p.borderCountries,
-  p.times,
-  p.advisory,
-  p.language,
-  p.norms,
-  p.resources,
-];
+// Masthead plus one two-tone ticket per flag color.
+export interface SectionPalette {
+  header: SectionColors;
+  tickets: TicketColors[];
+}
 
 const ACHROMATIC = 0.08;
 
-function colorsFor(raw: string, toneDown = true): SectionColors {
-  const tint = toneDown ? toned(raw) : raw;
-  return { tint, textColor: readableTextColor(tint), accentOnWhite: accentReadableOnWhite(raw) };
-}
-
-// Same hue, ~28% less saturation.
-function toned(hex: string): string {
-  const hsl = hexToHsl(hex);
-  return hslToHex({ ...hsl, s: Math.min(1, hsl.s * 0.72) });
+function colorsFor(tint: string): SectionColors {
+  return { tint, textColor: readableTextColor(tint), accentOnWhite: accentReadableOnWhite(tint) };
 }
 
 // High saturation even when dark: dark + desaturated red reads brown.
@@ -125,45 +105,31 @@ function deepen(hex: string): string {
   return hsl.s < ACHROMATIC ? hslToHex({ h: hsl.h, s: 0, l: 0.16 }) : hslToHex({ h: hsl.h, s: 0.65, l: 0.16 });
 }
 
-function midtone(hex: string): string {
+// Stub accent: same hue, darker, saturation held so it doesn't go
+// muddy. White/black shift toward gray instead.
+function stubShade(hex: string): string {
   const hsl = hexToHsl(hex);
-  return hsl.s < ACHROMATIC ? hslToHex({ h: hsl.h, s: 0, l: 0.32 }) : hslToHex({ h: hsl.h, s: 0.55, l: 0.32 });
+  if (hsl.s < ACHROMATIC) return hslToHex({ h: 0, s: 0, l: hsl.l > 0.5 ? hsl.l - 0.16 : hsl.l + 0.18 });
+  return hslToHex({ h: hsl.h, s: Math.max(hsl.s, 0.5), l: hsl.l * 0.7 });
 }
+
+const ticketFor = (hex: string): TicketColors => ({ body: colorsFor(hex), stub: colorsFor(stubShade(hex)) });
 
 // First chromatic color, so white/black-first flags still get a hue.
 const headerSource = (colors: string[]) => colors.find((c) => hexToHsl(c).s >= ACHROMATIC) ?? colors[0];
 
-// colors: most prominent first.
+// colors: most prominent first. Exact flag colors, untoned.
 export function paletteFromFlagColors(colors: string[]): SectionPalette {
   const header = headerSource(colors);
-  // Keep the masthead hue from also leading the section cycle.
-  const source = colors.length > 1 && colors[0] === header ? [...colors.slice(1), colors[0]] : colors;
-  const s = Array.from({ length: 8 }, (_, i) => colorsFor(source[i % source.length]));
-  return {
-    visa: s[0],
-    cities: s[1],
-    borderCountries: s[2],
-    times: s[3],
-    advisory: s[4],
-    language: s[5],
-    norms: s[6],
-    resources: s[7],
-    header: colorsFor(deepen(header), false),
-    stub: colorsFor(midtone(header), false),
-  };
+  // Masthead color goes last so the first ticket contrasts with it.
+  const tickets = colors.length > 1 ? [...colors.filter((c) => c !== header), header] : colors;
+  return { header: colorsFor(header), tickets: tickets.map(ticketFor) };
 }
 
+// No flag colors: a fixed vintage-ticket set.
 export const fallbackPalette: SectionPalette = {
-  visa: colorsFor("#d8edf8"),
-  cities: colorsFor("#e8e0f5"),
-  borderCountries: colorsFor("#e8e0f5"),
-  times: colorsFor("#fdf3d0"),
-  advisory: colorsFor("#d8ede0"),
-  language: colorsFor("#fae0e4"),
-  norms: colorsFor("#fdecd8"),
-  resources: colorsFor("#d8edf8"),
-  header: colorsFor(deepen("#d8edf8"), false),
-  stub: colorsFor(midtone("#d8edf8"), false),
+  header: colorsFor(deepen("#d8edf8")),
+  tickets: ["#e4704f", "#e9b949", "#5fa8a0", "#f2a477", "#8fa4d8", "#9dbb86", "#e39aae", "#b49bd6", "#d9bc8c"].map(ticketFor),
 };
 
 export function advisoryColor(level: number): string {
