@@ -85,6 +85,7 @@ export interface SectionColors {
 export interface SectionPalette {
   visa: SectionColors;
   cities: SectionColors;
+  map: SectionColors;
   borderCountries: SectionColors;
   times: SectionColors;
   advisory: SectionColors;
@@ -98,6 +99,7 @@ export interface SectionPalette {
 export const paletteCycle = (p: SectionPalette): SectionColors[] => [
   p.visa,
   p.cities,
+  p.map,
   p.borderCountries,
   p.times,
   p.advisory,
@@ -138,16 +140,17 @@ export function paletteFromFlagColors(colors: string[]): SectionPalette {
   const header = headerSource(colors);
   // Keep the masthead hue from also leading the section cycle.
   const source = colors.length > 1 && colors[0] === header ? [...colors.slice(1), colors[0]] : colors;
-  const s = Array.from({ length: 8 }, (_, i) => colorsFor(source[i % source.length]));
+  const s = Array.from({ length: 9 }, (_, i) => colorsFor(source[i % source.length]));
   return {
     visa: s[0],
     cities: s[1],
-    borderCountries: s[2],
-    times: s[3],
-    advisory: s[4],
-    language: s[5],
-    norms: s[6],
-    resources: s[7],
+    map: s[2],
+    borderCountries: s[3],
+    times: s[4],
+    advisory: s[5],
+    language: s[6],
+    norms: s[7],
+    resources: s[8],
     header: colorsFor(deepen(header), false),
     stub: colorsFor(midtone(header), false),
   };
@@ -156,6 +159,7 @@ export function paletteFromFlagColors(colors: string[]): SectionPalette {
 export const fallbackPalette: SectionPalette = {
   visa: colorsFor("#d8edf8"),
   cities: colorsFor("#e8e0f5"),
+  map: colorsFor("#d8ede0"),
   borderCountries: colorsFor("#e8e0f5"),
   times: colorsFor("#fdf3d0"),
   advisory: colorsFor("#d8ede0"),
