@@ -4,7 +4,7 @@
   "name": "whereabout-staging",
   "compatibility_date": "2026-10-23",
   "assets": {
-    "directory": "./build/web",
-    "not_found_handling": "single-page-application"
+    "directory": "./apps/whereabout-web/out",
+    "not_found_handling": "404-page"
   }
 }

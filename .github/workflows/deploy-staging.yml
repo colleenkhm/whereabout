@@ -17,21 +17,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
+      - uses: actions/setup-node@v4
         with:
-          flutter-version: 3.47.2
-          channel: stable
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/whereabout-web/package-lock.json
 
       # Dev Supabase project, never prod.
-      - name: Write .env
+      - name: Build
+        working-directory: apps/whereabout-web
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.DEV_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.DEV_SUPABASE_PUBLISHABLE_KEY }}
         run: |
-          echo "SUPABASE_URL=${{ secrets.DEV_SUPABASE_URL }}" > .env
-          echo "SUPABASE_PUBLISHABLE_KEY=${{ secrets.DEV_SUPABASE_PUBLISHABLE_KEY }}" >> .env
+          npm ci
+          npm run build
 
-      - run: flutter pub get
-      - run: flutter build web --release --base-href /
-
+      # Reads wrangler.jsonc at the repo root.
       - uses: cloudflare/wrangler-action@v3
         with:
           wranglerVersion: "4.153.0"
