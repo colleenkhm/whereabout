@@ -17,20 +17,27 @@ refactors/doc updates unless they're worth calling out.
 
 ## [Unreleased]
 
+### Added
+- "Holidays" section on the country page — public holidays, sourced from
+  Nager.Date. Data is imported; the section isn't in the app yet.
+
+## [0.11.0] — 2026-11-21
+
+### Added
+- Map card on country pages: an OpenStreetMap map of the country with
+  its cities marked. OpenStreetMap and GeoNames are credited on the card
+  and on the About screen.
+
 ### Changed
 - Country pages are now a grid of flag-colored postage cards instead of
   an accordion. Each card opens its details in a bottom sheet on phones
   and a pop-up postcard on desktop. Local time and currency moved into
   the country header.
+- New home screen: an ocean-blue page covered in flag stamps, with the
+  country search in the middle.
 - The site header now shows whereabout's "?" mark in place of the
   globe, and is the same dark bar on every page, so it no longer blends
   into the flag-colored country header.
-- New home screen: an ocean-blue page covered in flag stamps, with the
-  country search in the middle.
-
-### Added
-- "Holidays" section on the country page — public holidays, sourced from
-  Nager.Date. Data is imported; the section isn't in the app yet.
 
 ## [0.10.0] — 2026-11-21
 
