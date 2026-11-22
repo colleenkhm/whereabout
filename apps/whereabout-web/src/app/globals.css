@@ -10,6 +10,7 @@
   --logo-sky: #97d8f5;
   --logo-sky-pale: #edf7fc;
   --logo-sky-rule: #c4e6f6;
+  --ocean: #5b9bd0;
   --ink: #1a1520;
   --ink-2: #3d3848;
   --ink-3: #6b6578;
@@ -19,6 +20,7 @@
   --warn: #8a6200;
   --danger: #8b2020;
 
+  --content-max: 1280px;
   --card-radius: 8px;
   --card-shadow:
     0 1px 2px rgba(26, 21, 32, 0.1), 0 4px 12px rgba(26, 21, 32, 0.1),
@@ -159,10 +161,4 @@ button {
   line-height: 1.1;
   letter-spacing: -0.01em;
   color: var(--ink);
-}
-
-/* Perforated tear line: 5px dash, 4px gap. */
-.dashed {
-  height: 1.5px;
-  background: repeating-linear-gradient(to right, currentColor 0 5px, transparent 5px 9px);
 }

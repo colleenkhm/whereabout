@@ -1,12 +1,31 @@
 .masthead {
-  position: relative;
-  display: flex;
+  padding: 14px 20px 20px;
+}
+
+/* Mobile: name + flag, facts below a rule. */
+.inner {
+  max-width: calc(var(--content-max) - 40px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title flag"
+    "facts facts";
   align-items: center;
-  padding: 6px 20px 16px;
+}
+
+.facts {
+  grid-area: facts;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid;
 }
 
 .titleCol {
-  flex: 1;
+  grid-area: title;
   min-width: 0;
 }
 
@@ -20,6 +39,7 @@
 }
 
 .flagCol {
+  grid-area: flag;
   margin-left: 18px;
 }
 
@@ -49,35 +69,29 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-.stubBody {
-  padding: 13px 20px;
-}
-
-.fields {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
-
-.field {
-  flex: 1;
-  min-width: 0;
-}
-
-.toggleAll {
-  margin-top: 14px;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
 @media (min-width: 900px) {
   .name {
     font-size: 50px;
   }
+  .masthead {
+    padding: 20px 20px 36px;
+  }
+  /* One left-aligned row: name, stamp beside it, then facts. */
+  .inner {
+    grid-template-columns: auto auto minmax(0, 1fr);
+    grid-template-areas: "title flag facts";
+    align-items: start;
+  }
+  /* Centered on the name's glyphs, not its line box. */
   .flagCol {
-    margin-left: 26px;
+    align-self: end;
+    margin: 0 0 8px 32px;
+  }
+  .facts {
+    margin: 0 0 0 112px;
+    padding: 0;
+    border-top: 0;
+    gap: 16px 80px;
   }
   .stamp {
     width: 80px;

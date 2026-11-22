@@ -1,16 +1,16 @@
 import Link from "next/link";
-import { MdPublic } from "react-icons/md";
+import LogoMark from "./LogoMark";
 
-// Site-wide nav: globe + wordmark, links home.
-export default function SiteHeader({ background = "var(--ink)" }: { background?: string }) {
+// Site-wide nav: logo mark + wordmark, links home. Not on the home page.
+export default function SiteHeader() {
   return (
-    <header style={{ background, padding: "16px 20px" }}>
+    <header style={{ background: "var(--ink)", padding: "16px 20px" }}>
       <Link
         href="/"
         title="Home"
-        style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "#fff" }}
+        style={{ display: "inline-flex", alignItems: "center", gap: 6, color: "#fff" }}
       >
-        <MdPublic size={22} style={{ opacity: 0.85 }} aria-hidden />
+        <LogoMark size={22} />
         <span
           style={{
             fontFamily: "var(--fraunces)",
