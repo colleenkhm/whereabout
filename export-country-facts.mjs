@@ -2,8 +2,9 @@
 //
 // country_facts is adapted from mledoze/countries (ODbL), so ODbL 4.6
 // requires offering the adapted table as a free machine-readable download.
-// Writes web/data/country-facts.csv + its license notice; flutter build web
-// ships both. Re-run (and commit) whenever country_facts changes.
+// Writes apps/whereabout-web/public/data/country-facts.csv + its license
+// notice; the web build ships both. Re-run (and commit) whenever
+// country_facts changes.
 //
 // Run:
 //   node export-country-facts.mjs                                 // dev
@@ -22,7 +23,7 @@ if (!SUPABASE_URL || !SERVICE_KEY) {
   process.exit(1);
 }
 
-const OUT_DIR = 'web/data';
+const OUT_DIR = 'apps/whereabout-web/public/data';
 
 // Every data column; created_at/updated_at are row bookkeeping, not data.
 const COLUMNS = [

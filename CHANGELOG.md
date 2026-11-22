@@ -21,6 +21,12 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+### Changed
+- The site is rebuilt as a regular website. Pages load faster, text can be
+  selected and searched, every country has its own link (e.g.
+  `/country/gr`), and country pages can show up in search engines. Page
+  colors appear right away instead of after the flag loads.
+
 ## [0.9.0] — 2026-11-18
 
 ### Added

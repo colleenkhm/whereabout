@@ -1,5 +1,6 @@
 name: Deploy web
 
+# Re-run by hand after a prod data import: pages are built from Supabase.
 on:
   push:
     branches: [main]
@@ -17,28 +18,28 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/whereabout-web
     steps:
       - uses: actions/checkout@v4
 
-      - uses: subosito/flutter-action@v2
+      - uses: actions/setup-node@v4
         with:
-          flutter-version: 3.47.2
-          channel: stable
-          cache: true
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/whereabout-web/package-lock.json
 
-      # .env is gitignored but bundled as an asset; values are public-by-design.
-      - name: Write .env
-        run: |
-          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > .env
-          echo "SUPABASE_PUBLISHABLE_KEY=${{ secrets.SUPABASE_PUBLISHABLE_KEY }}" >> .env
-
-      - run: flutter pub get
-      - run: flutter build web --release --base-href /
+      - run: npm ci
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: build/web
+          path: apps/whereabout-web/out
 
   deploy:
     needs: build
