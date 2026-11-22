@@ -35,8 +35,11 @@ function buildTile(): string {
 
 const tile = buildTile();
 
-export default function PaperTexture({ children }: { children: React.ReactNode }) {
+// color: the paper underneath the grain.
+export default function PaperTexture({ children, color = "var(--page)" }: { children: React.ReactNode; color?: string }) {
   return (
-    <div style={{ minHeight: "100vh", background: `${tile} var(--page)` }}>{children}</div>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: `${tile} ${color}` }}>
+      {children}
+    </div>
   );
 }

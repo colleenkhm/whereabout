@@ -1,0 +1,126 @@
+.sheet {
+  width: 100%;
+  max-width: 720px;
+  max-height: 92vh;
+  margin: auto auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 14px 14px 0 0;
+  background: var(--white);
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.sheet[open] {
+  animation: slideUp 220ms ease-out;
+}
+
+.sheet::backdrop {
+  background: rgba(26, 21, 32, 0.45);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet[open] {
+    animation: none;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 8px 14px 20px;
+  flex-shrink: 0;
+}
+
+.close {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.close:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.body {
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+
+/* Desktop: a centred, enlarged postcard. */
+.hole {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .sheet {
+    max-width: 640px;
+    max-height: 82vh;
+    margin: auto;
+    border: 1.4px solid var(--ink);
+    border-radius: 14px;
+    overflow: visible;
+  }
+
+  .sheet[open] {
+    animation: popIn 180ms ease-out;
+  }
+
+  .panel {
+    max-height: 82vh;
+    border-radius: 12.6px;
+    overflow: hidden;
+  }
+
+  .header {
+    border-bottom: 1.4px solid var(--ink);
+  }
+
+  .hole {
+    display: block;
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--page);
+    border: 1.4px solid var(--ink);
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet[open] {
+    animation: none;
+  }
+}

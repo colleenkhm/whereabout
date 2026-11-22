@@ -67,13 +67,16 @@ export async function extractFlagBaseColors(iso: string): Promise<string[] | nul
       .sort((a, b) => b.count - a.count);
     if (swatches.length === 0) return null;
 
-    // Drop emblem detail, near-duplicates, and edge blends.
-    const threshold = swatches[0].count * 0.08;
+    // Drop emblem detail, near-duplicates, and edge blends. Low enough
+    // to keep minor flag colors (Saint Lucia's black/white, India's navy).
+    const threshold = swatches[0].count * 0.025;
     const base: string[] = [];
     for (const s of swatches) {
       if (s.count < threshold) continue;
       const rgb = hexToRgb(s.hex);
-      if (base.some((c) => dist(hexToRgb(c), rgb) < 0.12)) continue;
+      // Emblem shading yields extra whites/grays; merge them wider.
+      const gray = hexToHsl(s.hex).s < 0.08;
+      if (base.some((c) => dist(hexToRgb(c), rgb) < (gray && hexToHsl(c).s < 0.08 ? 0.3 : 0.12))) continue;
       if (isBlend(rgb, base.map(hexToRgb))) continue;
       base.push(s.hex);
     }
