@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import ExternalLink from "@/components/ExternalLink";
-import SiteFooter from "@/components/SiteFooter";
+import PaperTexture from "@/components/PaperTexture";
 import SiteHeader from "@/components/SiteHeader";
+import { withAlpha } from "@/lib/color";
+import styles from "./About.module.css";
 
 export const metadata: Metadata = { title: "Sources & credits · whereabout" };
 
@@ -75,37 +77,63 @@ const CREDITS: Credit[] = [
   },
 ];
 
+// Globe tones for the card headers.
+const HEADS = ["#017b40", "#3a78aa", "#1a1520"];
+
 export default function About() {
   return (
-    <>
+    <PaperTexture>
       <SiteHeader />
-      <main style={{ maxWidth: 640, margin: "0 auto", padding: "24px 16px 0" }}>
-        <h1 className="page-heading" style={{ fontSize: 26 }}>
-          Sources &amp; credits
-        </h1>
-        <p className="s-body" style={{ marginTop: 8 }}>
-          Travel tips, norms and language notes are written by hand. The facts below come from these open data sources.
-        </p>
-        <div style={{ marginTop: 16, background: "var(--white)", borderRadius: "var(--card-radius)", boxShadow: "var(--card-shadow)" }}>
-          {CREDITS.map((c, i) => (
-            <div key={c.name} style={{ padding: "14px 16px", borderBottom: i < CREDITS.length - 1 ? "1px solid var(--rule)" : "none" }}>
-              <div className="row-title">{c.name}</div>
-              <div className="s-label" style={{ marginTop: 2 }}>
-                {c.usedFor.toUpperCase()}
+      <main>
+        <div className={styles.masthead}>
+          <div className={styles.inner}>
+            <div>
+              <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+                ABOUT
               </div>
-              <p className="s-body" style={{ marginTop: 6, fontSize: 14 }}>
-                {c.notice}
+              <h1 className={styles.title}>Sources &amp; credits</h1>
+              <p className={`s-body ${styles.intro}`}>
+                Travel tips, norms and language notes are written by hand. The facts on this site come from these open
+                data sources listed below.
               </p>
-              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap", gap: "4px 14px" }}>
-                {c.links.map(([label, url]) => (
-                  <ExternalLink key={url} label={label} url={url} />
-                ))}
+            </div>
+            <div className={styles.byline}>
+              <div className="tf-label" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+                BUILT BY
+              </div>
+              <div className="tf-val" style={{ marginTop: 4 }}>
+                Colleen Murray
               </div>
             </div>
-          ))}
+          </div>
         </div>
-        <SiteFooter />
+        <div className={styles.wrap}>
+          {CREDITS.map((c, i) => {
+            const head = HEADS[i % HEADS.length];
+            return (
+              <section key={c.name} className={styles.card}>
+                <span className={styles.pin} aria-hidden />
+                <div className={styles.head} style={{ background: head, color: "#fff" }}>
+                  <h2 className="sec-name">{c.name}</h2>
+                  <div className="tk-eyebrow" style={{ marginTop: 6, color: withAlpha("#ffffff", 0.75) }}>
+                    {c.usedFor.toUpperCase()}
+                  </div>
+                </div>
+                <div className={styles.body}>
+                  <p className="s-body" style={{ fontSize: 14 }}>
+                    {c.notice}
+                  </p>
+                  <div className={styles.links}>
+                    {c.links.map(([label, url]) => (
+                      <ExternalLink key={url} label={label} url={url} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            );
+          })}
+        </div>
       </main>
-    </>
+    </PaperTexture>
   );
 }
