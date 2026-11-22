@@ -1,0 +1,90 @@
+.masthead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 6px 20px 16px;
+}
+
+.titleCol {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  margin-top: 12px;
+  font-family: var(--fraunces);
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.flagCol {
+  margin-left: 18px;
+}
+
+/* 50x34 image + 3px mat + 3px teeth. */
+.stamp {
+  position: relative;
+  width: 62px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+}
+
+.stampEdge {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0.6px 1px rgba(0, 0, 0, 0.35));
+}
+
+.flag {
+  position: relative;
+  width: 50px;
+  height: 34px;
+  object-fit: cover;
+  border-radius: 1.5px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.stubBody {
+  padding: 13px 20px;
+}
+
+.fields {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.field {
+  flex: 1;
+  min-width: 0;
+}
+
+.toggleAll {
+  margin-top: 14px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (min-width: 900px) {
+  .name {
+    font-size: 50px;
+  }
+  .flagCol {
+    margin-left: 26px;
+  }
+  .stamp {
+    width: 80px;
+    height: 58px;
+  }
+  .flag {
+    width: 68px;
+    height: 46px;
+  }
+}
