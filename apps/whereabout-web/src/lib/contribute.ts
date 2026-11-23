@@ -21,6 +21,9 @@ export const CONTRIBUTE_SECTIONS: Record<string, ContributeKind> = {
 // Contribute-only catch-all card: no stamp, its own prompt.
 export const OTHER_SECTION = "Something Else?";
 
+// Site-wide feedback from /contribute/feedback, no country. Not a ticket.
+export const FEEDBACK_SECTION = "General Feedback";
+
 export const CITY_CATEGORIES: [string, string][] = [
   ["activity", "Activity"],
   ["restaurant", "Restaurant"],

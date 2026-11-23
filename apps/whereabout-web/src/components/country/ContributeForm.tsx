@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import type { SectionColors } from "@/lib/color";
 import {
   CITY_CATEGORIES,
+  FEEDBACK_SECTION,
   OTHER_SECTION,
   loadEmail,
   saveEmail,
@@ -59,11 +60,14 @@ export default function ContributeForm({
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
 
-  const other = section === OTHER_SECTION;
+  const feedback = section === FEEDBACK_SECTION;
+  const other = section === OTHER_SECTION || feedback;
   const withTips = kind === "add" && !other;
-  const prompt = other
-    ? { label: "WHAT'S ON YOUR MIND?", placeholder: "Anything to add or correct that doesn't fit the other tickets." }
-    : PROMPTS[kind];
+  const prompt = feedback
+    ? { label: "WHAT'S YOUR FEEDBACK?", placeholder: "Ideas, bugs, anything about whereabout as a whole." }
+    : other
+      ? { label: "WHAT'S ON YOUR MIND?", placeholder: "Anything to add or correct that doesn't fit the other tickets." }
+      : PROMPTS[kind];
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const ready = text.trim() !== "" && emailOk && certified && status === "idle";
 
@@ -101,11 +105,12 @@ export default function ContributeForm({
       <div className={styles.form}>
         <p className="s-head">Thank you!</p>
         <p className="s-body">
-          {other ? "Your note" : kind === "add" ? "Your addition" : "Your dispute"} is in. Everything is checked by hand before the page
-          changes.
+          {feedback
+            ? "Your feedback is in. Every note is read by hand."
+            : `${other ? "Your note" : kind === "add" ? "Your addition" : "Your dispute"} is in. Everything is checked by hand before the page changes.`}
         </p>
         <button type="button" className={styles.submit} style={button(colors)} onClick={onDone}>
-          BACK TO {countryName.toUpperCase()}
+          BACK TO {feedback ? "CONTRIBUTE" : countryName.toUpperCase()}
         </button>
       </div>
     );

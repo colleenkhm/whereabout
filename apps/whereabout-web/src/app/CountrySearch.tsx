@@ -10,7 +10,7 @@ import styles from "./CountrySearch.module.css";
 // Accent-insensitive, so "aland" finds "Åland Islands".
 const fold = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
-// contribute: results open the add/dispute version of the country page.
+// contribute: results open the add/dispute version of the country page, and the panel stays white (it sits in a white card). Home is the ink variant.
 export default function CountrySearch({
   countries,
   contribute = false,
@@ -26,7 +26,7 @@ export default function CountrySearch({
   const open = query.trim() !== "";
 
   return (
-    <div className={`${styles.search} ${open ? styles.isOpen : ""}`}>
+    <div className={`${styles.search} ${open ? styles.isOpen : ""} ${contribute ? "" : styles.dark}`}>
       <label className={styles.field}>
         <MdSearch size={24} className={styles.icon} aria-hidden />
         <input

@@ -112,3 +112,48 @@
   font-size: 13px;
   color: var(--ink-3);
 }
+
+/* Home "Where to?": plain ink panel, no outline or shadow. */
+.dark .icon,
+.dark .input,
+.dark .name {
+  color: var(--white);
+}
+
+.dark .input,
+.dark .list {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: none;
+}
+
+.dark .input::placeholder,
+.dark .none {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dark .input:focus-visible {
+  border-color: var(--logo-sky);
+}
+
+.dark .input::-webkit-search-cancel-button {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 2l10 10M12 2L2 12' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.dark .list {
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.dark .list li + li {
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
+.dark .row:hover,
+.dark .row:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .code {
+  color: var(--logo-sky);
+}

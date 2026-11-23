@@ -35,6 +35,18 @@ Deno.test("dispute sections map to dispute", () => {
   assertEquals(valid({ ...base, section: "Travel Advisory" }).subject, "advisory");
 });
 
+Deno.test("general feedback needs no country and stores a null country_id", () => {
+  const v = valid({ ...base, countryIso: undefined, countryName: undefined, section: "General Feedback", tips: "x" });
+  assertEquals(v.subject, "feedback");
+  assertEquals(v.iso, "");
+  assertEquals(v.tips, "");
+  assertEquals(toRow(v).country_id, null);
+});
+
+Deno.test("general feedback ignores a stray country", () => {
+  assertEquals(valid({ ...base, section: "General Feedback" }).iso, "");
+});
+
 Deno.test("something else maps to general", () => {
   assertEquals(valid({ ...base, section: "Something Else?" }).subject, "general");
 });

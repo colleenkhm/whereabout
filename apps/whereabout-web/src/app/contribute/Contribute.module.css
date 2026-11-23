@@ -56,6 +56,22 @@
   margin-top: 8px;
 }
 
+/* Feedback page: the form brings its own padding. */
+.feedbackBody {
+  padding-bottom: 20px;
+}
+
+/* Small line under the card, for site-wide feedback. */
+.feedbackLink {
+  margin-top: 20px;
+  color: var(--ink);
+}
+
+.feedbackLink a {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
 @media (min-width: 900px) {
   .title {
     font-size: 50px;
