@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
     id: row.id,
     kind: sub.kind,
     section: sub.sectionTitle,
-    country: `${sub.countryName} (${sub.iso})`,
+    country: sub.iso ? `${sub.countryName} (${sub.iso})` : "",
     text: sub.text,
     why: sub.why,
     tips: sub.tips,
@@ -89,9 +89,11 @@ async function sendEmail(s: {
     console.warn("RESEND_API_KEY / CONTRIBUTIONS_TO not set; stored without emailing", s.id);
     return;
   }
-  const verb = s.kind === "add" ? "Add" : "Dispute";
+  const verb = !s.country ? "Feedback" : s.kind === "add" ? "Add" : "Dispute";
+  // Feedback has no country.
+  const where = s.country ? `${s.section}, ${s.country}` : "general";
   const lines = [
-    `${verb} · ${s.section} · ${s.country}`,
+    [verb, ...(s.country ? [s.section, s.country] : [])].join(" · "),
     "",
     ...(s.city ? [`City: ${s.city}`] : []),
     ...(s.category ? [`Category: ${s.category.replace(/_/g, " ")}`] : []),
@@ -116,7 +118,7 @@ async function sendEmail(s: {
         from: Deno.env.get("CONTRIBUTIONS_FROM") ?? "whereabout <onboarding@resend.dev>",
         to: [to],
         reply_to: s.email,
-        subject: `[whereabout] ${verb}: ${s.section}, ${s.country}`,
+        subject: `[whereabout] ${verb}: ${where}`,
         text: lines.join("\n"),
       }),
     });

@@ -11,6 +11,8 @@ export const SECTIONS: Record<string, { subject: string; kind: "add" | "dispute"
   "When to Visit": { subject: "best_time", kind: "add" },
   Resources: { subject: "resource", kind: "add" },
   "Something Else?": { subject: "general", kind: "add" },
+  // Site-wide, no country.
+  "General Feedback": { subject: "feedback", kind: "add" },
 };
 
 const CITY_CATEGORIES = ["activity", "restaurant", "place_to_stay", "other"];
@@ -56,15 +58,16 @@ export function validate(body: Body): Validation {
   // Bots fill every field.
   if (body.website) return { spam: true };
 
-  const iso = clean(body.countryIso, 3).toUpperCase();
   const sectionTitle = clean(body.section, 40);
   const section = SECTIONS[sectionTitle];
+  const feedback = section?.subject === "feedback";
+  const iso = feedback ? "" : clean(body.countryIso, 3).toUpperCase();
   const text = clean(body.text, 4000);
   const email = clean(body.email, 254);
   const category = clean(body.category, 20);
 
-  if (!/^[A-Z]{2,3}$/.test(iso)) return { ok: false, error: "Unknown country" };
   if (!section) return { ok: false, error: "Unknown section" };
+  if (!feedback && !/^[A-Z]{2,3}$/.test(iso)) return { ok: false, error: "Unknown country" };
   if (!text) return { ok: false, error: "Please write something to submit" };
   if (!EMAIL_RE.test(email)) return { ok: false, error: "Please enter a valid email" };
   if (body.certified !== true) return { ok: false, error: "Please confirm the certification" };
@@ -75,14 +78,14 @@ export function validate(body: Body): Validation {
     ok: true,
     value: {
       iso,
-      countryName: clean(body.countryName, 80) || iso,
+      countryName: feedback ? "" : clean(body.countryName, 80) || iso,
       sectionTitle,
       kind: section.kind,
       subject: section.subject,
       text,
       // Optional: why recommended (Cities only), tips (add cards).
       why: section.subject === "city" ? clean(body.why, 4000) : "",
-      tips: section.kind === "add" ? clean(body.tips, 4000) : "",
+      tips: section.kind === "add" && !feedback ? clean(body.tips, 4000) : "",
       source: clean(body.source, 1000),
       email,
       linkAccount: body.linkAccount === true,
@@ -97,7 +100,7 @@ export function validate(body: Body): Validation {
 export function toRow(s: Submission) {
   const isUrl = /^https?:\/\/\S+$/i.test(s.source);
   return {
-    country_id: s.iso,
+    country_id: s.iso || null,
     kind: s.kind,
     subject_type: s.subject,
     report_text: isUrl || !s.source ? s.text : `${s.text}\n\nSource: ${s.source}`,

@@ -18,6 +18,12 @@ refactors/doc updates unless they're worth calling out.
 ## [Unreleased]
 
 ### Added
+- A "BETA" label beside the whereabout logo on every page, and a note on
+  Sources & credits that information is still being collected, with a link
+  to Contribute.
+- General feedback: a "Send general feedback" link under the Contribute
+  card opens a short form for anything about whereabout as a whole, not one
+  country.
 - Contribute: a "Contribute" button (top right) opens a new page where you
   can pick a country and add to or dispute its information. Each ticket is
   marked ADD or DISPUTE, and tapping it opens a short form: your
@@ -34,6 +40,8 @@ refactors/doc updates unless they're worth calling out.
   pinned to the top of the screen as the page scrolls.
 
 ### Changed
+- On the home screen, the CONTRIBUTE and SOURCES & CREDITS tags are white
+  with a black shadow. The "Where to?" search stays a plain black panel.
 - A ticket's pop-up header now matches the color of its icon stub.
 - Country pages now use small flag colors too, like China's yellow stars,
   so their tickets aren't all one color.
