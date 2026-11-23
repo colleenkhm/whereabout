@@ -5,7 +5,7 @@ import type { CountrySummary } from "@/lib/types";
 import styles from "./StampBackdrop.module.css";
 
 // Enough to cover a large screen; overflow is clipped.
-const COUNT = 180;
+const COUNT = 250;
 
 // Stable shuffle so neighbors aren't alphabetical; same on server and client.
 const scramble = (iso: string) => [...iso].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) % 9973, 7);

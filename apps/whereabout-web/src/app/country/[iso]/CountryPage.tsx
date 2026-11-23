@@ -72,28 +72,10 @@ export default function CountryPage({
 
   const specs: CardSpec[] = [
     {
-      title: "Travel Advisory",
-      icon: MdOutlineShield,
-      hasData: advisory != null,
-      sheet: (c) => <TravelAdvisorySection advisories={usAdvisories} accent={c.accentOnWhite} />,
-    },
-    {
       title: "Visa & Entry",
       icon: MdOutlineBadge,
       hasData: true,
       sheet: (c) => <VisaSection visa={visa} accent={c.accentOnWhite} stateDeptUrl={advisory?.officialUrl ?? null} />,
-    },
-    {
-      title: "Languages",
-      icon: MdTranslate,
-      hasData: facts.languages.length > 0,
-      sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
-    },
-    {
-      title: "When to Visit",
-      icon: MdOutlineWbSunny,
-      hasData: guide.bestTimes.length > 0,
-      sheet: () => <BestTimesSection bestTimes={guide.bestTimes} palette={palette.tickets.map((t) => t.body)} />,
     },
     {
       title: "Cities",
@@ -124,10 +106,28 @@ export default function CountryPage({
       ),
     },
     {
+      title: "Languages",
+      icon: MdTranslate,
+      hasData: facts.languages.length > 0,
+      sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
+    },
+    {
+      title: "Travel Advisory",
+      icon: MdOutlineShield,
+      hasData: advisory != null,
+      sheet: (c) => <TravelAdvisorySection advisories={usAdvisories} accent={c.accentOnWhite} />,
+    },
+    {
       title: "Practical Norms",
       icon: MdOutlineTipsAndUpdates,
       hasData: guide.practicalNorms.length > 0,
       sheet: (c) => <PracticalNormsSection norms={guide.practicalNorms} colors={c} />,
+    },
+    {
+      title: "When to Visit",
+      icon: MdOutlineWbSunny,
+      hasData: guide.bestTimes.length > 0,
+      sheet: () => <BestTimesSection bestTimes={guide.bestTimes} palette={palette.tickets.map((t) => t.body)} />,
     },
     {
       title: "Resources",
@@ -139,17 +139,20 @@ export default function CountryPage({
 
   return (
     <PaperTexture>
-      <SiteHeader />
+      <SiteHeader background={palette.headerAccent} />
       <main>
         <CountryHeader
           isoCode={country.isoCode}
           name={country.nameCommon}
+          languages={facts.languages}
+          nativeNames={facts.nativeNames}
           timezone={facts.timezone}
           latitude={facts.latitude}
           exchangeRate={rate}
           currencyName={facts.currencyName}
           currencyCode={facts.currencyCode}
           header={palette.header}
+          accent={palette.headerAccent}
         />
         <PostageGrid>
           {specs.map((spec, i) => {
@@ -168,7 +171,7 @@ export default function CountryPage({
           })}
         </PostageGrid>
       </main>
-      <SiteFooter />
+      <SiteFooter accent={palette.headerAccent} />
       <PostageSheet sheet={sheet} onClose={() => setSheet(null)} />
     </PaperTexture>
   );

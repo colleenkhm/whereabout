@@ -4,19 +4,23 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { withAlpha, type SectionColors } from "@/lib/color";
 import { monthAbbrev } from "@/lib/format";
-import type { ExchangeRate } from "@/lib/types";
+import type { ExchangeRate, LanguageEntry } from "@/lib/types";
 import ExternalLink from "../ExternalLink";
+import { sortLanguages } from "./LanguageSection";
 import styles from "./CountryHeader.module.css";
 
 interface Props {
   isoCode: string;
   name: string;
+  languages: LanguageEntry[];
+  nativeNames: Record<string, string>;
   timezone: string | null;
   latitude: number | null;
   exchangeRate: ExchangeRate | null;
   currencyName: string | null;
   currencyCode: string | null;
   header: SectionColors;
+  accent: string;
 }
 
 // Masthead: flag, name, then local time and currency.
@@ -25,7 +29,10 @@ export default function CountryHeader(p: Props) {
   const hasTime = p.timezone != null;
   const hasCurrency = p.currencyCode != null;
   return (
-    <div className={styles.masthead} style={{ background: p.header.tint }}>
+    <div
+      className={styles.masthead}
+      style={{ background: p.header.tint }}
+    >
       <div className={styles.inner}>
         <div className={styles.titleCol}>
           <div className="tk-eyebrow" style={{ color: withAlpha(ink, 0.55) }}>
@@ -36,12 +43,14 @@ export default function CountryHeader(p: Props) {
           </h1>
         </div>
         <div className={styles.flagCol}>
-          <StampFlag isoCode={p.isoCode} />
+          <StampFlag isoCode={p.isoCode} label={nativeName(p.name, p.languages, p.nativeNames)} />
         </div>
         {(hasTime || hasCurrency) && (
           <div className={styles.facts} style={{ borderColor: withAlpha(ink, 0.2) }}>
             {hasTime && <LocalTimeFact timezone={p.timezone!} latitude={p.latitude} ink={ink} />}
-            {hasCurrency && <CurrencyFact rate={p.exchangeRate} currencyName={p.currencyName} ink={ink} />}
+            {hasCurrency && (
+              <CurrencyFact rate={p.exchangeRate} currencyName={p.currencyName} currencyCode={p.currencyCode!} ink={ink} />
+            )}
           </div>
         )}
       </div>
@@ -49,44 +58,33 @@ export default function CountryHeader(p: Props) {
   );
 }
 
-// Flag on a white perforated postage-stamp mat. Desktop size via CSS.
-function StampFlag({ isoCode }: { isoCode: string }) {
+// Flag on a classic postage stamp: white paper, round-hole perforations. Sizes via CSS.
+function StampFlag({ isoCode, label }: { isoCode: string; label: string }) {
   return (
-    <div className={styles.stamp}>
-      <svg className={styles.stampEdge} viewBox="0 0 62 46" preserveAspectRatio="none" aria-hidden>
-        <path d={stampPath(62, 46)} fill="#fff" />
-      </svg>
-      <Image
-        className={styles.flag}
-        src={`https://flagcdn.com/w160/${isoCode.toLowerCase()}.png`}
-        alt=""
-        width={68}
-        height={46}
-        unoptimized
-      />
+    <div className={styles.stampShadow}>
+      <div className={styles.stamp}>
+        <Image
+          className={styles.flag}
+          src={`https://flagcdn.com/w160/${isoCode.toLowerCase()}.png`}
+          alt=""
+          width={68}
+          height={46}
+          unoptimized
+        />
+        <span className={styles.stampName}>
+          {label}
+        </span>
+        <span className={`tk-eyebrow ${styles.stampCode}`}>{isoCode}</span>
+      </div>
     </div>
   );
 }
 
-// Zigzag outline: alternating baseline/outward points, 3px teeth.
-function stampPath(w: number, h: number, tooth = 3): string {
-  const l = tooth, t = tooth, r = w - tooth, b = h - tooth;
-  const pts: [number, number][] = [[l, t]];
-  const edge = (x0: number, y0: number, x1: number, y1: number, ox: number, oy: number) => {
-    const len = Math.hypot(x1 - x0, y1 - y0);
-    const steps = Math.max(2, Math.round(len / tooth));
-    for (let i = 1; i <= steps; i++) {
-      const f = i / steps;
-      const x = x0 + (x1 - x0) * f;
-      const y = y0 + (y1 - y0) * f;
-      pts.push(i % 2 ? [x + ox * tooth, y + oy * tooth] : [x, y]);
-    }
-  };
-  edge(l, t, r, t, 0, -1);
-  edge(r, t, r, b, 1, 0);
-  edge(r, b, l, b, 0, 1);
-  edge(l, b, l, t, -1, 0);
-  return "M" + pts.map(([x, y]) => `${x.toFixed(2)} ${y.toFixed(2)}`).join("L") + "Z";
+// Most-spoken non-English language with a native name; else first non-English; else English.
+function nativeName(english: string, languages: LanguageEntry[], names: Record<string, string>): string {
+  const local = Object.entries(names).filter(([lang]) => lang !== "English");
+  const byRank = sortLanguages(languages).find((l) => local.some(([lang]) => lang === l.name));
+  return (byRank && names[byRank.name]) ?? local[0]?.[1] ?? english;
 }
 
 function LocalTimeFact({ timezone, latitude, ink }: { timezone: string; latitude: number | null; ink: string }) {
@@ -106,19 +104,66 @@ function LocalTimeFact({ timezone, latitude, ink }: { timezone: string; latitude
   const hemisphere =
     latitude == null ? null : latitude === 0 ? "On the Equator" : latitude > 0 ? "Northern Hemisphere" : "Southern Hemisphere";
   return (
-    <Fact label="LOCAL TIME" value={local?.time ?? "—"} ink={ink}>
-      {local && <div>{`${local.date} · ${local.utc}`}</div>}
-      {hemisphere && <div>{hemisphere}</div>}
-    </Fact>
+    <div className={styles.timeFact}>
+      <div className="tf-label" style={{ color: withAlpha(ink, 0.55) }}>
+        LOCAL TIME
+      </div>
+      <DigitalClock hour={local?.hour ?? null} minute={local?.minute ?? null} ink={ink} />
+      <div className={`tf-sub ${styles.timeSub}`} style={{ color: withAlpha(ink, 0.75) }}>
+        {local && <div>{`${local.date} · ${local.utc}`}</div>}
+        {hemisphere && <div>{hemisphere}</div>}
+      </div>
+    </div>
   );
 }
 
-function CurrencyFact({ rate, currencyName, ink }: { rate: ExchangeRate | null; currencyName: string | null; ink: string }) {
+// Minimal 12-hour digital readout in the masthead ink, with a blinking colon.
+function DigitalClock({ hour, minute, ink }: { hour: number | null; minute: number | null; ink: string }) {
+  const pad = (n: number | null) => (n == null ? "--" : String(n).padStart(2, "0"));
+  const h12 = hour == null ? "--" : String(hour % 12 || 12);
+  const period = hour == null ? "" : hour < 12 ? "AM" : "PM";
   return (
-    <Fact label="$1 USD =" value={rate ? rateLabel(rate) : "—"} ink={ink}>
-      <div>{currencyName ?? "Daily rate"}</div>
+    <div
+      className={styles.clock}
+      style={{ color: ink, borderColor: withAlpha(ink, 0.35), background: withAlpha(ink, 0.06) }}
+      role="img"
+      aria-label={hour == null ? "Local time" : `Local time ${h12}:${pad(minute)} ${period}`}
+    >
+      <span>{h12}</span>
+      <span className={styles.colon}>:</span>
+      <span>{pad(minute)}</span>
+      {period && <span className={styles.period}>{period}</span>}
+    </div>
+  );
+}
+
+// Rate printed on a minimal banknote: framed, code in the corner.
+function CurrencyFact(p: { rate: ExchangeRate | null; currencyName: string | null; currencyCode: string; ink: string }) {
+  const { rate, ink } = p;
+  return (
+    <div>
+      <div className="tf-label" style={{ color: withAlpha(ink, 0.55) }}>
+        $1 USD =
+      </div>
+      <div
+        className={styles.bill}
+        style={{
+          color: ink,
+          borderColor: withAlpha(ink, 0.45),
+          background: withAlpha(ink, 0.06),
+        }}
+      >
+        <span className={styles.billFrame} style={{ borderColor: withAlpha(ink, 0.25) }} aria-hidden />
+        <span className={`tk-eyebrow ${styles.billCode}`} style={{ color: withAlpha(ink, 0.6) }} aria-hidden>
+          {p.currencyCode}
+        </span>
+        <div className="tf-val">{rate ? rateLabel(rate) : "—"}</div>
+        <div className="tf-sub" style={{ color: withAlpha(ink, 0.75) }}>
+          {p.currencyName ?? "Daily rate"}
+        </div>
+      </div>
       {rate && (
-        <div style={{ marginTop: 4 }}>
+        <div className="tf-sub" style={{ marginTop: 6 }}>
           <ExternalLink
             label="Convert"
             url={`https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=${rate.currencyCode}`}
@@ -126,23 +171,6 @@ function CurrencyFact({ rate, currencyName, ink }: { rate: ExchangeRate | null; 
           />
         </div>
       )}
-    </Fact>
-  );
-}
-
-// Label, big value, then detail lines.
-function Fact({ label, value, ink, children }: { label: string; value: string; ink: string; children?: React.ReactNode }) {
-  return (
-    <div>
-      <div className="tf-label" style={{ color: withAlpha(ink, 0.55) }}>
-        {label}
-      </div>
-      <div className="tf-val" style={{ marginTop: 4, color: ink }}>
-        {value}
-      </div>
-      <div className="tf-sub" style={{ marginTop: 2, color: withAlpha(ink, 0.75) }}>
-        {children}
-      </div>
     </div>
   );
 }
@@ -168,6 +196,8 @@ function localTime(now: Date, timeZone: string) {
     const utc = m ? `UTC${m[1]}${Number(m[2])}${m[3] === "00" ? "" : `:${m[3]}`}` : "UTC+0";
     return {
       time: `${parts.hour}:${parts.minute}`,
+      hour: Number(parts.hour),
+      minute: Number(parts.minute),
       date: `${parts.weekday}, ${monthAbbrev(Number(parts.month) - 1)} ${parts.day}`,
       utc,
     };

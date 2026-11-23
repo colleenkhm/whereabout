@@ -90,6 +90,8 @@ export interface TicketColors {
 // Masthead plus one two-tone ticket per flag color.
 export interface SectionPalette {
   header: SectionColors;
+  // Deeper shade of the masthead color (same formula as ticket stubs), its accent.
+  headerAccent: string;
   tickets: TicketColors[];
 }
 
@@ -123,12 +125,14 @@ export function paletteFromFlagColors(colors: string[]): SectionPalette {
   const header = headerSource(colors);
   // Masthead color goes last so the first ticket contrasts with it.
   const tickets = colors.length > 1 ? [...colors.filter((c) => c !== header), header] : colors;
-  return { header: colorsFor(header), tickets: tickets.map(ticketFor) };
+  return { header: colorsFor(header), headerAccent: stubShade(header), tickets: tickets.map(ticketFor) };
 }
 
 // No flag colors: a fixed vintage-ticket set.
+const fallbackHeader = deepen("#d8edf8");
 export const fallbackPalette: SectionPalette = {
-  header: colorsFor(deepen("#d8edf8")),
+  header: colorsFor(fallbackHeader),
+  headerAccent: stubShade(fallbackHeader),
   tickets: ["#e4704f", "#e9b949", "#5fa8a0", "#f2a477", "#8fa4d8", "#9dbb86", "#e39aae", "#b49bd6", "#d9bc8c"].map(ticketFor),
 };
 

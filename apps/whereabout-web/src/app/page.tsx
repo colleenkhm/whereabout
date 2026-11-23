@@ -9,22 +9,32 @@ export default async function Home() {
   const countries = await listCountries();
   return (
     <PaperTexture color="var(--ocean)">
-      <main
+      {/* Backdrop spans the footer too. */}
+      <div
         style={{
           flex: 1,
           position: "relative",
-          display: "grid",
-          placeItems: "center",
-          padding: "48px 24px",
-          minHeight: "max(560px, 100svh)",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <StampBackdrop countries={countries} />
-        <div style={{ position: "relative", width: "100%", maxWidth: 640 }}>
-          <CountrySearch countries={countries} />
-        </div>
-      </main>
-      <SiteFooter />
+        <main
+          style={{
+            flex: 1,
+            position: "relative",
+            display: "grid",
+            placeItems: "center",
+            padding: "48px 24px",
+            minHeight: "max(560px, 100svh)",
+          }}
+        >
+          <div style={{ position: "relative", width: "100%", maxWidth: 640 }}>
+            <CountrySearch countries={countries} />
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
     </PaperTexture>
   );
 }

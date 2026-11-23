@@ -1,13 +1,27 @@
 import Link from "next/link";
+import { readableTextColor } from "@/lib/color";
 
-// Credit line + Sources link (licenses need it findable everywhere).
-export default function SiteFooter() {
-  const style = { fontFamily: "var(--dm-mono)", fontSize: 10.5, color: "rgba(26, 21, 32, 0.75)" };
+// Sources link (licenses need it findable everywhere). Ink tag like the search panel.
+// accent: the country page's complementary color in place of ink.
+export default function SiteFooter({ accent }: { accent?: string }) {
   return (
-    <footer style={{ ...style, padding: "24px 0", textAlign: "center" }}>
-      built by Colleen Murray&nbsp;&nbsp;·&nbsp;&nbsp;
-      <Link href="/about" style={{ textDecoration: "underline" }}>
-        Sources &amp; credits
+    <footer style={{ position: "relative", padding: "28px 0", textAlign: "center" }}>
+      <Link
+        href="/about"
+        style={{
+          display: "inline-block",
+          padding: "10px 18px",
+          background: accent ?? "var(--ink)",
+          border: "2px solid var(--ink)",
+          borderRadius: 4,
+          color: accent ? readableTextColor(accent) : "#fff",
+          fontFamily: "var(--dm-mono)",
+          fontSize: 13,
+          fontWeight: 500,
+          letterSpacing: 1,
+        }}
+      >
+        SOURCES &amp; CREDITS
       </Link>
     </footer>
   );

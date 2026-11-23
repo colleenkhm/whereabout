@@ -137,6 +137,7 @@ function toFacts(row: Row | null, languageRows: Row[]): CountryFacts {
     lastImportedAt: str(row?.last_imported_at),
     borderingCountryCodes: row ? ((row.neighbors as string[] | null) ?? []) : null,
     climates: row ? ((row.climates as CountryFacts["climates"] | null) ?? []) : [],
+    nativeNames: (row?.native_names as Record<string, string> | null) ?? {},
   };
 }
 
