@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { readableTextColor } from "@/lib/color";
+import ContributeLink from "./ContributeLink";
 import LogoMark from "./LogoMark";
 import styles from "./SiteHeader.module.css";
 
@@ -17,7 +18,16 @@ export default function SiteHeader({ background }: { background?: string }) {
       }
     >
       {/* Window corner on the country variant; content-width otherwise. */}
-      <div style={background ? undefined : { maxWidth: "calc(var(--content-max) - 40px)", margin: "0 auto" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          color: text,
+          ...(background ? {} : { maxWidth: "calc(var(--content-max) - 40px)", margin: "0 auto" }),
+        }}
+      >
         <Link
           href="/"
           title="Home"
@@ -40,6 +50,7 @@ export default function SiteHeader({ background }: { background?: string }) {
             whereabout
           </span>
         </Link>
+        <ContributeLink />
       </div>
     </header>
   );

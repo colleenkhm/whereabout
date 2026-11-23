@@ -122,6 +122,17 @@
   height: 30px;
 }
 
+/* Contribute mode: rubber-stamp label in the body's empty top. */
+.mark {
+  align-self: flex-start;
+  margin-bottom: auto;
+  padding: 3px 6px 2px;
+  border: 1.2px solid;
+  border-radius: 2px;
+  color: #fff;
+  white-space: nowrap;
+}
+
 .title {
   font-size: 15px;
   line-height: 1.2;

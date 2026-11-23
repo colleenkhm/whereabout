@@ -1,5 +1,6 @@
 import { listCountries } from "@/lib/countryRepository";
 import PaperTexture from "@/components/PaperTexture";
+import ContributeLink from "@/components/ContributeLink";
 import SiteFooter from "@/components/SiteFooter";
 import CountrySearch from "./CountrySearch";
 import StampBackdrop from "./StampBackdrop";
@@ -19,6 +20,10 @@ export default async function Home() {
         }}
       >
         <StampBackdrop countries={countries} />
+        {/* Ink tag over the stamps, so it reads on any flag. */}
+        <div style={{ position: "absolute", top: 16, right: 16, zIndex: 1 }}>
+          <ContributeLink variant="filled" />
+        </div>
         <main
           style={{
             flex: 1,
