@@ -43,6 +43,12 @@ Deno.test("general feedback needs no country and stores a null country_id", () =
   assertEquals(toRow(v).country_id, null);
 });
 
+Deno.test("wantsUpdates on any form, only when literally true", () => {
+  assertEquals(valid({ ...base, section: "General Feedback", wantsUpdates: true }).wantsUpdates, true);
+  assertEquals(valid({ ...base, wantsUpdates: true }).wantsUpdates, true);
+  assertEquals(valid({ ...base, wantsUpdates: "yes" }).wantsUpdates, false);
+});
+
 Deno.test("general feedback ignores a stray country", () => {
   assertEquals(valid({ ...base, section: "General Feedback" }).iso, "");
 });

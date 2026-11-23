@@ -12,6 +12,7 @@
 // can only deliver to the Resend account's own address, which is all this needs.
 
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { addSubscriber } from "../_shared/subscribers.ts";
 import { type Body, toRow, validate } from "./validate.ts";
 
 const corsHeaders = {
@@ -51,6 +52,9 @@ Deno.serve(async (req) => {
     return json({ error: "Couldn't save that. Please try again." }, error.code === "23503" ? 400 : 500);
   }
 
+  // Opt-in checkbox; a failure here doesn't fail the submission.
+  if (sub.wantsUpdates) await addSubscriber(supabase, sub.email, sub.iso ? "contribution" : "feedback");
+
   await sendEmail({
     id: row.id,
     kind: sub.kind,
@@ -62,6 +66,7 @@ Deno.serve(async (req) => {
     source: sub.source,
     email: sub.email,
     linkAccount: sub.linkAccount,
+    wantsUpdates: sub.wantsUpdates,
     city: sub.city,
     category: sub.category,
   });
@@ -80,6 +85,7 @@ async function sendEmail(s: {
   source: string;
   email: string;
   linkAccount: boolean;
+  wantsUpdates: boolean;
   city: string;
   category: string;
 }) {
@@ -105,6 +111,7 @@ async function sendEmail(s: {
     `Source: ${s.source || "(none given)"}`,
     `Contributor email: ${s.email}`,
     `Link to their account later: ${s.linkAccount ? "yes" : "no"}`,
+    `Wants email updates: ${s.wantsUpdates ? "yes" : "no"}`,
     "Certified true to the best of their knowledge: yes",
     "",
     `correction_reports.id = ${s.id}`,

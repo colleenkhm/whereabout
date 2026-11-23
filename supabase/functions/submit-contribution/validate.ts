@@ -29,6 +29,7 @@ export interface Body {
   email?: unknown;
   certified?: unknown;
   linkAccount?: unknown;
+  wantsUpdates?: unknown;
   city?: unknown;
   category?: unknown;
   website?: unknown; // honeypot
@@ -46,6 +47,7 @@ export interface Submission {
   source: string;
   email: string;
   linkAccount: boolean;
+  wantsUpdates: boolean;
   city: string;
   category: string;
 }
@@ -89,6 +91,7 @@ export function validate(body: Body): Validation {
       source: clean(body.source, 1000),
       email,
       linkAccount: body.linkAccount === true,
+      wantsUpdates: body.wantsUpdates === true,
       // City fields only mean something on the Cities card.
       city: isCity ? clean(body.city, 120) : "",
       category: isCity ? category : "",

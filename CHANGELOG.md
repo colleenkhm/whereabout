@@ -26,8 +26,8 @@ refactors/doc updates unless they're worth calling out.
 ### Added
 - whereabout is now in beta: a "BETA" label sits beside the logo on every
   page, and Sources & credits notes that information is still being
-  collected, with a link to Contribute.
-- Contribute: a "Contribute" button (top right) opens a new page where you
+  collected, with a link to Get involved.
+- Get involved: a "Get involved" button (top right) opens a new page where you
   can pick a country and add to or dispute its information. Each ticket is
   marked ADD or DISPUTE, and tapping it opens a short form: your
   information, optional tips & things to know (on ADD tickets; Cities also
@@ -36,14 +36,17 @@ refactors/doc updates unless they're worth calling out.
   Else?" ticket takes anything that doesn't fit the others. DISPUTE forms
   open with the current information above them. ADD and DISPUTE pop-ups
   get a green or red header to match their stamp.
-- General feedback: a "Send general feedback" link under the Contribute
+- General feedback: a "Send general feedback" link under the add/dispute
   card opens a short form for anything about whereabout as a whole, not one
   country.
+- Get updates: a sign-up card on the Get involved page takes your email if
+  you'd like occasional updates about whereabout, and every contribution
+  and feedback form has an opt-in checkbox for the same.
 - On phones, the whereabout logo row and the country name + stamp stay
   pinned to the top of the screen as the page scrolls.
 
 ### Changed
-- On the home screen, the CONTRIBUTE and SOURCES & CREDITS tags are white
+- On the home screen, the GET INVOLVED and SOURCES & CREDITS tags are white
   with a black shadow.
 - The flags behind the home screen search now drift in rows, alternating
   direction.
@@ -53,6 +56,8 @@ refactors/doc updates unless they're worth calling out.
 - Yellow and gold tickets are softer: a lighter body and a paler stub,
   instead of neon yellow with a muddy olive stub.
 - White tickets have a black stub instead of a gray one.
+- Dark tickets (the ones with a white shadow) no longer have a thin white
+  outline.
 - On country pages, the whereabout logo row now uses one of the flag's other
   colors, so it reads apart from the country's colored header below it. The
   perforated line under it is gone.
