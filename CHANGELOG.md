@@ -24,6 +24,11 @@ refactors/doc updates unless they're worth calling out.
   pinned to the top of the screen as the page scrolls.
 
 ### Changed
+- Country pages now use small flag colors too, like China's yellow stars,
+  so their tickets aren't all one color.
+- Yellow and gold tickets are softer: a lighter body and a paler stub,
+  instead of neon yellow with a muddy olive stub.
+- White tickets have a black stub instead of a gray one.
 - On country pages, the whereabout logo row now uses one of the flag's other
   colors, so it reads apart from the country's colored header below it. The
   perforated line under it is gone.
