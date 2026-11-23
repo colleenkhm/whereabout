@@ -49,7 +49,7 @@ export default async function Contribute() {
         </section>
 
         <p className={`s-body ${styles.feedbackLink}`}>
-          Not about one country? <Link href="/contribute/feedback">Send general feedback →</Link>
+          Anything else to mention, or want to get even more involved? <Link href="/contribute/feedback">Send general feedback →</Link>
         </p>
 
         <UpdatesSignup />

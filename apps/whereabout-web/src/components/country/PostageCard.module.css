@@ -3,8 +3,9 @@
   --stub: 72%;
   --notch: 6px;
   --edge: 1.2px;
-  /* Shadow fill: --board-shadow (white on dark pages). */
-  --ink-edge: var(--board-shadow, var(--ink));
+  /* Shadow: --board-shadow (white on dark pages); white cards override to ink. */
+  --drop: var(--board-shadow, var(--ink));
+  --ink-edge: var(--drop);
   position: relative;
   display: block;
   height: 160px;
@@ -91,7 +92,7 @@
       bottom / 100% 51% no-repeat;
 }
 
-/* Flat pushpin, top-left: page-colored, ink-outlined like the card. */
+/* Flat pushpin, top-left: filled in the page's text color so it never matches the page. */
 .pin {
   position: absolute;
   top: -3px;
@@ -99,7 +100,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--page-bg);
+  background: var(--page-ink);
   border: 1.4px solid var(--board-shadow, var(--ink));
   z-index: 2;
 }
@@ -279,12 +280,12 @@
   background-color: var(--body);
   border: 1.4px solid var(--ink);
   border-radius: 3px;
-  box-shadow: 4px 4px 0 var(--board-shadow, var(--ink));
+  box-shadow: 4px 4px 0 var(--drop);
 }
 
 /* SVG-outlined shapes: shadow follows the outline. */
 .foldedMap {
-  filter: drop-shadow(4px 4px 0 var(--board-shadow, var(--ink)));
+  filter: drop-shadow(4px 4px 0 var(--drop));
 }
 
 .outline {
@@ -500,7 +501,7 @@
   background: var(--body);
   border: 1.4px solid var(--ink);
   border-radius: 16px;
-  filter: drop-shadow(4px 4px 0 var(--board-shadow, var(--ink)));
+  filter: drop-shadow(4px 4px 0 var(--drop));
 }
 
 .speech::after {

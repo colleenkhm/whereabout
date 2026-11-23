@@ -38,7 +38,7 @@ export function DeparturesBar(p: LocalFactsProps & { onOpen: () => void }) {
       ? [
           <span key="c">
             {p.exchangeRate ? `$1 USD = ${rateLabel(p.exchangeRate)}` : `$1 USD = ${p.currencyCode} —`}
-            {p.currencyName && <span className={styles.desktopOnly}> ({p.currencyName})</span>}
+            {p.currencyName && <span className={styles.desktopOnly}> ({p.currencyName.toUpperCase()})</span>}
           </span>,
         ]
       : []),

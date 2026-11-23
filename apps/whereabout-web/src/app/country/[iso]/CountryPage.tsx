@@ -13,7 +13,6 @@ import {
   MdOutlineShield,
   MdOutlineTipsAndUpdates,
   MdOutlineWbSunny,
-  MdTranslate,
 } from "react-icons/md";
 import { type SectionColors, type SectionPalette, type TicketColors } from "@/lib/color";
 import { CONTRIBUTE_SECTIONS, OTHER_SECTION, useContributeMode } from "@/lib/contribute";
@@ -30,6 +29,7 @@ import ContributeForm from "@/components/country/ContributeForm";
 import CountryHeader from "@/components/country/CountryHeader";
 import { LocalDetails } from "@/components/country/LocalFacts";
 import LanguageSection from "@/components/country/LanguageSection";
+import TalkingIcon from "@/components/icons/TalkingIcon";
 import MapSection from "@/components/country/MapSection";
 import PostageCard, { type CardShape, POSTAGE_TILTS, PostageGrid } from "@/components/country/PostageCard";
 import PostageSheet, { type SheetContent } from "@/components/country/PostageSheet";
@@ -107,6 +107,13 @@ export default function CountryPage({
       ),
     },
     {
+      title: "Languages",
+      shape: "speech",
+      icon: TalkingIcon,
+      hasData: facts.languages.length > 0,
+      sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
+    },
+    {
       title: "Border Countries",
       shape: "globe",
       icon: MdOutlineMap,
@@ -114,13 +121,6 @@ export default function CountryPage({
       sheet: (c) => (
         <BorderCountriesSection isoCode={country.isoCode} codes={borders ?? []} allCountries={allCountries} accent={c.accentOnWhite} />
       ),
-    },
-    {
-      title: "Languages",
-      shape: "speech",
-      icon: MdTranslate,
-      hasData: facts.languages.length > 0,
-      sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
     },
     {
       title: "Travel Advisory",
