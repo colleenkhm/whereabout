@@ -20,6 +20,17 @@ refactors/doc updates unless they're worth calling out.
 ### Added
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
+- On phones, the whereabout logo row and the country name + stamp stay
+  pinned to the top of the screen as the page scrolls.
+
+### Changed
+- On country pages, the whereabout logo row now uses one of the flag's other
+  colors, so it reads apart from the country's colored header below it. The
+  perforated line under it is gone.
+- The flat gray behind a country's tickets is now a soft, muted version of
+  that country's header color.
+- The local-time clock and the currency banknote are filled with the same
+  soft, muted country color as the page, with black text and outlines.
 
 ## [0.12.0] — 2026-11-23
 
