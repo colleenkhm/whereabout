@@ -78,7 +78,7 @@ node_modules/
 !.env.example
 
 # Supabase CLI cache (linked project, versions)
-supabase/.temp/
+**/supabase/.temp/
 
 # Generated Flutter files under apps/ and packages/ — covered by their own
 # .gitignores too, but those vanish on branches that don't track these dirs.

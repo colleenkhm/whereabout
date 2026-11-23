@@ -18,12 +18,22 @@ refactors/doc updates unless they're worth calling out.
 ## [Unreleased]
 
 ### Added
+- Contribute: a "Contribute" button (top right) opens a new page where you
+  can pick a country and add to or dispute its information. Each ticket is
+  marked ADD or DISPUTE, and tapping it opens a short form: your
+  information, optional tips & things to know (on ADD tickets), an optional
+  source, your email, and an opt-in to attach it to
+  your account once accounts launch. A "Something Else?" ticket takes
+  anything that doesn't fit the others. DISPUTE forms open with the
+  current information above them. ADD and DISPUTE pop-ups get a green or
+  red header to match their stamp. Needs the email service set up before submissions arrive.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 - On phones, the whereabout logo row and the country name + stamp stay
   pinned to the top of the screen as the page scrolls.
 
 ### Changed
+- A ticket's pop-up header now matches the color of its icon stub.
 - Country pages now use small flag colors too, like China's yellow stars,
   so their tickets aren't all one color.
 - Yellow and gold tickets are softer: a lighter body and a paler stub,
