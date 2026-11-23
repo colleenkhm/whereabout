@@ -21,6 +21,17 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+### Changed
+- "Get involved" and "Sources & credits" lift on hover, like the country
+  cards, so they read as links.
+- When to Visit shows at most four months, picked so each reason for
+  visiting gets at least one. Month squares no longer repeat their month
+  names or open with "Best months to visit —".
+- Cities: the source link sits on the left under the list, clear of the
+  population numbers, with no extra rule below the last city.
+- Languages always opens now. A country with no language census data, or
+  no speaker percentages, says so and links to the add/dispute form.
+
 ## [0.13.0] — 2026-11-23
 
 ### Added
