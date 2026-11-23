@@ -165,3 +165,32 @@ button {
   letter-spacing: -0.01em;
   color: var(--ink);
 }
+
+/* --- Shared utilities --- */
+
+/* Faded ink for eyebrows on paper. */
+.ink-soft {
+  color: rgba(26, 21, 32, 0.6);
+}
+
+.error-text {
+  color: var(--danger);
+}
+
+/* Same lift as the country cards, for links that need to read as clickable. */
+.lift {
+  display: inline-block;
+  transition: transform 160ms ease-out;
+}
+
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lift {
+    transition: none;
+  }
+}

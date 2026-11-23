@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { isWhitish, readableTextColor, type SectionColors } from "@/lib/color";
+import { cssVars, isWhitish, readableTextColor, type SectionColors } from "@/lib/color";
 import type { ExchangeRate, LanguageEntry } from "@/lib/types";
 import SiteHeader from "../SiteHeader";
 import { DeparturesBar } from "./LocalFacts";
@@ -28,10 +28,7 @@ export default function CountryHeader(p: Props) {
   const hasFacts = p.timezone != null || p.currencyCode != null;
   // Hidden with the facts (contribute mode).
   const hemisphere = hasFacts ? hemisphereOf(p.latitude) : null;
-  const colors = {
-    "--c2": p.nav,
-    "--c2-ink": readableTextColor(p.nav),
-  } as React.CSSProperties;
+  const colors = cssVars({ "--c2": p.nav, "--c2-ink": readableTextColor(p.nav) });
   return (
     <>
       <div className={styles.sticky} style={colors}>

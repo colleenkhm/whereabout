@@ -1,7 +1,8 @@
-import { advisoryColor } from "@/lib/color";
+import { advisoryColor, cssVars } from "@/lib/color";
 import { formatShortDate } from "@/lib/format";
 import type { TravelAdvisory } from "@/lib/types";
 import SectionSource from "./SectionSource";
+import section from "./Section.module.css";
 
 const levelNumber = (a: TravelAdvisory) => {
   const m = /(\d+)/.exec(a.level ?? "");
@@ -10,19 +11,19 @@ const levelNumber = (a: TravelAdvisory) => {
 
 export default function TravelAdvisorySection({ advisories, accent }: { advisories: TravelAdvisory[]; accent: string }) {
   return (
-    <div style={{ padding: "16px 20px" }}>
-      {advisories.map((a, i) => {
+    <div className={section.pad}>
+      {advisories.map((a) => {
         const level = levelNumber(a);
         return (
-          <div key={a.issuingAuthority} style={i ? { marginTop: 14, paddingTop: 14, borderTop: "1px solid var(--rule)" } : undefined}>
+          <div key={a.issuingAuthority} className={section.divided}>
             <div className="s-label">{a.issuingAuthority}</div>
             {(a.level || a.levelLabel) && (
-              <div className="s-head" style={{ marginTop: 5, color: level == null ? "var(--ink)" : advisoryColor(level) }}>
+              <div className={`s-head ${section.headline} ${section.level}`} style={cssVars({ "--level": level == null ? undefined : advisoryColor(level) })}>
                 {[a.level, a.levelLabel].filter(Boolean).join(" — ")}
               </div>
             )}
             {a.summary && (
-              <p className="s-body" style={{ marginTop: 6 }}>
+              <p className={`s-body ${section.lead}`}>
                 {a.summary}
               </p>
             )}

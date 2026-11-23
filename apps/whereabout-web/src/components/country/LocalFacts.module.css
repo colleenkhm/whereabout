@@ -210,3 +210,15 @@
 .table tr + tr td {
   border-top: 1px solid var(--rule);
 }
+
+.zone {
+  margin-top: 4px;
+}
+
+.currency {
+  margin-top: 5px;
+}
+
+.unavailable {
+  margin-top: 6px;
+}

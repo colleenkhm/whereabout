@@ -1,0 +1,20 @@
+/* Contribute mode: ink strip above the grid. */
+.banner {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.bannerInner {
+  max-width: calc(var(--content-max) - 40px);
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.done {
+  text-decoration: underline;
+}

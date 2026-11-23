@@ -1,5 +1,14 @@
 // Port of contrast_color.dart and section_palette.dart.
 
+import type { CSSProperties } from "react";
+
+// Runtime colors for a CSS module, as custom properties. The only inline style allowed.
+export const cssVars = (vars: Record<`--${string}`, string | undefined>) => vars as CSSProperties;
+
+// A SectionColors as --tint / --text / --accent.
+export const sectionVars = (c: SectionColors) =>
+  cssVars({ "--tint": c.tint, "--text": c.textColor, "--accent": c.accentOnWhite });
+
 export type Rgb = { r: number; g: number; b: number }; // 0-1
 type Hsl = { h: number; s: number; l: number }; // h 0-360, s/l 0-1
 

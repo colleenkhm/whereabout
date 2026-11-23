@@ -14,7 +14,7 @@ export default function Feedback() {
     <PaperTexture color="var(--ocean)">
       <SiteHeader />
       <main className={styles.main}>
-        <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+        <div className="tk-eyebrow ink-soft">
           GET INVOLVED
         </div>
         <h1 className={styles.title}>General feedback</h1>
@@ -25,7 +25,7 @@ export default function Feedback() {
             <h2 className="sec-name">Tell us anything</h2>
           </div>
           <div className={styles.feedbackBody}>
-            <p className="s-body" style={{ padding: "18px 20px 0" }}>
+            <p className={`s-body ${styles.feedbackIntro}`}>
               Something about whereabout as a whole, not one country: a bug, an idea, something confusing, or what
               you&apos;d like to see next.
             </p>

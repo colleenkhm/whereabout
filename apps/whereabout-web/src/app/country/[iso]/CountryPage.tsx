@@ -36,6 +36,7 @@ import PostageSheet, { type SheetContent } from "@/components/country/PostageShe
 import PracticalNormsSection from "@/components/country/PracticalNormsSection";
 import TravelAdvisorySection from "@/components/country/TravelAdvisorySection";
 import VisaSection from "@/components/country/VisaSection";
+import styles from "./CountryPage.module.css";
 
 // sheet: what the card opens.
 interface CardSpec {
@@ -110,7 +111,8 @@ export default function CountryPage({
       title: "Languages",
       shape: "speech",
       icon: TalkingIcon,
-      hasData: facts.languages.length > 0,
+      // Always opens: no census data gets its own message.
+      hasData: true,
       sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
     },
     {
@@ -253,22 +255,11 @@ const STAMP_COLORS = { add: stampColors("var(--stamp-add)"), dispute: stampColor
 // Ink strip above the grid: which mode, and the way back out.
 function ContributeBanner({ isoCode, name }: { isoCode: string; name: string }) {
   return (
-    <div style={{ background: "var(--ink)", color: "var(--white)" }}>
-      <div
-        style={{
-          maxWidth: "calc(var(--content-max) - 40px)",
-          margin: "0 auto",
-          padding: "10px 20px",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          gap: "4px 16px",
-        }}
-      >
+    <div className={styles.banner}>
+      <div className={styles.bannerInner}>
         <span className="tk-eyebrow">CONTRIBUTING TO {name.toUpperCase()}</span>
         {/* Full load: mode is read from the URL on mount. */}
-        <a href={`/country/${isoCode.toLowerCase()}`} className="tf-link" style={{ textDecoration: "underline" }}>
+        <a href={`/country/${isoCode.toLowerCase()}`} className={`tf-link ${styles.done}`}>
           DONE
         </a>
       </div>

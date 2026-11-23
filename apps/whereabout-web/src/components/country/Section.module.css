@@ -1,0 +1,90 @@
+/* Shared sheet bodies for the country sections. Colors arrive as --tint / --text / --accent (sectionVars). */
+
+.pad {
+  padding: 16px 20px;
+}
+
+.message {
+  padding: 18px 20px;
+}
+
+.tinted {
+  background: var(--tint);
+  color: var(--text);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+/* Head under an s-label; body under a head. */
+.headline {
+  margin-top: 5px;
+}
+
+.lead {
+  margin-top: 6px;
+}
+
+/* Row lists: rules only between rows. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--rule);
+}
+
+.rowTitle {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Contribute mode: a row as a button. */
+.pick {
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.footer {
+  padding: 0 20px 13px;
+}
+
+/* Divider between later blocks in one section. */
+.divided + .divided {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+.inlineLink {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* Advisory level, in its severity color. */
+.level {
+  color: var(--level, var(--ink));
+}
+
+.tallRow {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+/* Beats the global .row-title ink. */
+.row .linkTitle {
+  color: var(--accent);
+}

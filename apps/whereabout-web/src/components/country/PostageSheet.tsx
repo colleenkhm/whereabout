@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import type { IconType } from "react-icons";
 import { MdClose } from "react-icons/md";
-import type { SectionColors } from "@/lib/color";
+import { sectionVars, type SectionColors } from "@/lib/color";
 import styles from "./PostageSheet.module.css";
 
 export interface SheetContent {
@@ -55,9 +55,9 @@ export default function PostageSheet({ sheet, onClose }: { sheet: SheetContent |
       {sheet && Icon && (
         <div className={styles.panel}>
           <span className={styles.hole} aria-hidden />
-          <div className={styles.header} style={{ background: sheet.colors.tint, color: sheet.colors.textColor }}>
+          <div className={styles.header} style={sectionVars(sheet.colors)}>
             <Icon size={22} aria-hidden />
-            <h2 className="sec-name" style={{ flex: 1, color: sheet.colors.textColor }}>
+            <h2 className={`sec-name ${styles.title}`}>
               {sheet.title}
             </h2>
             <button className={styles.close} onClick={onClose} aria-label="Close" title="Close">

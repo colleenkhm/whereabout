@@ -91,7 +91,7 @@ export function LocalDetails(p: LocalFactsProps & { accent: string }) {
             <Clock local={local} />
           </div>
           <div className="s-head">{local?.longDate ?? " "}</div>
-          <div className="row-meta" style={{ marginTop: 4 }}>
+          <div className={`row-meta ${styles.zone}`}>
             {local ? [local.zoneName, local.utc].filter(Boolean).join(" · ") : " "}
           </div>
           {local && now && <div className="row-meta">{offsetFromViewer(local.offsetMinutes, now)}</div>}
@@ -100,7 +100,7 @@ export function LocalDetails(p: LocalFactsProps & { accent: string }) {
       {p.currencyCode != null && (
         <section>
           <div className="s-label">CURRENCY</div>
-          <div className="s-head" style={{ marginTop: 5 }}>
+          <div className={`s-head ${styles.currency}`}>
             {[p.currencyName, p.currencyCode].filter(Boolean).join(" · ")}
           </div>
           {rate ? (
@@ -126,7 +126,7 @@ export function LocalDetails(p: LocalFactsProps & { accent: string }) {
               />
             </>
           ) : (
-            <div className="row-meta" style={{ marginTop: 6 }}>
+            <div className={`row-meta ${styles.unavailable}`}>
               Live rate unavailable right now.
             </div>
           )}

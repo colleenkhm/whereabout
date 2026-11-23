@@ -1,0 +1,29 @@
+/* GET INVOLVED / SOURCES & CREDITS tags. One box for every variant (and the filled BETA), so they always line up. */
+.tag {
+  padding: 4px 8px;
+  border: 2px solid;
+  border-radius: 4px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Colored header/footer bar, in its text color. --tag-shadow: white on dark bars (set by the bar), like the cards. */
+.outline {
+  border-color: currentColor;
+  box-shadow: 3px 3px 0 var(--tag-shadow, var(--ink));
+}
+
+/* Ink bar. */
+.white {
+  background: #fff;
+  color: var(--ink);
+  border-color: #fff;
+}
+
+/* Home page, over the flags. */
+.filled {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}

@@ -17,7 +17,7 @@ export default async function Contribute() {
     <PaperTexture color="var(--ocean)">
       <SiteHeader />
       <main className={styles.main}>
-        <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+        <div className="tk-eyebrow ink-soft">
           GET INVOLVED
         </div>
         <h1 className={styles.title}>Help fill in the map</h1>
