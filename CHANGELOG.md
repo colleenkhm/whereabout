@@ -18,30 +18,35 @@ refactors/doc updates unless they're worth calling out.
 ## [Unreleased]
 
 ### Added
-- A "BETA" label beside the whereabout logo on every page, and a note on
-  Sources & credits that information is still being collected, with a link
-  to Contribute.
-- General feedback: a "Send general feedback" link under the Contribute
-  card opens a short form for anything about whereabout as a whole, not one
-  country.
+- "Holidays" section on the country page — public holidays, sourced from
+  Nager.Date. Data is imported; the section isn't in the app yet.
+
+## [0.13.0] — 2026-11-23
+
+### Added
+- whereabout is now in beta: a "BETA" label sits beside the logo on every
+  page, and Sources & credits notes that information is still being
+  collected, with a link to Contribute.
 - Contribute: a "Contribute" button (top right) opens a new page where you
   can pick a country and add to or dispute its information. Each ticket is
   marked ADD or DISPUTE, and tapping it opens a short form: your
   information, optional tips & things to know (on ADD tickets; Cities also
-  asks why it's recommended), an optional
-  source, your email, and an opt-in to attach it to
-  your account once accounts launch. A "Something Else?" ticket takes
-  anything that doesn't fit the others. DISPUTE forms open with the
-  current information above them. ADD and DISPUTE pop-ups get a green or
-  red header to match their stamp. Needs the email service set up before submissions arrive.
-- "Holidays" section on the country page — public holidays, sourced from
-  Nager.Date. Data is imported; the section isn't in the app yet.
+  asks why it's recommended), an optional source, your email, and an
+  opt-in to attach it to your account once accounts launch. A "Something
+  Else?" ticket takes anything that doesn't fit the others. DISPUTE forms
+  open with the current information above them. ADD and DISPUTE pop-ups
+  get a green or red header to match their stamp.
+- General feedback: a "Send general feedback" link under the Contribute
+  card opens a short form for anything about whereabout as a whole, not one
+  country.
 - On phones, the whereabout logo row and the country name + stamp stay
   pinned to the top of the screen as the page scrolls.
 
 ### Changed
 - On the home screen, the CONTRIBUTE and SOURCES & CREDITS tags are white
-  with a black shadow. The "Where to?" search stays a plain black panel.
+  with a black shadow.
+- The flags behind the home screen search now drift in rows, alternating
+  direction.
 - A ticket's pop-up header now matches the color of its icon stub.
 - Country pages now use small flag colors too, like China's yellow stars,
   so their tickets aren't all one color.
