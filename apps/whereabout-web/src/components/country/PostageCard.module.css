@@ -12,6 +12,63 @@
   transition: transform 160ms ease-out;
 }
 
+/* Crisp offset shadow: the ticket's shape moved 4px, with the ticket's own notches also cut
+   so no shadow shows inside them. Built like the ticket: an ink outline layer (::before) with
+   a fill inset by --edge (::after) in the ticket's outline color, so white shadows get an ink edge. */
+.card::before,
+.card::after {
+  --n: calc(var(--notch) - var(--edge));
+  --hole-x: calc(var(--stub) - 4px);
+  content: "";
+  position: absolute;
+  z-index: -1;
+  transform: translate(4px, 4px);
+}
+
+.card::before {
+  inset: 0;
+  border-radius: 10px;
+  background: var(--ink);
+  -webkit-mask:
+    radial-gradient(circle at var(--hole-x) calc(var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
+      51% no-repeat,
+    radial-gradient(circle at var(--stub) calc(100% - var(--edge)), transparent var(--n), #000 calc(var(--n) + 0.5px))
+      bottom / 100% 51% no-repeat;
+  -webkit-mask-composite: source-in, source-in, source-over, source-over;
+  mask:
+    radial-gradient(circle at var(--hole-x) calc(var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
+      51% no-repeat,
+    radial-gradient(circle at var(--stub) calc(100% - var(--edge)), transparent var(--n), #000 calc(var(--n) + 0.5px))
+      bottom / 100% 51% no-repeat;
+  mask-composite: intersect, intersect, add, add;
+}
+
+.card::after {
+  inset: var(--edge);
+  border-radius: calc(10px - var(--edge));
+  background: var(--ink-edge);
+  -webkit-mask:
+    radial-gradient(circle at var(--hole-x) -4px, transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) 0, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) top / 100% 51%
+      no-repeat,
+    radial-gradient(circle at var(--stub) 100%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) bottom /
+      100% 51% no-repeat;
+  -webkit-mask-composite: source-in, source-in, source-over, source-over;
+  mask:
+    radial-gradient(circle at var(--hole-x) -4px, transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) 0, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) top / 100% 51%
+      no-repeat,
+    radial-gradient(circle at var(--stub) 100%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) bottom /
+      100% 51% no-repeat;
+  mask-composite: intersect, intersect, add, add;
+}
+
 /* Outline: an ink layer the ticket's shape grown by --edge, with the ticket inset by
    --edge inside it, so the border is even through corners and notches. Pin sits outside. */
 .frame {

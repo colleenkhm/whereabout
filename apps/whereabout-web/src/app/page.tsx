@@ -3,9 +3,9 @@ import PaperTexture from "@/components/PaperTexture";
 import ContributeLink from "@/components/ContributeLink";
 import SiteFooter from "@/components/SiteFooter";
 import CountrySearch from "./CountrySearch";
-import StampBackdrop from "./StampBackdrop";
+import FlagBackdrop from "./FlagBackdrop";
 
-// No site header here: just stamps and the search.
+// No site header here: just flags and the search.
 export default async function Home() {
   const countries = await listCountries();
   return (
@@ -19,8 +19,8 @@ export default async function Home() {
           flexDirection: "column",
         }}
       >
-        <StampBackdrop countries={countries} />
-        {/* Ink tag over the stamps, so it reads on any flag. */}
+        <FlagBackdrop countries={countries} />
+        {/* Ink tag over the flags, so it reads on any flag. */}
         <div style={{ position: "absolute", top: 16, right: 16, zIndex: 1 }}>
           <ContributeLink variant="filled" />
         </div>
@@ -34,7 +34,7 @@ export default async function Home() {
             minHeight: "max(560px, 100svh)",
           }}
         >
-          <div style={{ position: "relative", width: "100%", maxWidth: 640 }}>
+          <div style={{ position: "relative", width: "100%", maxWidth: 580 }}>
             <CountrySearch countries={countries} />
           </div>
         </main>

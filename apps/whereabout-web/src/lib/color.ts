@@ -96,6 +96,8 @@ export interface SectionPalette {
   nav: string;
   // Page behind the tickets: the masthead hue, pale and muted.
   page: SectionColors;
+  // Bottom of the page gradient: same hue as page, a little deeper.
+  pageDeep: string;
   tickets: TicketColors[];
 }
 
@@ -134,10 +136,11 @@ function paler(hex: string, t: number): string {
 }
 
 // Same hue, pale and soft; fixed lightness so dark flags don't go gray.
-function mutedPage(hex: string): SectionColors {
+const mutedPageHex = (hex: string, l: number) => {
   const hsl = hexToHsl(hex);
-  return colorsFor(hslToHex({ h: hsl.h, s: hsl.s < ACHROMATIC ? 0 : Math.min(hsl.s, 0.45), l: 0.9 }));
-}
+  return hslToHex({ h: hsl.h, s: hsl.s < ACHROMATIC ? 0 : Math.min(hsl.s, 0.45), l });
+};
+const mutedPage = (hex: string): SectionColors => colorsFor(mutedPageHex(hex, 0.9));
 
 // Light colors soften on the body too; the stub stays paler still.
 const ticketFor = (hex: string): TicketColors => ({
@@ -159,6 +162,7 @@ export function paletteFromFlagColors(colors: string[]): SectionPalette {
     headerAccent,
     nav: colors.length > 1 ? tickets[0] : headerAccent,
     page: mutedPage(header),
+    pageDeep: mutedPageHex(header, 0.8),
     tickets: tickets.map(ticketFor),
   };
 }
@@ -170,6 +174,7 @@ export const fallbackPalette: SectionPalette = {
   headerAccent: stubShade(fallbackHeader),
   nav: stubShade(fallbackHeader),
   page: mutedPage(fallbackHeader),
+  pageDeep: mutedPageHex(fallbackHeader, 0.8),
   tickets: ["#e4704f", "#e9b949", "#5fa8a0", "#f2a477", "#8fa4d8", "#9dbb86", "#e39aae", "#b49bd6", "#d9bc8c"].map(ticketFor),
 };
 

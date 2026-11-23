@@ -27,11 +27,7 @@ export default function PostageCard({
 }) {
   const { body, stub } = colors;
   const ticket = (
-    // Dark tickets (white text) get a white outline to match their perforation.
-    <span
-      className={styles.frame}
-      style={body.textColor === "#ffffff" ? ({ "--ink-edge": "#ffffff" } as React.CSSProperties) : undefined}
-    >
+    <span className={styles.frame}>
       <span className={styles.ticket} style={{ background: body.tint, color: body.textColor }}>
         <span className={styles.main}>
           {mark && mark !== "none" && hasData && (
@@ -60,7 +56,11 @@ export default function PostageCard({
     </span>
   );
 
-  const style = { "--tilt": `${tilt}deg` } as React.CSSProperties;
+  // Dark tickets (white text): white outline to match their perforation, ink-edged white shadow.
+  const style = {
+    "--tilt": `${tilt}deg`,
+    ...(body.textColor === "#ffffff" ? { "--ink-edge": "#ffffff" } : {}),
+  } as React.CSSProperties;
   return hasData ? (
     <button className={`${styles.card} ${styles.open}`} style={style} onClick={onOpen}>
       {ticket}

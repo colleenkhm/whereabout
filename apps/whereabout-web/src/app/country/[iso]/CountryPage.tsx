@@ -143,7 +143,7 @@ export default function CountryPage({
   ];
 
   return (
-    <PaperTexture color={palette.page.tint}>
+    <PaperTexture color={palette.page.tint} deep={palette.pageDeep}>
       <CountryHeader
         isoCode={country.isoCode}
         name={country.nameCommon}
@@ -209,7 +209,7 @@ export default function CountryPage({
           })}
         </PostageGrid>
       </main>
-      <SiteFooter accent={palette.headerAccent} />
+      <SiteFooter accent={palette.header.tint} />
       <PostageSheet sheet={sheet} onClose={() => setSheet(null)} />
     </PaperTexture>
   );
