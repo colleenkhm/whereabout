@@ -90,6 +90,8 @@ export default function PostageCard({
     "--body-ink": body.textColor,
     "--accent": stub.tint,
     "--accent-ink": stub.textColor,
+    // White card: ink shadow even on dark pages.
+    ...(body.tint.toLowerCase() === "#ffffff" ? { "--drop": "var(--ink)" } : {}),
   } as React.CSSProperties;
   const className = `${styles.card} ${styles[`is-${shape}`] ?? ""} ${hasData ? styles.open : styles.empty}`;
   // Post-its stick on their own; clipboards hang by the clip; speech bubbles float.
@@ -166,7 +168,6 @@ export function PostageGrid({
   children: React.ReactNode;
 }) {
   const vars = {
-    "--page-bg": page.tint,
     "--page-ink": page.textColor,
     "--page-ink-soft": withAlpha(page.textColor, 0.7),
     // Dark page: white shadows and pin outlines so they show.
