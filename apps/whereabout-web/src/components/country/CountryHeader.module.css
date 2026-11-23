@@ -1,5 +1,9 @@
 .masthead {
-  padding: 14px 20px 20px;
+  position: relative;
+  overflow: hidden;
+  padding: 16px 20px 20px;
+  /* Thin ink rule, same weight as the ticket outlines' ink. */
+  border-bottom: 1.4px solid var(--ink);
 }
 
 /* Mobile: name + flag, facts below a rule. */
@@ -18,7 +22,8 @@
   grid-area: facts;
   display: flex;
   flex-wrap: wrap;
-  gap: 16px 40px;
+  justify-content: space-between;
+  gap: 16px 24px;
   margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid;
@@ -30,75 +35,197 @@
 }
 
 .name {
-  margin-top: 12px;
+  margin-top: 10px;
   font-family: var(--fraunces);
   font-weight: 900;
-  font-size: 36px;
+  font-size: 42px;
   line-height: 1;
   letter-spacing: -0.02em;
 }
 
 .flagCol {
   grid-area: flag;
+  position: relative;
   margin-left: 18px;
 }
 
-/* 50x34 image + 3px mat + 3px teeth. */
-.stamp {
+/* Banknote: outer border, inset frame line, corner code. */
+.bill {
   position: relative;
-  width: 62px;
-  height: 46px;
-  display: grid;
-  place-items: center;
+  display: inline-block;
+  margin-top: 5px;
+  padding: 8px 44px 8px 14px;
+  border: 1.5px solid;
+  border-radius: 4px;
 }
 
-.stampEdge {
+.billFrame {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 0.6px 1px rgba(0, 0, 0, 0.35));
+  inset: 3px;
+  border: 1px solid;
+  border-radius: 2px;
+  pointer-events: none;
 }
 
+.billCode {
+  position: absolute;
+  top: 6px;
+  right: 9px;
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+/* Shadow lives on a wrapper; the mask would clip it. */
+.stampShadow {
+  filter: drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
+}
+
+/* Hole grid centered on the edges bites half-circles; the solid layer fills the middle. */
+.stamp {
+  --pitch: 6px;
+  --hole: 1.9px;
+  width: 76px;
+  height: 78px;
+  padding: 7px 7px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fffdf8;
+  color: var(--ink);
+  -webkit-mask:
+    radial-gradient(circle, transparent var(--hole), #000 calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2)
+      calc(var(--pitch) / -2) / var(--pitch) var(--pitch) round,
+    linear-gradient(#000 0 0) center / calc(100% - var(--pitch)) calc(100% - var(--pitch)) no-repeat;
+  mask:
+    radial-gradient(circle, transparent var(--hole), #000 calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2)
+      calc(var(--pitch) / -2) / var(--pitch) var(--pitch) round,
+    linear-gradient(#000 0 0) center / calc(100% - var(--pitch)) calc(100% - var(--pitch)) no-repeat;
+}
+
+/* Thin printed frame line around the art. */
 .flag {
-  position: relative;
-  width: 50px;
-  height: 34px;
+  width: 58px;
+  height: 38px;
+  margin-top: 2px;
   object-fit: cover;
-  border-radius: 1.5px;
-  background: rgba(255, 255, 255, 0.15);
+  outline: 1px solid rgba(26, 21, 32, 0.25);
+  outline-offset: 2px;
+}
+
+/* Printed margin: native name, then code. */
+.stampName {
+  max-width: 100%;
+  margin-top: 6px;
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 9px;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stampCode {
+  margin-top: 1px;
+  font-size: 7.5px;
+  letter-spacing: 1.2px;
+  color: var(--ink-3);
+}
+
+/* Stretches to the currency column's height; hemisphere line drops to level with Convert. */
+.timeFact {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeSub {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 2px;
+}
+
+/* Digital readout: mono digits in a thin ink frame. */
+.clock {
+  display: inline-flex;
+  align-items: baseline;
+  margin: 5px 0 4px;
+  padding: 2px 10px 3px;
+  border: 1.5px solid;
+  border-radius: 6px;
+  font-family: var(--dm-mono);
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: 1px;
+  font-variant-numeric: tabular-nums;
+}
+
+.period {
+  margin-left: 6px;
+  font-size: 0.5em;
+  letter-spacing: 1px;
+}
+
+.colon {
+  margin: 0 1px;
+  animation: blink 2s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .colon {
+    animation: none;
+  }
 }
 
 @media (min-width: 900px) {
+  .clock {
+    font-size: 28px;
+  }
   .name {
-    font-size: 50px;
+    font-size: 64px;
   }
   .masthead {
-    padding: 20px 20px 36px;
+    padding: 16px 20px 36px;
   }
-  /* One left-aligned row: name, stamp beside it, then facts. */
+  /* Full-width row: name left, facts spread through the middle, stamp right. */
   .inner {
-    grid-template-columns: auto auto minmax(0, 1fr);
-    grid-template-areas: "title flag facts";
-    align-items: start;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "title facts flag";
+    align-items: center;
   }
-  /* Centered on the name's glyphs, not its line box. */
   .flagCol {
-    align-self: end;
-    margin: 0 0 8px 32px;
+    margin-left: 28px;
   }
   .facts {
-    margin: 0 0 0 112px;
+    margin: 0 0 0 28px;
     padding: 0;
     border-top: 0;
-    gap: 16px 80px;
+    justify-content: space-evenly;
+    gap: 16px 28px;
   }
   .stamp {
-    width: 80px;
-    height: 58px;
+    width: 96px;
+    height: 96px;
+    padding: 8px 8px 0;
   }
   .flag {
-    width: 68px;
-    height: 46px;
+    width: 76px;
+    height: 50px;
+  }
+  .stampName {
+    margin-top: 8px;
+    font-size: 11px;
+  }
+  .stampCode {
+    font-size: 8.5px;
   }
 }

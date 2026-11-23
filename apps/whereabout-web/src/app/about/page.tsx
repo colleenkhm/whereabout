@@ -97,14 +97,6 @@ export default function About() {
                 data sources listed below.
               </p>
             </div>
-            <div className={styles.byline}>
-              <div className="tf-label" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
-                BUILT BY
-              </div>
-              <div className="tf-val" style={{ marginTop: 4 }}>
-                Colleen Murray
-              </div>
-            </div>
           </div>
         </div>
         <div className={styles.wrap}>
@@ -132,6 +124,14 @@ export default function About() {
               </section>
             );
           })}
+        </div>
+        <div className={styles.byline}>
+          <div className="tf-label" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+            BUILT BY
+          </div>
+          <div className="tf-val" style={{ marginTop: 4 }}>
+            Colleen Murray
+          </div>
         </div>
       </main>
     </PaperTexture>

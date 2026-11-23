@@ -1,34 +1,48 @@
-/* Admission ticket: notched at the tear line, stub on the right. */
+/* Admission ticket: small notches at the tear line, stub on the right. */
 .card {
-  --stub: 68%;
-  --notch: 9px;
+  --stub: 72%;
+  --notch: 6px;
+  --edge: 1.2px;
   --ink-edge: var(--ink);
   position: relative;
   display: block;
   height: 160px;
   text-align: left;
-  transform: rotate(var(--tilt, 0deg));
+  transform: rotate(calc(var(--tilt, 0deg) * 2));
   transition: transform 160ms ease-out;
 }
 
-/* Outline that follows the notches (a border can't). Pin sits outside it. */
+/* Outline: an ink layer the ticket's shape grown by --edge, with the ticket inset by
+   --edge inside it, so the border is even through corners and notches. Pin sits outside. */
 .frame {
+  --n: calc(var(--notch) - var(--edge));
   position: absolute;
   inset: 0;
-  filter: drop-shadow(1.2px 0 0 var(--ink-edge)) drop-shadow(-1.2px 0 0 var(--ink-edge))
-    drop-shadow(0 1.2px 0 var(--ink-edge)) drop-shadow(0 -1.2px 0 var(--ink-edge));
-  transition: filter 160ms ease-out;
+  border-radius: 10px;
+  background: var(--ink-edge);
+  -webkit-mask:
+    radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
+      51% no-repeat,
+    radial-gradient(circle at var(--stub) calc(100% - var(--edge)), transparent var(--n), #000 calc(var(--n) + 0.5px))
+      bottom / 100% 51% no-repeat;
+  mask:
+    radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
+      51% no-repeat,
+    radial-gradient(circle at var(--stub) calc(100% - var(--edge)), transparent var(--n), #000 calc(var(--n) + 0.5px))
+      bottom / 100% 51% no-repeat;
 }
 
+/* Flat pushpin, top-left: page-colored, ink-outlined like the card. */
 .pin {
   position: absolute;
-  top: -5px;
-  left: 14px;
-  width: 10px;
-  height: 10px;
+  top: -4px;
+  left: 20px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--page);
   border: 1.4px solid var(--ink);
+  z-index: 2;
 }
 
 .open:focus-visible {
@@ -36,21 +50,15 @@
   outline-offset: 5px;
 }
 
-/* Straighten and lift on hover. */
+/* Lift on hover. */
 @media (hover: hover) {
   .open:hover {
     transform: translateY(-3px);
   }
-  .open:hover .frame {
-    filter: drop-shadow(1.2px 0 0 var(--ink-edge)) drop-shadow(-1.2px 0 0 var(--ink-edge))
-      drop-shadow(0 1.2px 0 var(--ink-edge)) drop-shadow(0 -1.2px 0 var(--ink-edge))
-      drop-shadow(0 6px 8px rgba(26, 21, 32, 0.18));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .card,
-  .frame {
+  .card {
     transition: none;
   }
 }
@@ -61,10 +69,11 @@
 
 .ticket {
   position: absolute;
-  inset: 0;
+  inset: var(--edge);
   display: flex;
-  border-radius: 10px;
-  /* Half-circle bites top and bottom at the tear line. */
+  border-radius: calc(10px - var(--edge));
+  overflow: hidden;
+  /* Shallow half-circle bites top and bottom at the tear line. */
   -webkit-mask:
     radial-gradient(circle at var(--stub) 0, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) top / 100% 51%
       no-repeat,
@@ -82,11 +91,11 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 14px 14px 13px;
+  padding: 12px 10px 18px 12px;
   min-width: 0;
 }
 
-/* Tear line: 5px dash, 4px gap. */
+/* Tear line: 5px dash, 4px gap. Color follows the body text (white on dark tickets). */
 .perf {
   position: absolute;
   top: calc(var(--notch) + 5px);
@@ -94,7 +103,7 @@
   left: var(--stub);
   width: 1.5px;
   margin-left: -0.75px;
-  background: repeating-linear-gradient(to bottom, var(--ink) 0 5px, transparent 5px 9px);
+  background: repeating-linear-gradient(to bottom, var(--perf, var(--ink)) 0 5px, transparent 5px 9px);
   opacity: 0.55;
   z-index: 1;
 }
@@ -102,8 +111,10 @@
 /* Accent: deeper shade of the body color. */
 .stub {
   flex: 1;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .icon {
@@ -112,7 +123,9 @@
 }
 
 .title {
-  font-size: 17px;
+  font-size: 15px;
+  line-height: 1.2;
+  padding-bottom: 2px;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -120,12 +133,18 @@
 }
 
 @media (min-width: 600px) {
+  .card {
+    --stub: 68%;
+  }
+  .main {
+    padding: 14px 14px 20px;
+  }
   .icon {
     width: 40px;
     height: 40px;
   }
   .title {
-    font-size: 19px;
+    font-size: 17px;
   }
 }
 
@@ -138,7 +157,7 @@
 
 .hint {
   color: var(--ink-3);
-  margin-bottom: 16px;
+  margin: 0 2px 12px;
 }
 
 .mouse {
@@ -157,12 +176,12 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px 14px;
+  gap: 22px 12px;
 }
 
 @media (min-width: 600px) {
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 22px 18px;
+    gap: 34px 26px;
   }
 }

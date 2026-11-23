@@ -9,14 +9,19 @@ const WIDELY_SPOKEN = 30;
 // Many large language groups; always show MAX_SHOWN.
 const MANY_LANGUAGE_COUNTRIES = new Set(["ZA", "IN", "CN", "RU", "CH"]);
 
-// By verified percent, then display rank, then official. English always shown.
-function displayLanguages(languages: LanguageEntry[], iso: string): LanguageEntry[] {
-  const sorted = [...languages].sort(
+// By verified percent, then display rank, then official.
+export function sortLanguages(languages: LanguageEntry[]): LanguageEntry[] {
+  return [...languages].sort(
     (a, b) =>
       (b.percentSpeakers ?? -1) - (a.percentSpeakers ?? -1) ||
       (a.displayRank ?? 2 ** 30) - (b.displayRank ?? 2 ** 30) ||
       Number(b.isOfficial) - Number(a.isOfficial),
   );
+}
+
+// Sorted, capped; English always shown.
+function displayLanguages(languages: LanguageEntry[], iso: string): LanguageEntry[] {
+  const sorted = sortLanguages(languages);
   const widely = sorted.filter((l) => (l.percentSpeakers ?? 0) >= WIDELY_SPOKEN).length;
   const floor = MANY_LANGUAGE_COUNTRIES.has(iso) ? MAX_SHOWN : MIN_SHOWN;
   const shown = sorted.slice(0, Math.min(MAX_SHOWN, Math.max(floor, widely)));
