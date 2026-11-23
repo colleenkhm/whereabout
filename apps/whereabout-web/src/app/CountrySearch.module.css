@@ -1,4 +1,4 @@
-/* Departures board: one ink panel for the input and its results. */
+/* White panel, ink outline, crisp ink offset shadow. */
 .search {
   position: relative;
 }
@@ -13,7 +13,7 @@
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--white);
+  color: var(--ink);
   pointer-events: none;
 }
 
@@ -22,21 +22,22 @@
   padding: 18px 16px 18px 52px;
   font-family: var(--dm-sans);
   font-size: 16px;
-  color: var(--white);
-  background: var(--ink);
+  color: var(--ink);
+  background: var(--white);
   border: 2px solid var(--ink);
   border-radius: 4px;
   outline: none;
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .input::placeholder {
   font-family: var(--dm-mono);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--ink-3);
 }
 
 /* Focus shown inside the panel, nothing drawn outside it. */
 .input:focus-visible {
-  border-color: var(--logo-sky);
+  border-color: var(--logo-green);
 }
 
 .input::-webkit-search-cancel-button {
@@ -45,7 +46,7 @@
   width: 14px;
   height: 14px;
   cursor: pointer;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 2l10 10M12 2L2 12' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 2l10 10M12 2L2 12' stroke='black' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
     center / contain no-repeat;
 }
 
@@ -65,13 +66,15 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  background: var(--ink);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-top: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 0 0 4px 4px;
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .list li + li {
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .row {
@@ -83,7 +86,7 @@
 
 .row:hover,
 .row:focus-visible {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.06);
   outline: none;
 }
 
@@ -93,19 +96,64 @@
   font-family: var(--dm-mono);
   font-size: 13px;
   letter-spacing: 1px;
-  color: var(--logo-sky);
+  color: var(--logo-green);
 }
 
 .name {
   font-family: var(--dm-sans);
   font-weight: 600;
   font-size: 15.5px;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .none {
   padding: 12px 16px;
   font-family: var(--dm-mono);
   font-size: 13px;
+  color: var(--ink-3);
+}
+
+/* Home "Where to?": plain ink panel, no outline or shadow. */
+.dark .icon,
+.dark .input,
+.dark .name {
+  color: var(--white);
+}
+
+.dark .input,
+.dark .list {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: none;
+}
+
+.dark .input::placeholder,
+.dark .none {
   color: rgba(255, 255, 255, 0.6);
+}
+
+.dark .input:focus-visible {
+  border-color: var(--logo-sky);
+}
+
+.dark .input::-webkit-search-cancel-button {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2 2l10 10M12 2L2 12' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.dark .list {
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.dark .list li + li {
+  border-top-color: rgba(255, 255, 255, 0.07);
+}
+
+.dark .row:hover,
+.dark .row:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark .code {
+  color: var(--logo-sky);
 }

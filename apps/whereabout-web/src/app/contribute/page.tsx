@@ -1,0 +1,60 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { MdOutlineEditNote } from "react-icons/md";
+import PaperTexture from "@/components/PaperTexture";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+import { listCountries } from "@/lib/countryRepository";
+import CountrySearch from "../CountrySearch";
+import styles from "./Contribute.module.css";
+import UpdatesSignup from "./UpdatesSignup";
+
+export const metadata: Metadata = { title: "Get involved · whereabout" };
+
+export default async function Contribute() {
+  const countries = await listCountries();
+  return (
+    <PaperTexture color="var(--ocean)">
+      <SiteHeader />
+      <main className={styles.main}>
+        <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+          GET INVOLVED
+        </div>
+        <h1 className={styles.title}>Help fill in the map</h1>
+
+        <section className={styles.option}>
+          <div className={styles.head}>
+            <MdOutlineEditNote size={24} aria-hidden />
+            <h2 className="sec-name">Add or dispute country information</h2>
+          </div>
+          <div className={styles.body}>
+            <p className="s-body">
+              Know something you&apos;d like to pass along to other travelers, or spotted something wrong? Pick a country and you&apos;ll see its page
+              as usual, with each section marked <b>ADD</b> or <b>DISPUTE</b>.
+            </p>
+            <ul className={`s-body ${styles.list}`}>
+              <li>
+                <b>Add</b> to when to visit, practical norms, resources, and city tips: things to do, places to eat, and places to stay.
+              </li>
+              <li>
+                <b>Dispute</b> facts like visas, travel advisories, borders and languages. Tell us what&apos;s wrong and
+                where you saw it.
+              </li>
+            </ul>
+            <p className="src-row">Everything is checked by hand before a page changes.</p>
+            <div className={styles.search}>
+              <CountrySearch countries={countries} contribute />
+            </div>
+          </div>
+        </section>
+
+        <p className={`s-body ${styles.feedbackLink}`}>
+          Not about one country? <Link href="/contribute/feedback">Send general feedback →</Link>
+        </p>
+
+        <UpdatesSignup />
+      </main>
+      <SiteFooter />
+    </PaperTexture>
+  );
+}

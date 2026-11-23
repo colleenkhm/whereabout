@@ -1,9 +1,10 @@
-/* Admission ticket: small notches at the tear line, stub on the right. */
+/* Board item wrapper. Admission ticket: small notches at the tear line, stub on the right. */
 .card {
   --stub: 72%;
   --notch: 6px;
   --edge: 1.2px;
-  --ink-edge: var(--ink);
+  /* Shadow fill: --board-shadow (white on dark pages). */
+  --ink-edge: var(--board-shadow, var(--ink));
   position: relative;
   display: block;
   height: 160px;
@@ -12,14 +13,72 @@
   transition: transform 160ms ease-out;
 }
 
+/* Crisp offset shadow: the ticket's shape moved 4px, with the ticket's own notches also cut
+   so no shadow shows inside them. Built like the ticket: an ink outline layer (::before) with
+   a fill inset by --edge (::after) in the ticket's outline color, so white shadows get an ink edge. */
+.is-ticket::before,
+.is-ticket::after {
+  --n: calc(var(--notch) - var(--edge));
+  --hole-x: calc(var(--stub) - 4px);
+  content: "";
+  position: absolute;
+  z-index: -1;
+  transform: translate(4px, 4px);
+}
+
+.is-ticket::before {
+  inset: 0;
+  border-radius: 10px;
+  background: var(--ink);
+  -webkit-mask:
+    radial-gradient(circle at var(--hole-x) calc(var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
+      51% no-repeat,
+    radial-gradient(circle at var(--stub) calc(100% - var(--edge)), transparent var(--n), #000 calc(var(--n) + 0.5px))
+      bottom / 100% 51% no-repeat;
+  -webkit-mask-composite: source-in, source-in, source-over, source-over;
+  mask:
+    radial-gradient(circle at var(--hole-x) calc(var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - var(--edge) - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
+      51% no-repeat,
+    radial-gradient(circle at var(--stub) calc(100% - var(--edge)), transparent var(--n), #000 calc(var(--n) + 0.5px))
+      bottom / 100% 51% no-repeat;
+  mask-composite: intersect, intersect, add, add;
+}
+
+.is-ticket::after {
+  inset: var(--edge);
+  border-radius: calc(10px - var(--edge));
+  background: var(--ink-edge);
+  -webkit-mask:
+    radial-gradient(circle at var(--hole-x) -4px, transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) 0, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) top / 100% 51%
+      no-repeat,
+    radial-gradient(circle at var(--stub) 100%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) bottom /
+      100% 51% no-repeat;
+  -webkit-mask-composite: source-in, source-in, source-over, source-over;
+  mask:
+    radial-gradient(circle at var(--hole-x) -4px, transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--hole-x) calc(100% - 4px), transparent var(--n), #000 calc(var(--n) + 0.5px)),
+    radial-gradient(circle at var(--stub) 0, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) top / 100% 51%
+      no-repeat,
+    radial-gradient(circle at var(--stub) 100%, transparent var(--notch), #000 calc(var(--notch) + 0.5px)) bottom /
+      100% 51% no-repeat;
+  mask-composite: intersect, intersect, add, add;
+}
+
 /* Outline: an ink layer the ticket's shape grown by --edge, with the ticket inset by
-   --edge inside it, so the border is even through corners and notches. Pin sits outside. */
+   --edge inside it, so the border is even through corners and notches. Pin sits outside.
+   Always ink, even on dark tickets with a white shadow. */
 .frame {
   --n: calc(var(--notch) - var(--edge));
   position: absolute;
   inset: 0;
   border-radius: 10px;
-  background: var(--ink-edge);
+  background: var(--ink);
   -webkit-mask:
     radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
       51% no-repeat,
@@ -35,18 +94,18 @@
 /* Flat pushpin, top-left: page-colored, ink-outlined like the card. */
 .pin {
   position: absolute;
-  top: -4px;
+  top: -3px;
   left: 20px;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: var(--page);
-  border: 1.4px solid var(--ink);
+  background: var(--page-bg);
+  border: 1.4px solid var(--board-shadow, var(--ink));
   z-index: 2;
 }
 
 .open:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--page-ink);
   outline-offset: 5px;
 }
 
@@ -122,6 +181,17 @@
   height: 30px;
 }
 
+/* Contribute mode: rubber-stamp label in the body's empty top. */
+.mark {
+  align-self: flex-start;
+  margin-bottom: auto;
+  padding: 3px 6px 2px;
+  border: 1.2px solid;
+  border-radius: 2px;
+  color: #fff;
+  white-space: nowrap;
+}
+
 .title {
   font-size: 15px;
   line-height: 1.2;
@@ -156,7 +226,7 @@
 }
 
 .hint {
-  color: var(--ink-3);
+  color: var(--page-ink-soft);
   margin: 0 2px 12px;
 }
 
@@ -183,5 +253,335 @@
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 34px 26px;
+  }
+}
+/* --- Paper shapes: everything but the ticket. --- */
+
+/* Title bottom-left, icon top-right. Rectangles get an ink outline and crisp offset shadow. */
+.paper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 12px 12px 14px;
+  color: var(--body-ink);
+}
+
+.globe,
+.calendar,
+.lined,
+.postIt,
+.skyline,
+.clipboard,
+.indexCard {
+  overflow: hidden;
+  background-color: var(--body);
+  border: 1.4px solid var(--ink);
+  border-radius: 3px;
+  box-shadow: 4px 4px 0 var(--board-shadow, var(--ink));
+}
+
+/* SVG-outlined shapes: shadow follows the outline. */
+.foldedMap {
+  filter: drop-shadow(4px 4px 0 var(--board-shadow, var(--ink)));
+}
+
+.outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.fill {
+  fill: var(--body);
+  stroke: var(--ink);
+  stroke-width: 1.4px;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.shade {
+  fill: var(--body-ink);
+  fill-opacity: 0.08;
+}
+
+.crease {
+  fill: none;
+  stroke: var(--body-ink);
+  stroke-opacity: 0.3;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
+
+.content {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.iconSlot {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paper .icon {
+  width: 28px;
+  height: 28px;
+}
+
+.paper .mark {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 12px;
+}
+
+/* Globe: round, meridians and parallels; title across the equator, no icon. */
+.is-globe {
+  justify-self: center;
+  width: 160px;
+}
+
+.globe {
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  text-align: center;
+}
+
+.globe .iconSlot {
+  display: none;
+}
+
+.globe .title {
+  padding: 2px 6px;
+  background: var(--body);
+}
+
+.globe .mark {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Pins top-center on the globe, calendar and skyline postcard. */
+.is-globe .pin,
+.is-calendar .pin,
+.is-skyline .pin {
+  left: calc(50% - 5px);
+}
+
+/* Tear-off calendar: accent band holding the icon, title centered on the page. */
+.is-calendar {
+  justify-self: center;
+  width: min(100%, 150px);
+}
+
+.calendar {
+  border-radius: 6px;
+  justify-content: center;
+  padding-top: 36px;
+  text-align: center;
+}
+
+.calendar .iconSlot {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-bottom: 1.4px solid var(--ink);
+}
+
+.calendar .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.calendar .mark {
+  top: 42px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Folded map: zigzag top and bottom edges clear the icon and title. */
+.foldedMap {
+  padding-bottom: 20px;
+}
+
+/* Pins on both fold peaks, where the zigzag edge reaches the top. */
+.is-foldedMap .pin {
+  left: calc(25% - 5px);
+}
+
+.is-foldedMap .pinRight {
+  left: calc(75% - 5px);
+}
+
+.foldedMap .iconSlot {
+  top: 18px;
+}
+
+/* Notebook page: accent margin line, faint ruled lines. */
+.lined {
+  padding-left: 32px;
+  background-image:
+    linear-gradient(to right, transparent 22px, var(--accent) 22px 23.5px, transparent 23.5px),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 21px,
+      color-mix(in srgb, var(--body-ink) 16%, transparent) 21px 22px
+    );
+  background-position:
+    0 0,
+    0 8px;
+}
+
+/* Sticky note: square, adhesive band along the top, no pin. */
+.is-postIt {
+  justify-self: center;
+  width: min(100%, 160px);
+}
+
+.postIt {
+  border-radius: 1px;
+}
+
+.postIt::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 26%;
+  background: color-mix(in srgb, var(--body-ink) 7%, transparent);
+}
+
+/* Postcard front: title top-left, faint flat skyline along the bottom, no icon. */
+.skyline {
+  justify-content: flex-start;
+}
+
+.skyline .iconSlot {
+  display: none;
+}
+
+.skyline .mark {
+  left: auto;
+  right: 12px;
+}
+
+.skylineArt {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 48%;
+  fill: var(--body-ink);
+  fill-opacity: 0.16;
+}
+
+/* Speech bubble: rounded, tail bottom-left. Shadow via filter so it follows the tail. */
+.speech {
+  bottom: 10px;
+  overflow: visible;
+  background: var(--body);
+  border: 1.4px solid var(--ink);
+  border-radius: 16px;
+  filter: drop-shadow(4px 4px 0 var(--board-shadow, var(--ink)));
+}
+
+.speech::after {
+  content: "";
+  position: absolute;
+  left: 24px;
+  bottom: -9px;
+  width: 16px;
+  height: 16px;
+  background: var(--body);
+  border-right: 1.4px solid var(--ink);
+  border-bottom: 1.4px solid var(--ink);
+  transform: skewX(-25deg) rotate(45deg);
+}
+
+/* Clipboard: accent clip over the top edge; icon clears it. */
+.clipboard {
+  overflow: visible;
+  border-radius: 6px;
+}
+
+.clip {
+  position: absolute;
+  z-index: 2;
+  top: -7px;
+  left: 50%;
+  width: 54px;
+  height: 16px;
+  margin-left: -27px;
+  background: var(--accent);
+  border: 1.4px solid var(--ink);
+  border-radius: 4px;
+}
+
+.clipboard .iconSlot {
+  top: 18px;
+}
+
+/* Index card: one accent rule under the top. */
+.indexCard::before {
+  content: "";
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  border-top: 1.5px solid var(--accent);
+}
+
+@media (min-width: 600px) {
+  .paper {
+    padding: 14px 14px 18px;
+  }
+  .foldedMap .icon,
+  .lined .icon,
+  .postIt .icon,
+  .indexCard .icon {
+    width: 34px;
+    height: 34px;
+  }
+  .foldedMap {
+    padding-bottom: 22px;
+  }
+  .lined {
+    padding-left: 34px;
+  }
+  .is-postIt {
+    width: 170px;
+  }
+  .globe {
+    padding: 0 14px;
+  }
+  .calendar {
+    padding-top: 36px;
+  }
+}
+
+/* Wide screens: cards stay compact, centered in their (still wide) cells. */
+@media (min-width: 600px) {
+  .card:not(.is-postIt):not(.is-globe):not(.is-calendar) {
+    justify-self: center;
+    width: 100%;
+    max-width: 300px;
   }
 }

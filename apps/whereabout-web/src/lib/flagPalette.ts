@@ -67,9 +67,9 @@ export async function extractFlagBaseColors(iso: string): Promise<string[] | nul
       .sort((a, b) => b.count - a.count);
     if (swatches.length === 0) return null;
 
-    // Drop emblem detail, near-duplicates, and edge blends. Low enough
-    // to keep minor flag colors (Saint Lucia's black/white, India's navy).
-    const threshold = swatches[0].count * 0.025;
+    // Drop emblem detail, near-duplicates, and edge blends. Bar is China's
+    // yellow stars (~1.9% of its red): anything that size or bigger counts.
+    const threshold = swatches[0].count * 0.018;
     const base: string[] = [];
     for (const s of swatches) {
       if (s.count < threshold) continue;

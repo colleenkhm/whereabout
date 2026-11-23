@@ -92,6 +92,12 @@ export interface SectionPalette {
   header: SectionColors;
   // Deeper shade of the masthead color (same formula as ticket stubs), its accent.
   headerAccent: string;
+  // Masthead: the next flag color after the page's; else headerAccent.
+  nav: string;
+  // Page behind the cards: color 1, full strength.
+  page: SectionColors;
+  // Bottom of the page gradient: same hue as page, a little deeper.
+  pageDeep: string;
   tickets: TicketColors[];
 }
 
@@ -108,24 +114,70 @@ function deepen(hex: string): string {
 }
 
 // Stub accent: same hue, darker, saturation held so it doesn't go
-// muddy. White/black shift toward gray instead.
+// muddy. Light colors (yellows, golds) go paler instead of olive.
+// White pairs with ink; black shifts toward gray.
 function stubShade(hex: string): string {
   const hsl = hexToHsl(hex);
-  if (hsl.s < ACHROMATIC) return hslToHex({ h: 0, s: 0, l: hsl.l > 0.5 ? hsl.l - 0.16 : hsl.l + 0.18 });
+  if (hsl.s < ACHROMATIC) return hsl.l > 0.5 ? INK : hslToHex({ h: 0, s: 0, l: hsl.l + 0.18 });
+  if (luminance(hex) > LIGHT) return paler(hex, 0.65);
   return hslToHex({ h: hsl.h, s: Math.max(hsl.s, 0.5), l: hsl.l * 0.7 });
 }
 
-const ticketFor = (hex: string): TicketColors => ({ body: colorsFor(hex), stub: colorsFor(stubShade(hex)) });
+// Matches --ink.
+const INK = "#1a1520";
+
+// WCAG luminance above which a color counts as light.
+const LIGHT = 0.55;
+
+// Lightness moved t of the way to white, hue and saturation kept.
+function paler(hex: string, t: number): string {
+  const hsl = hexToHsl(hex);
+  return hslToHex({ ...hsl, l: hsl.l + (1 - hsl.l) * t });
+}
+
+// Light colors soften on the body too; the stub stays paler still.
+const ticketFor = (hex: string): TicketColors => ({
+  body: colorsFor(hexToHsl(hex).s >= ACHROMATIC && luminance(hex) > LIGHT ? paler(hex, 0.35) : hex),
+  stub: colorsFor(stubShade(hex)),
+});
+
+// White masthead: the stamp gets an ink outline.
+export const isWhitish = (hex: string) => {
+  const hsl = hexToHsl(hex);
+  return hsl.s < ACHROMATIC && hsl.l > 0.85;
+};
 
 // First chromatic color, so white/black-first flags still get a hue.
 const headerSource = (colors: string[]) => colors.find((c) => hexToHsl(c).s >= ACHROMATIC) ?? colors[0];
 
-// colors: most prominent first. Exact flag colors, untoned.
+// Page bottom: same hue, a touch deeper, saturation held so reds stay red.
+const pageDeepHex = (hex: string) => {
+  const hsl = hexToHsl(hex);
+  return hsl.s < ACHROMATIC
+    ? hslToHex({ ...hsl, l: hsl.l * 0.92 })
+    : hslToHex({ h: hsl.h, s: Math.max(hsl.s, 0.5), l: hsl.l * 0.9 });
+};
+
+// colors: most prominent first. Page = color 1; cards use the other flag colors.
+// Only one other color: color 1 is its accent. Single-color flag: white cards.
 export function paletteFromFlagColors(colors: string[]): SectionPalette {
   const header = headerSource(colors);
-  // Masthead color goes last so the first ticket contrasts with it.
-  const tickets = colors.length > 1 ? [...colors.filter((c) => c !== header), header] : colors;
-  return { header: colorsFor(header), headerAccent: stubShade(header), tickets: tickets.map(ticketFor) };
+  const others = colors.filter((c) => c !== header);
+  const headerAccent = stubShade(header);
+  const tickets =
+    others.length > 1
+      ? others.map(ticketFor)
+      : others.length === 1
+        ? [{ body: ticketFor(others[0]).body, stub: colorsFor(header) }]
+        : [{ body: colorsFor("#ffffff"), stub: colorsFor(header) }];
+  return {
+    header: colorsFor(header),
+    headerAccent,
+    nav: others[0] ?? headerAccent,
+    page: colorsFor(header),
+    pageDeep: pageDeepHex(header),
+    tickets,
+  };
 }
 
 // No flag colors: a fixed vintage-ticket set.
@@ -133,6 +185,9 @@ const fallbackHeader = deepen("#d8edf8");
 export const fallbackPalette: SectionPalette = {
   header: colorsFor(fallbackHeader),
   headerAccent: stubShade(fallbackHeader),
+  nav: stubShade(fallbackHeader),
+  page: colorsFor(fallbackHeader),
+  pageDeep: pageDeepHex(fallbackHeader),
   tickets: ["#e4704f", "#e9b949", "#5fa8a0", "#f2a477", "#8fa4d8", "#9dbb86", "#e39aae", "#b49bd6", "#d9bc8c"].map(ticketFor),
 };
 

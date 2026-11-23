@@ -21,6 +21,53 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+## [0.13.0] — 2026-11-23
+
+### Added
+- whereabout is now in beta: a "BETA" label sits beside the logo on every
+  page, and Sources & credits notes that information is still being
+  collected, with a link to Get involved.
+- Get involved: a "Get involved" button (top right) opens a new page where you
+  can pick a country and add to or dispute its information. Each card is
+  marked ADD or DISPUTE, and tapping it opens a short form: your
+  information, optional tips & things to know (on ADD cards; Cities also
+  asks why it's recommended), an optional source, your email, and an
+  opt-in to attach it to your account once accounts launch. A "Something
+  Else?" card takes anything that doesn't fit the others. DISPUTE forms
+  open with the current information above them. ADD and DISPUTE pop-ups
+  get a green or red header to match their stamp.
+- General feedback: a "Send general feedback" link under the add/dispute
+  card opens a short form for anything about whereabout as a whole, not one
+  country.
+- Get updates: a sign-up card on the Get involved page takes your email if
+  you'd like occasional updates about whereabout, and every contribution
+  and feedback form has an opt-in checkbox for the same.
+- A slim black airport-style bar under each country's name shows the local
+  date, time and exchange rate, with a Convert link. On desktop it also
+  shows the UTC offset and the currency's name. On phones, tapping it opens
+  the full date, time zone, how far ahead or behind you it is, and the rate
+  both ways with common amounts.
+
+### Changed
+- Country pages look like a bulletin board. The page is the flag's main
+  color, the header under the logo row is the flag's next color, and each
+  section is its own pinned object in the flag's other colors: a ticket
+  for Visa & Entry, a postcard with a skyline for Cities, a folded map, a
+  globe for Border Countries, a speech bubble for Languages, a clipboard
+  for Travel Advisory, a sticky note for Practical Norms, a tear-off
+  calendar for When to Visit and a notebook page for Resources. Country
+  pages use small flag colors too, like China's yellow stars.
+- The whereabout logo row, the country name + stamp and the date/time bar
+  stay pinned to the top of the screen as a country page scrolls.
+- A card's pop-up header matches its accent color.
+- Every page except home ends in a black footer with a Sources & credits
+  link. On the home screen, the GET INVOLVED and SOURCES & CREDITS tags are
+  white with a black shadow.
+- The flags behind the home screen search now drift in rows, alternating
+  direction.
+- The Sources & credits page puts its beta note on a black sticker beside
+  the title.
+
 ## [0.12.0] — 2026-11-23
 
 ### Added

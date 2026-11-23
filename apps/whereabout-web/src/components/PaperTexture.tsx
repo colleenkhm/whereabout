@@ -35,10 +35,19 @@ function buildTile(): string {
 
 const tile = buildTile();
 
-// color: the paper underneath the grain.
-export default function PaperTexture({ children, color = "var(--page)" }: { children: React.ReactNode; color?: string }) {
+// color: the paper underneath the grain. deep: optional bottom color for a top-to-bottom gradient.
+export default function PaperTexture({
+  children,
+  color = "var(--page)",
+  deep,
+}: {
+  children: React.ReactNode;
+  color?: string;
+  deep?: string;
+}) {
+  const paper = deep ? `${tile}, linear-gradient(to bottom, ${color}, ${deep})` : `${tile} ${color}`;
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: `${tile} ${color}` }}>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: paper }}>
       {children}
     </div>
   );

@@ -1,25 +1,23 @@
 import Link from "next/link";
-import { readableTextColor } from "@/lib/color";
+import { tagStyle } from "./linkTags";
 
-// Sources link (licenses need it findable everywhere). Ink tag like the search panel.
-// accent: the country page's complementary color in place of ink.
-export default function SiteFooter({ accent }: { accent?: string }) {
+// Sources link (licenses need it findable everywhere): ink bar, bold underlined white text.
+// onFlags: home page, no bar, the over-the-flags tag like its GET INVOLVED.
+export default function SiteFooter({ onFlags }: { onFlags?: boolean }) {
+  if (onFlags)
+    return (
+      <footer style={{ position: "relative", padding: "28px 0", textAlign: "center" }}>
+        <Link href="/about" className="tf-link" style={{ display: "inline-block", ...tagStyle("filled") }}>
+          SOURCES &amp; CREDITS
+        </Link>
+      </footer>
+    );
   return (
-    <footer style={{ position: "relative", padding: "28px 0", textAlign: "center" }}>
+    <footer style={{ marginTop: "auto", padding: "16px 20px", background: "var(--ink)", textAlign: "center" }}>
       <Link
         href="/about"
-        style={{
-          display: "inline-block",
-          padding: "10px 18px",
-          background: accent ?? "var(--ink)",
-          border: "2px solid var(--ink)",
-          borderRadius: 4,
-          color: accent ? readableTextColor(accent) : "#fff",
-          fontFamily: "var(--dm-mono)",
-          fontSize: 13,
-          fontWeight: 500,
-          letterSpacing: 1,
-        }}
+        className="tf-link"
+        style={{ color: "#fff", fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}
       >
         SOURCES &amp; CREDITS
       </Link>

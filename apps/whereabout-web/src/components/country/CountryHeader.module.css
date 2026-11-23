@@ -1,37 +1,38 @@
+/* Logo row + masthead pinned while scrolling, all breakpoints. Above the cards' pins. */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Color 2: the next flag color after the page's. */
 .masthead {
   position: relative;
   overflow: hidden;
-  padding: 16px 20px 20px;
-  /* Thin ink rule, same weight as the ticket outlines' ink. */
-  border-bottom: 1.4px solid var(--ink);
+  padding: 16px 20px;
+  background: var(--c2);
+  color: var(--c2-ink);
 }
 
-/* Mobile: name + flag, facts below a rule. */
+.eyebrow {
+  color: color-mix(in srgb, var(--c2-ink) 55%, transparent);
+}
+
 .inner {
   max-width: calc(var(--content-max) - 40px);
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "title flag"
-    "facts facts";
   align-items: center;
 }
 
-.facts {
-  grid-area: facts;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 16px 24px;
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid;
+.titleCol {
+  min-width: 0;
 }
 
-.titleCol {
-  grid-area: title;
-  min-width: 0;
+.hemisphere {
+  margin-top: 6px;
+  color: color-mix(in srgb, var(--c2-ink) 75%, transparent);
 }
 
 .name {
@@ -44,40 +45,19 @@
 }
 
 .flagCol {
-  grid-area: flag;
   position: relative;
   margin-left: 18px;
-}
-
-/* Banknote: outer border, inset frame line, corner code. */
-.bill {
-  position: relative;
-  display: inline-block;
-  margin-top: 5px;
-  padding: 8px 44px 8px 14px;
-  border: 1.5px solid;
-  border-radius: 4px;
-}
-
-.billFrame {
-  position: absolute;
-  inset: 3px;
-  border: 1px solid;
-  border-radius: 2px;
-  pointer-events: none;
-}
-
-.billCode {
-  position: absolute;
-  top: 6px;
-  right: 9px;
-  font-size: 8px;
-  letter-spacing: 1px;
 }
 
 /* Shadow lives on a wrapper; the mask would clip it. */
 .stampShadow {
   filter: drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
+}
+
+/* White masthead: 1px ink edge that follows the perforations, then the usual shadow. */
+.stampOutlined {
+  filter: drop-shadow(1px 0 0 var(--ink)) drop-shadow(-1px 0 0 var(--ink)) drop-shadow(0 1px 0 var(--ink))
+    drop-shadow(0 -1px 0 var(--ink)) drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
 }
 
 /* Hole grid centered on the edges bites half-circles; the solid layer fills the middle. */
@@ -133,99 +113,30 @@
   color: var(--ink-3);
 }
 
-/* Stretches to the currency column's height; hemisphere line drops to level with Convert. */
-.timeFact {
-  display: flex;
-  flex-direction: column;
-}
-
-.timeSub {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-top: 2px;
-}
-
-/* Digital readout: mono digits in a thin ink frame. */
-.clock {
-  display: inline-flex;
-  align-items: baseline;
-  margin: 5px 0 4px;
-  padding: 2px 10px 3px;
-  border: 1.5px solid;
-  border-radius: 6px;
-  font-family: var(--dm-mono);
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 1.2;
-  letter-spacing: 1px;
-  font-variant-numeric: tabular-nums;
-}
-
-.period {
-  margin-left: 6px;
-  font-size: 0.5em;
-  letter-spacing: 1px;
-}
-
-.colon {
-  margin: 0 1px;
-  animation: blink 2s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0.25;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .colon {
-    animation: none;
-  }
-}
-
 @media (min-width: 900px) {
-  .clock {
-    font-size: 28px;
-  }
   .name {
     font-size: 64px;
   }
   .masthead {
-    padding: 16px 20px 36px;
-  }
-  /* Full-width row: name left, facts spread through the middle, stamp right. */
-  .inner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas: "title facts flag";
-    align-items: center;
+    padding: 20px 20px 24px;
   }
   .flagCol {
     margin-left: 28px;
   }
-  .facts {
-    margin: 0 0 0 28px;
-    padding: 0;
-    border-top: 0;
-    justify-content: space-evenly;
-    gap: 16px 28px;
-  }
   .stamp {
-    width: 96px;
-    height: 96px;
-    padding: 8px 8px 0;
+    width: 112px;
+    height: 112px;
+    padding: 9px 9px 0;
   }
   .flag {
-    width: 76px;
-    height: 50px;
+    width: 90px;
+    height: 60px;
   }
   .stampName {
-    margin-top: 8px;
-    font-size: 11px;
+    margin-top: 9px;
+    font-size: 12px;
   }
   .stampCode {
-    font-size: 8.5px;
+    font-size: 9.5px;
   }
 }

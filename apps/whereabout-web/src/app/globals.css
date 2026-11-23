@@ -19,6 +19,9 @@
   --ok: #2e7a50;
   --warn: #8a6200;
   --danger: #8b2020;
+  /* Contribute-mode ticket stamps. Saturated so the red doesn't read brown. */
+  --stamp-add: #017b40;
+  --stamp-dispute: #c8102e;
 
   --content-max: 1280px;
   --card-radius: 8px;

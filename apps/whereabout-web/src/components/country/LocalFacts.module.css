@@ -1,0 +1,212 @@
+/* Departures board: thin ink strip, one line of small white mono text. Whole strip is the button. */
+.board {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 9px 20px;
+  border: 0;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--dm-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.cover:focus-visible {
+  outline: 2px solid var(--logo-sky);
+  outline-offset: -4px;
+}
+
+/* As wide as the line, so the actions sit under its two ends. Clicks pass through to the cover. */
+.boardInner {
+  position: relative;
+  max-width: calc(var(--content-max) - 40px);
+  width: fit-content;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 9.5px;
+  letter-spacing: 1.4px;
+}
+
+.convert {
+  pointer-events: auto;
+  color: var(--logo-sky);
+}
+
+/* Wraps between parts, never inside one, so the full rate always shows. */
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.part {
+  white-space: nowrap;
+}
+
+.part + .part::before {
+  content: "·";
+  margin: 0 8px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.more {
+  color: var(--logo-sky);
+}
+
+@media (hover: hover) {
+  .cover:hover ~ .boardInner .more,
+  .convert:hover {
+    text-decoration: underline;
+  }
+}
+
+.period {
+  margin-left: 3px;
+}
+
+.colon {
+  animation: blink 2s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .colon {
+    animation: none;
+  }
+}
+
+.wideOnly,
+.desktopOnly {
+  display: none;
+}
+
+/* Tablet and up: one bigger line, UTC offset shown, no details sheet. */
+@media (min-width: 600px) {
+  .cover,
+  .more {
+    display: none;
+  }
+  .wideOnly {
+    display: inline;
+  }
+  .narrowOnly {
+    display: none;
+  }
+  .board {
+    padding: 11px 20px;
+    font-size: 14px;
+  }
+  .boardInner {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 28px;
+  }
+  .line {
+    min-width: 0;
+  }
+  /* Never squeezed: the line wraps first. */
+  .actions {
+    flex: none;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 900px) {
+  .board {
+    font-size: 16px;
+  }
+  .actions {
+    font-size: 13px;
+  }
+}
+
+/* Parentheticals (UTC offset, currency name): desktop only. */
+@media (min-width: 1100px) {
+  .desktopOnly {
+    display: inline;
+  }
+}
+
+/* Sheet body. */
+.details {
+  padding: 16px 20px;
+}
+
+.details section + section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+.bigTime {
+  margin: 4px 0 2px;
+  font-family: var(--dm-mono);
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.bigTime .period {
+  margin-left: 6px;
+  font-size: 0.45em;
+  letter-spacing: 1px;
+}
+
+.rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 18px;
+  margin-top: 6px;
+  font-family: var(--dm-mono);
+  font-size: 13.5px;
+}
+
+.table {
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-family: var(--dm-mono);
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.table td {
+  padding: 3px 0;
+}
+
+.table td:first-child {
+  padding-right: 28px;
+  color: var(--ink-3);
+}
+
+.table tr + tr td {
+  border-top: 1px solid var(--rule);
+}

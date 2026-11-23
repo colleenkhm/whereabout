@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ExternalLink from "@/components/ExternalLink";
 import PaperTexture from "@/components/PaperTexture";
+import SerratedSticker from "@/components/SerratedSticker";
 import SiteHeader from "@/components/SiteHeader";
 import { withAlpha } from "@/lib/color";
 import styles from "./About.module.css";
@@ -86,6 +88,7 @@ export default function About() {
       <SiteHeader />
       <main>
         <div className={styles.masthead}>
+          {/* Beta note as an ink sticker; beside the title on desktop. */}
           <div className={styles.inner}>
             <div>
               <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
@@ -96,6 +99,14 @@ export default function About() {
                 Travel tips, norms and language notes are written by hand. The facts on this site come from these open
                 data sources listed below.
               </p>
+            </div>
+            <div>
+              <SerratedSticker className={`s-body ${styles.sticker}`}>
+                <strong>whereabout</strong> is in beta. Information is still being collected and checked, so some countries are thinner
+                than others. If something is missing or wrong, head to <Link href="/contribute" style={{ textDecoration: "underline" }}>
+                  Get involved
+                </Link> to add or dispute information.
+              </SerratedSticker>
             </div>
           </div>
         </div>
@@ -129,7 +140,7 @@ export default function About() {
           <div className="tf-label" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
             BUILT BY
           </div>
-          <div className="tf-val" style={{ marginTop: 4 }}>
+          <div className="s-body" style={{ marginTop: 2, fontSize: 14 }}>
             Colleen Murray
           </div>
         </div>

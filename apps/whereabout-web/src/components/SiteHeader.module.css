@@ -1,15 +1,10 @@
-/* Country variant: deeper-shade logo row, perforated tear line under it, edge to edge. */
+/* Country variant: translucent flag-colored logo row, edge to edge. */
 .blended {
-  padding: 12px 20px 0;
-  background: var(--bg);
-  /* Fills the subpixel seam above the masthead so the page doesn't show through. */
-  box-shadow: 0 1px 0 var(--bg);
-}
-
-.blended::after {
-  content: "";
-  display: block;
-  height: 1.5px;
-  margin: 6px -20px 0;
-  background: repeating-linear-gradient(to right, var(--divider) 0 5px, transparent 5px 9px);
+  /* Optically even: the "?" sits ~5px inside its icon box. */
+  padding: 14px 10px;
+  /* Translucent: the page's paper and gradient show through. */
+  --bg-soft: color-mix(in srgb, var(--bg) 75%, transparent);
+  background: var(--bg-soft);
+  /* Thick ink rule above the masthead, matching the offset shadows. */
+  border-bottom: 3px solid var(--ink);
 }
