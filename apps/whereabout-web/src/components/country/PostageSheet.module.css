@@ -78,6 +78,7 @@
     border: 1.4px solid var(--ink);
     border-radius: 14px;
     overflow: visible;
+    box-shadow: 6px 6px 0 var(--ink);
   }
 
   .sheet[open] {

@@ -1,4 +1,4 @@
-/* Mobile: logo row + name/stamp pinned while scrolling. Above the tickets' pins. */
+/* Logo row + masthead pinned while scrolling, all breakpoints. Above the tickets' pins. */
 .sticky {
   position: sticky;
   top: 0;
@@ -6,9 +6,22 @@
 }
 
 .masthead {
+  --mast-ink: var(--c2-ink);
   position: relative;
   overflow: hidden;
   padding: 16px 20px 16px;
+  background: var(--c2);
+  color: var(--mast-ink);
+  /* Thick ink rule under the name; stays when the header sticks. */
+  border-bottom: 3px solid var(--ink);
+}
+
+.eyebrow {
+  color: color-mix(in srgb, var(--mast-ink) 55%, transparent);
+}
+
+.desktopOnly {
+  display: none;
 }
 
 /* Mobile: name + flag; facts in their own block below. */
@@ -21,19 +34,14 @@
   align-items: center;
 }
 
-/* No facts block below to carry the ink rule. */
-.ruled {
-  border-bottom: 1.4px solid var(--ink);
-}
-
 .desktopFacts {
   display: none;
 }
 
 .mobileFacts {
-  padding: 0 20px 20px;
-  /* Thin ink rule, same weight as the ticket outlines' ink. */
-  border-bottom: 1.4px solid var(--ink);
+  padding: 18px 20px 20px;
+  /* Thick ink rule, matching the offset shadows. */
+  border-bottom: 3px solid var(--ink);
 }
 
 .mobileFactsInner {
@@ -50,15 +58,22 @@
 .facts {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  /* Top-aligned so the LOCAL TIME and $1 USD labels share a line. */
+  align-items: flex-start;
   gap: 16px 24px;
-  padding-top: 14px;
-  border-top: 1px solid;
 }
 
 .titleCol {
   grid-area: title;
   min-width: 0;
+  /* Natural width, so the crowding check can measure it. */
+  justify-self: start;
+}
+
+.hemisphere {
+  margin-top: 6px;
+  color: color-mix(in srgb, var(--mast-ink) 75%, transparent);
 }
 
 .name {
@@ -82,8 +97,10 @@
   display: inline-block;
   margin-top: 5px;
   padding: 8px 44px 8px 14px;
-  border: 1.5px solid;
+  /* Outline and offset shadow in the masthead's text color, so they show on dark and light flags. */
+  border: 1.5px solid var(--fact-shadow, var(--ink));
   border-radius: 4px;
+  box-shadow: 3px 3px 0 var(--fact-shadow, var(--ink));
 }
 
 .billFrame {
@@ -160,57 +177,104 @@
   color: var(--ink-3);
 }
 
-/* Stretches to the currency column's height; hemisphere line drops to level with Convert. */
-.timeFact {
+/* Calendar left, centered against the label/clock/UTC stack on the right. */
+.timeRow {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.timeSub {
+.clockWrap {
+  margin-top: 5px;
+}
+
+.utc {
+  margin-top: 4px;
+  text-align: right;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  width: 52px;
+  height: 66px;
+  border: 1.5px solid var(--fact-shadow, var(--ink));
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 3px 3px 0 var(--fact-shadow, var(--ink));
+}
+
+.calMonth {
+  padding: 2px 0 1px;
+  font-family: var(--dm-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.calDay {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  margin-top: 2px;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--dm-mono);
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-/* Too narrow for time and currency side by side: stack them, date beside the clock. */
-@container (max-width: 439px) {
+.calWeekday {
+  margin-top: 4px;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+/* Side by side (any breakpoint): calendar and clock become separate items so
+   space-evenly spaces every block equally. */
+@container (min-width: 560px) {
+  .timeRow {
+    display: contents;
+  }
+  .calendar {
+    align-self: center;
+  }
+}
+
+/* Too narrow for time and currency side by side: stack them in one centered
+   column as wide as the wider block, with both blocks spanning it edge to edge. */
+@container (max-width: 559px) {
   .facts {
-    flex-direction: column;
-  }
-  .timeFact {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-    column-gap: 18px;
-    align-items: center;
-  }
-  .timeLabel {
-    grid-column: 1 / -1;
-  }
-  .timeSub {
     justify-content: center;
-    gap: 2px;
-    margin-top: 1px;
-    text-align: right;
   }
   .currencyFact {
-    align-self: center;
     text-align: center;
   }
+  /* Wider than the banknote, capped at the facts area's width. */
+  .timeRow {
+    justify-content: space-between;
+    justify-self: center;
+    width: min(100% + 64px, 100cqw);
+  }
   .bill {
+    display: block;
     text-align: left;
   }
 }
 
-/* Digital readout: mono digits in a thin ink frame. */
+/* Digital readout: white digits on ink, white offset shadow (inverse of the other boxes). */
 .clock {
   display: inline-flex;
   align-items: baseline;
-  margin: 5px 0 4px;
   padding: 2px 10px 3px;
-  border: 1.5px solid;
+  color: var(--white);
+  background: var(--ink);
+  border: 1.5px solid var(--white);
   border-radius: 6px;
+  box-shadow: 3px 3px 0 var(--white);
   font-family: var(--dm-mono);
   font-weight: 500;
   font-size: 24px;
@@ -243,18 +307,48 @@
 }
 
 @media (min-width: 900px) {
+  /* Room in the desktop row: bigger calendar. */
+  .calendar {
+    width: 72px;
+    height: 90px;
+    border-radius: 8px;
+  }
+  .calMonth {
+    padding: 3px 0 2px;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+  }
+  .calDay {
+    font-size: 32px;
+  }
+  .calWeekday {
+    margin-top: 5px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+  }
+  .mobileOnly {
+    display: none;
+  }
+  .desktopOnly {
+    display: block;
+  }
+  /* Clock box matches the banknote's height so labels, boxes and sub-lines align. */
   .clock {
-    font-size: 28px;
+    height: 66px;
+    padding: 0 14px;
+    font-size: 34px;
+    line-height: 63px;
+  }
+  .bill {
+    min-height: 66px;
   }
   .name {
     font-size: 64px;
   }
-  .sticky {
-    position: static;
-  }
   .masthead {
+    --mast-ink: var(--c1-ink);
     padding: 16px 20px 36px;
-    border-bottom: 1.4px solid var(--ink);
+    background: var(--c1);
   }
   .mobileFacts {
     display: none;
@@ -277,9 +371,6 @@
   }
   .facts {
     margin: 0 0 0 28px;
-    padding: 0;
-    border-top: 0;
-    justify-content: space-evenly;
     gap: 16px 28px;
   }
   .stamp {
@@ -297,5 +388,19 @@
   }
   .stampCode {
     font-size: 9.5px;
+  }
+  /* Doesn't all fit on one row: name + stamp, then the facts in a row below. */
+  .stacked {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "title flag"
+      "facts facts";
+    row-gap: 24px;
+  }
+  .stacked .facts {
+    margin-left: 0;
+  }
+  .stacked .flagCol {
+    margin-bottom: 0;
   }
 }
