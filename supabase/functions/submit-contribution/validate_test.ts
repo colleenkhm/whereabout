@@ -45,6 +45,12 @@ Deno.test("tips land in details on add cards only", () => {
   assertEquals(valid({ ...base, section: "Languages", tips: "x" }).tips, "");
 });
 
+Deno.test("why recommended lands in details on Cities only", () => {
+  const city = { ...base, section: "Cities", city: "Lisbon", why: " Best pastéis. " };
+  assertEquals(toRow(valid(city)).details, { city: "Lisbon", category: null, why: "Best pastéis." });
+  assertEquals(valid({ ...base, why: "x" }).why, "");
+});
+
 Deno.test("email is required and must look like one", () => {
   assertEquals(errorOf({ ...base, email: "" }), "Please enter a valid email");
   assertEquals(errorOf({ ...base, email: undefined }), "Please enter a valid email");

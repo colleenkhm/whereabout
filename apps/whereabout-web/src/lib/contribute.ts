@@ -45,6 +45,7 @@ export interface Contribution {
   countryName: string;
   section: string;
   text: string;
+  why?: string;
   tips: string;
   source: string;
   email: string;

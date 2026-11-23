@@ -32,7 +32,7 @@ export default async function Contribute() {
             </p>
             <ul className={`s-body ${styles.list}`}>
               <li>
-                <b>Add</b> to when to visit, practical norms, resources, and things to do, eat, or stay in a city.
+                <b>Add</b> to when to visit, practical norms, resources, and city tips: things to do, places to eat, and places to stay.
               </li>
               <li>
                 <b>Dispute</b> facts like visas, travel advisories, borders and languages. Tell us what&apos;s wrong and

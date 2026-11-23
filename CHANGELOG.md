@@ -21,7 +21,8 @@ refactors/doc updates unless they're worth calling out.
 - Contribute: a "Contribute" button (top right) opens a new page where you
   can pick a country and add to or dispute its information. Each ticket is
   marked ADD or DISPUTE, and tapping it opens a short form: your
-  information, optional tips & things to know (on ADD tickets), an optional
+  information, optional tips & things to know (on ADD tickets; Cities also
+  asks why it's recommended), an optional
   source, your email, and an opt-in to attach it to
   your account once accounts launch. A "Something Else?" ticket takes
   anything that doesn't fit the others. DISPUTE forms open with the

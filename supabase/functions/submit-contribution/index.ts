@@ -57,6 +57,7 @@ Deno.serve(async (req) => {
     section: sub.sectionTitle,
     country: `${sub.countryName} (${sub.iso})`,
     text: sub.text,
+    why: sub.why,
     tips: sub.tips,
     source: sub.source,
     email: sub.email,
@@ -74,6 +75,7 @@ async function sendEmail(s: {
   section: string;
   country: string;
   text: string;
+  why: string;
   tips: string;
   source: string;
   email: string;
@@ -96,6 +98,7 @@ async function sendEmail(s: {
     ...(s.city || s.category ? [""] : []),
     s.text,
     "",
+    ...(s.why ? ["Why recommended:", s.why, ""] : []),
     ...(s.tips ? ["Tips & things to know:", s.tips, ""] : []),
     `Source: ${s.source || "(none given)"}`,
     `Contributor email: ${s.email}`,

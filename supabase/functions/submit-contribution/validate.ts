@@ -21,6 +21,7 @@ export interface Body {
   countryName?: unknown;
   section?: unknown;
   text?: unknown;
+  why?: unknown;
   tips?: unknown;
   source?: unknown;
   email?: unknown;
@@ -38,6 +39,7 @@ export interface Submission {
   kind: "add" | "dispute";
   subject: string;
   text: string;
+  why: string;
   tips: string;
   source: string;
   email: string;
@@ -78,7 +80,8 @@ export function validate(body: Body): Validation {
       kind: section.kind,
       subject: section.subject,
       text,
-      // Optional tips/review; add cards only.
+      // Optional: why recommended (Cities only), tips (add cards).
+      why: section.subject === "city" ? clean(body.why, 4000) : "",
       tips: section.kind === "add" ? clean(body.tips, 4000) : "",
       source: clean(body.source, 1000),
       email,
@@ -109,6 +112,7 @@ export function toRow(s: Submission) {
 function details(s: Submission) {
   const d: Record<string, string | null> = {};
   if (s.subject === "city") Object.assign(d, { city: s.city || null, category: s.category || null });
+  if (s.why) d.why = s.why;
   if (s.tips) d.tips = s.tips;
   return Object.keys(d).length ? d : null;
 }

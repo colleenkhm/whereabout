@@ -45,6 +45,7 @@ export default function ContributeForm({
 }) {
   const id = useId();
   const [text, setText] = useState("");
+  const [why, setWhy] = useState("");
   const [tips, setTips] = useState("");
   const [source, setSource] = useState("");
   // Client-only: the sheet body never prerenders.
@@ -76,6 +77,7 @@ export default function ContributeForm({
       countryName,
       section,
       text,
+      why: cities ? why : undefined,
       tips: withTips ? tips : "",
       source,
       email: email.trim(),
@@ -145,6 +147,20 @@ export default function ContributeForm({
           required
         />
       </Field>
+
+      {cities && (
+        <Field id={`${id}-why`} label="WHY RECOMMENDED?" optional>
+          <textarea
+            id={`${id}-why`}
+            className={styles.input}
+            value={why}
+            onChange={(e) => setWhy(e.target.value)}
+            placeholder="What makes it worth a traveler's time"
+            maxLength={4000}
+            rows={3}
+          />
+        </Field>
+      )}
 
       {withTips && (
         <Field id={`${id}-tips`} label="TIPS & THINGS TO KNOW" optional>
