@@ -196,6 +196,10 @@ async function importCountryFacts() {
           currency_name: currencyName,
           calling_code: callingCode,
           official_languages: c.languages ?? {},
+          // Keyed by English language name to match country_languages.
+          native_names: Object.fromEntries(
+            Object.entries(c.name?.native ?? {}).map(([code, n]) => [c.languages?.[code] ?? code, n.common]),
+          ),
           latitude,
           longitude: c.latlng?.[1] ?? null,
           hemisphere,
