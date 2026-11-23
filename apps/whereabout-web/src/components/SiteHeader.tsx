@@ -54,7 +54,7 @@ export default function SiteHeader({ background }: { background?: string }) {
             <BetaTag />
           </span>
         </Link>
-        <ContributeLink />
+        <ContributeLink variant={background ? "outline" : "white"} />
       </div>
     </header>
   );

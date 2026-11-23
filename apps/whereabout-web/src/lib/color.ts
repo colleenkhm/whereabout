@@ -92,9 +92,9 @@ export interface SectionPalette {
   header: SectionColors;
   // Deeper shade of the masthead color (same formula as ticket stubs), its accent.
   headerAccent: string;
-  // Site nav bar: the next flag color after the masthead's; single-color flags use headerAccent.
+  // Masthead: the next flag color after the page's; else headerAccent.
   nav: string;
-  // Page behind the tickets: the masthead hue, pale and muted.
+  // Page behind the cards: color 1, full strength.
   page: SectionColors;
   // Bottom of the page gradient: same hue as page, a little deeper.
   pageDeep: string;
@@ -135,35 +135,48 @@ function paler(hex: string, t: number): string {
   return hslToHex({ ...hsl, l: hsl.l + (1 - hsl.l) * t });
 }
 
-// Same hue, pale and soft; fixed lightness so dark flags don't go gray.
-const mutedPageHex = (hex: string, l: number) => {
-  const hsl = hexToHsl(hex);
-  return hslToHex({ h: hsl.h, s: hsl.s < ACHROMATIC ? 0 : Math.min(hsl.s, 0.45), l });
-};
-const mutedPage = (hex: string): SectionColors => colorsFor(mutedPageHex(hex, 0.9));
-
 // Light colors soften on the body too; the stub stays paler still.
 const ticketFor = (hex: string): TicketColors => ({
   body: colorsFor(hexToHsl(hex).s >= ACHROMATIC && luminance(hex) > LIGHT ? paler(hex, 0.35) : hex),
   stub: colorsFor(stubShade(hex)),
 });
 
+// White masthead: the stamp gets an ink outline.
+export const isWhitish = (hex: string) => {
+  const hsl = hexToHsl(hex);
+  return hsl.s < ACHROMATIC && hsl.l > 0.85;
+};
+
 // First chromatic color, so white/black-first flags still get a hue.
 const headerSource = (colors: string[]) => colors.find((c) => hexToHsl(c).s >= ACHROMATIC) ?? colors[0];
 
-// colors: most prominent first. Exact flag colors, untoned.
+// Page bottom: same hue, a touch deeper, saturation held so reds stay red.
+const pageDeepHex = (hex: string) => {
+  const hsl = hexToHsl(hex);
+  return hsl.s < ACHROMATIC
+    ? hslToHex({ ...hsl, l: hsl.l * 0.92 })
+    : hslToHex({ h: hsl.h, s: Math.max(hsl.s, 0.5), l: hsl.l * 0.9 });
+};
+
+// colors: most prominent first. Page = color 1; cards use the other flag colors.
+// Only one other color: color 1 is its accent. Single-color flag: white cards.
 export function paletteFromFlagColors(colors: string[]): SectionPalette {
   const header = headerSource(colors);
-  // Masthead color goes last so the first ticket contrasts with it.
-  const tickets = colors.length > 1 ? [...colors.filter((c) => c !== header), header] : colors;
+  const others = colors.filter((c) => c !== header);
   const headerAccent = stubShade(header);
+  const tickets =
+    others.length > 1
+      ? others.map(ticketFor)
+      : others.length === 1
+        ? [{ body: ticketFor(others[0]).body, stub: colorsFor(header) }]
+        : [{ body: colorsFor("#ffffff"), stub: colorsFor(header) }];
   return {
     header: colorsFor(header),
     headerAccent,
-    nav: colors.length > 1 ? tickets[0] : headerAccent,
-    page: mutedPage(header),
-    pageDeep: mutedPageHex(header, 0.8),
-    tickets: tickets.map(ticketFor),
+    nav: others[0] ?? headerAccent,
+    page: colorsFor(header),
+    pageDeep: pageDeepHex(header),
+    tickets,
   };
 }
 
@@ -173,8 +186,8 @@ export const fallbackPalette: SectionPalette = {
   header: colorsFor(fallbackHeader),
   headerAccent: stubShade(fallbackHeader),
   nav: stubShade(fallbackHeader),
-  page: mutedPage(fallbackHeader),
-  pageDeep: mutedPageHex(fallbackHeader, 0.8),
+  page: colorsFor(fallbackHeader),
+  pageDeep: pageDeepHex(fallbackHeader),
   tickets: ["#e4704f", "#e9b949", "#5fa8a0", "#f2a477", "#8fa4d8", "#9dbb86", "#e39aae", "#b49bd6", "#d9bc8c"].map(ticketFor),
 };
 

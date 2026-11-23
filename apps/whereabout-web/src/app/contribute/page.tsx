@@ -29,8 +29,8 @@ export default async function Contribute() {
           </div>
           <div className={styles.body}>
             <p className="s-body">
-              Know something a traveler should, or spotted something wrong? Pick a country and you&apos;ll see its page
-              as usual, with each ticket marked <b>ADD</b> or <b>DISPUTE</b>.
+              Know something you'd like to pass along to other travelers, or spotted something wrong? Pick a country and you&apos;ll see its page
+              as usual, with each section marked <b>ADD</b> or <b>DISPUTE</b>.
             </p>
             <ul className={`s-body ${styles.list}`}>
               <li>

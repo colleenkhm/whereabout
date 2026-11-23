@@ -17,6 +17,18 @@ refactors/doc updates unless they're worth calling out.
 
 ## [Unreleased]
 
+### Changed
+- Country pages look like a bulletin board: the page is the flag's main
+  color, and each section is its own pinned object (a ticket for Visa &
+  Entry, a postcard with a skyline for Cities, a folded map, a globe for
+  Border Countries, a sticky note, a speech bubble for Languages, a
+  clipboard for Travel Advisory, a tear-off calendar for When to Visit, a notebook page for
+  Resources) in the flag's other colors. Local date, time and exchange rate moved to a slim black
+  airport-style bar under the country name, with a Convert link. On
+  tablets and desktop it also shows the UTC offset. On phones, tapping it
+  opens the full date, time zone, how far ahead or behind you it is, and
+  the rate both ways with common amounts.
+
 ### Added
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.

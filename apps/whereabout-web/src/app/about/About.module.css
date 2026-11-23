@@ -25,6 +25,21 @@
   color: var(--ink);
 }
 
+/* Beta note: flat ink sticker with a serrated edge, on the masthead. Beats .s-body's color. */
+.inner .sticker {
+  max-width: 480px;
+  margin-top: 18px;
+  /* Edge drawn by SerratedSticker; padding clears the 6px spikes. */
+  padding: 18px 22px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 14px;
+}
+
+.sticker a {
+  color: var(--white);
+}
+
 /* Bottom of the page, after the credits, behind a rule. */
 .byline {
   width: min(100% - 40px, var(--content-max) - 40px);
@@ -36,6 +51,16 @@
 @media (min-width: 900px) {
   .masthead {
     padding: 20px 20px 36px;
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 40px;
+    align-items: center;
+  }
+  .inner .sticker {
+    max-width: 400px;
+    margin-top: 0;
   }
   .title {
     font-size: 50px;
@@ -58,8 +83,11 @@
 }
 
 /* Small postage sheet: ink outline, pin hole, colored header. */
+/* Inline-block so the pin (poking above the card) never splits into the previous column. */
 .card {
   position: relative;
+  display: inline-block;
+  width: 100%;
   break-inside: avoid;
   margin: 6px 0 24px;
   border: 1.4px solid var(--ink);
