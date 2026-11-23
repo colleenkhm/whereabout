@@ -1,5 +1,8 @@
 import { formatPopulation } from "@/lib/format";
+import { cssVars } from "@/lib/color";
 import type { City } from "@/lib/types";
+import styles from "./CitiesSection.module.css";
+import section from "./Section.module.css";
 import SectionSource from "./SectionSource";
 
 const MAX_SHOWN = 5;
@@ -30,7 +33,7 @@ export default function CitiesSection({
     : sorted.slice(0, MAX_SHOWN);
 
   return (
-    <div>
+    <div style={cssVars({ "--accent": accent })}>
       {shown.map((city, i) => {
         const meta = [city.name === capital && "Capital", city.population != null && formatPopulation(city.population)]
           .filter(Boolean)
@@ -40,45 +43,25 @@ export default function CitiesSection({
           <Row
             key={city.id}
             {...(onPick && { type: "button" as const, onClick: () => onPick(city.name) })}
-            style={{
-              ...(onPick && PICK_RESET),
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "13px 20px",
-              borderBottom: i < shown.length - 1 ? "1px solid var(--rule)" : "none",
-            }}
+            className={`${section.row} ${onPick ? section.pick : ""}`}
           >
-            <span className="row-meta" style={{ width: 18, color: accent, fontWeight: 600 }}>
-              {String(i + 1).padStart(2, "0")}
-            </span>
-            <span className="row-title" style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <span className={`row-meta ${styles.index}`}>{String(i + 1).padStart(2, "0")}</span>
+            <span className={`row-title ${section.rowTitle}`}>
               {city.name}
-              {city.isFeatured && <span style={{ color: "var(--butter-dark)", fontSize: 11, marginLeft: 5 }}>★</span>}
+              {city.isFeatured && <span className={styles.star}>★</span>}
             </span>
             {meta && <span className="row-meta">{meta}</span>}
             {onPick && (
-              <span aria-hidden style={{ color: accent, fontWeight: 600 }}>
+              <span aria-hidden className={styles.chevron}>
                 ›
               </span>
             )}
           </Row>
         );
       })}
-      <div style={{ padding: "0 20px 13px" }}>
-        <SectionSource links={[["GeoNames", "https://www.geonames.org/"]]} color={accent} />
+      <div className={section.footer}>
+        <SectionSource list links={[["GeoNames", "https://www.geonames.org/"]]} color={accent} />
       </div>
     </div>
   );
 }
-
-const PICK_RESET: React.CSSProperties = {
-  width: "100%",
-  background: "none",
-  border: "none",
-  borderRadius: 0,
-  textAlign: "left",
-  font: "inherit",
-  color: "inherit",
-  cursor: "pointer",
-};

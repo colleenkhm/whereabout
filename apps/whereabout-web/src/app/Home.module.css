@@ -1,0 +1,36 @@
+/* Backdrop spans the footer too. */
+.stage {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.corner {
+  position: absolute;
+  top: 16px;
+  z-index: 1;
+}
+
+.left {
+  left: 16px;
+}
+
+.right {
+  right: 16px;
+}
+
+.main {
+  flex: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 48px 24px;
+  min-height: max(560px, 100svh);
+}
+
+.search {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+}

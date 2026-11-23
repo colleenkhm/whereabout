@@ -31,7 +31,7 @@ export default function UpdatesSignup() {
 
   return (
     <section className={styles.option}>
-      <div className={styles.head} style={{ background: "var(--ink)" }}>
+      <div className={`${styles.head} ${styles.inkHead}`}>
         <MdOutlineMarkEmailUnread size={22} aria-hidden />
         <h2 className="sec-name">Get updates</h2>
       </div>
@@ -39,7 +39,7 @@ export default function UpdatesSignup() {
         {status === "sent" ? (
           <p className="s-body">You&apos;re on the list. Thanks for following along!</p>
         ) : (
-          <form onSubmit={submit} noValidate style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <form onSubmit={submit} noValidate className={styles.stack}>
             <label htmlFor="updates-email" className="s-body">
               Please submit your email if you would like to receive updates about whereabout.
             </label>
@@ -58,7 +58,6 @@ export default function UpdatesSignup() {
               <button
                 type="submit"
                 className={form.submit}
-                style={{ background: "var(--ink)", color: "#fff" }}
                 disabled={!ready}
               >
                 {status === "sending" ? "SENDING…" : "SIGN UP"}
@@ -76,7 +75,7 @@ export default function UpdatesSignup() {
             />
             <span className="src-row">Only used for occasional updates about whereabout.</span>
             {error && (
-              <p className="s-body" role="alert" style={{ color: "var(--danger)" }}>
+              <p className="s-body error-text" role="alert">
                 {error}
               </p>
             )}

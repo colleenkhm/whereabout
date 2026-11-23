@@ -2,6 +2,8 @@ import { formatShortDate } from "@/lib/format";
 import type { VisaInfo } from "@/lib/types";
 import ExternalLink from "../ExternalLink";
 import SectionSource from "./SectionSource";
+import section from "./Section.module.css";
+import styles from "./VisaSection.module.css";
 
 const STATE_DEPT_INDEX =
   "https://travel.state.gov/content/travel/en/international-travel/International-Travel-Country-Information-Pages.html";
@@ -18,7 +20,7 @@ export default function VisaSection({
 }) {
   if (!visa) {
     return (
-      <p className="s-body" style={{ padding: "18px 20px" }}>
+      <p className={`s-body ${section.message}`}>
         No visa information available at this time. Check the{" "}
         <ExternalLink label="US State Department" url={stateDeptUrl ?? STATE_DEPT_INDEX} color={accent} /> for the
         latest information.
@@ -28,21 +30,21 @@ export default function VisaSection({
 
   const prohibited = visa.prohibitedOnEntry || visa.prohibitedOnExit;
   return (
-    <div style={{ padding: "16px 20px" }}>
+    <div className={section.pad}>
       <div className="s-label">{visa.issuingAuthority}</div>
-      <div className="s-head" style={{ marginTop: 5 }}>
+      <div className={`s-head ${section.headline}`}>
         For {visa.nationalityIsoCode} passport holders
       </div>
-      <p className="s-body" style={{ marginTop: 6 }}>
+      <p className={`s-body ${section.lead}`}>
         {visa.summary}
       </p>
       {visa.applicationUrl && (
-        <div style={{ marginTop: 4, textAlign: "right" }}>
+        <div className={styles.apply}>
           <ExternalLink label="Apply" url={visa.applicationUrl} color={accent} />
         </div>
       )}
       {prohibited && (
-        <div style={{ marginTop: 12, paddingTop: 11, borderTop: "1px solid var(--rule)", display: "grid", gap: 8 }}>
+        <div className={styles.prohibited}>
           {visa.prohibitedOnEntry && <Prohibited label="Declare on entry" body={visa.prohibitedOnEntry} />}
           {visa.prohibitedOnExit && <Prohibited label="Declare on exit" body={visa.prohibitedOnExit} />}
         </div>
@@ -59,10 +61,10 @@ export default function VisaSection({
 function Prohibited({ label, body }: { label: string; body: string }) {
   return (
     <div>
-      <div className="s-label" style={{ color: "var(--danger)" }}>
+      <div className="s-label error-text">
         {label.toUpperCase()}
       </div>
-      <p className="s-body" style={{ marginTop: 3 }}>
+      <p className={`s-body ${styles.declare}`}>
         {body}
       </p>
     </div>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { City } from "@/lib/types";
+import styles from "./MapView.module.css";
 
 const FALLBACK_ZOOM = 5;
 const MAX_FIT_ZOOM = 9;
@@ -60,5 +61,5 @@ export default function MapView({
     };
   }, [latitude, longitude, cities, capital, accent]);
 
-  return <div ref={ref} style={{ height: 280, width: "100%", background: "var(--rule)" }} />;
+  return <div ref={ref} className={styles.map} />;
 }

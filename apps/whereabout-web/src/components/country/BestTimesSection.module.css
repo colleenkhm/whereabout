@@ -1,0 +1,31 @@
+.grid {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.square {
+  background: var(--tint);
+  color: color-mix(in srgb, var(--text) 85%, transparent);
+  padding: 13px 14px 14px;
+}
+
+.month.month {
+  font-size: 17px;
+  color: var(--text);
+}
+
+.short.short {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: italic;
+  color: inherit;
+}
+
+.why.why {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: inherit;
+}

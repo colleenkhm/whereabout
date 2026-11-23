@@ -1,3 +1,6 @@
+import { cssVars } from "@/lib/color";
+import styles from "./PaperTexture.module.css";
+
 // Faint fleck/fiber paper texture as a tiled SVG. Fixed seed.
 const TILE = 320;
 
@@ -45,9 +48,8 @@ export default function PaperTexture({
   color?: string;
   deep?: string;
 }) {
-  const paper = deep ? `${tile}, linear-gradient(to bottom, ${color}, ${deep})` : `${tile} ${color}`;
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: paper }}>
+    <div className={styles.paper} style={cssVars({ "--grain": tile, "--paper": color, "--paper-deep": deep })}>
       {children}
     </div>
   );

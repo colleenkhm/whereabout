@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import type { City } from "@/lib/types";
 import SectionSource from "./SectionSource";
+import section from "./Section.module.css";
 
 const MapView = dynamic(() => import("./MapView"), { ssr: false });
 
@@ -16,7 +17,7 @@ export default function MapSection(props: {
   return (
     <div>
       <MapView {...props} />
-      <div style={{ padding: "0 20px 13px" }}>
+      <div className={section.footer}>
         <SectionSource
           links={[
             ["OpenStreetMap", "https://www.openstreetmap.org/copyright"],

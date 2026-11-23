@@ -1,0 +1,15 @@
+/* No land borders: little landform drawing beside its label. */
+.landform {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.art {
+  flex-shrink: 0;
+}
+
+.description {
+  margin-top: 2px;
+  color: var(--ink-3);
+}

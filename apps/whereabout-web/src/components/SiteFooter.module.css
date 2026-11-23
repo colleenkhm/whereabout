@@ -1,0 +1,22 @@
+.onFlags {
+  position: relative;
+  padding: 28px 0;
+  text-align: center;
+}
+
+/* Flex: no line-box gap above the inline-block link. Extra bottom room for the underline. */
+.bar {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  padding: 16px 20px 19px;
+  background: var(--ink);
+}
+
+.barLink {
+  line-height: 1;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

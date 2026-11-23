@@ -1,6 +1,8 @@
 "use client";
 
 import { useLayoutEffect, useRef, useState } from "react";
+import { cssVars } from "@/lib/color";
+import styles from "./SerratedSticker.module.css";
 
 const SPIKE = 6; // depth
 const PITCH = 12; // target spike width
@@ -19,7 +21,7 @@ export default function SerratedSticker({ className, children }: { className?: s
     return () => ro.disconnect();
   }, []);
   return (
-    <div ref={ref} className={className} style={{ clipPath: clip }}>
+    <div ref={ref} className={`${styles.sticker} ${className ?? ""}`} style={cssVars({ "--clip": clip })}>
       {children}
     </div>
   );

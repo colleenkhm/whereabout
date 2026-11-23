@@ -8,3 +8,40 @@
   /* Thick ink rule above the masthead, matching the offset shadows. */
   border-bottom: 3px solid var(--ink);
 }
+
+/* Default: ink bar, content-width row. */
+.ink {
+  background: var(--ink);
+  padding: 16px 20px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text);
+}
+
+.ink .row {
+  max-width: calc(var(--content-max) - 40px);
+  margin: 0 auto;
+}
+
+.home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+
+.wordmark {
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.1px;
+}
+
+.beta {
+  margin-left: 4px;
+}

@@ -1,0 +1,7 @@
+/* Grain tile over the paper color (or a top-to-bottom gradient). */
+.paper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--grain), linear-gradient(to bottom, var(--paper), var(--paper-deep, var(--paper)));
+}

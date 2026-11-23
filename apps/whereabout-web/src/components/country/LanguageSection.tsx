@@ -1,7 +1,9 @@
 import { MdStar } from "react-icons/md";
-import { withAlpha, type SectionColors } from "@/lib/color";
+import { cssVars, sectionVars, type SectionColors } from "@/lib/color";
+import { contributeHref } from "@/lib/contribute";
 import type { LanguageEntry } from "@/lib/types";
 import SectionSource from "./SectionSource";
+import styles from "./LanguageSection.module.css";
 
 const MIN_SHOWN = 3;
 const MAX_SHOWN = 5;
@@ -54,65 +56,57 @@ export default function LanguageSection({
   isoCode: string;
   colors: SectionColors;
 }) {
-  const { tint, textColor } = colors;
+  if (languages.length === 0)
+    return (
+      <div className={styles.panel} style={sectionVars(colors)}>
+        <MissingCensus isoCode={isoCode} what="language" />
+      </div>
+    );
+
   const shown = displayLanguages(languages, isoCode);
+  const anyPercent = languages.some((l) => l.percentSpeakers != null);
   // URL -> short label, deduped. Citations required by source terms.
   const sources = new Map<string, string>();
   for (const l of shown) if (l.sourceUrl && l.source) sources.set(l.sourceUrl, l.source.split(",")[0].trim());
 
   return (
-    <div style={{ background: tint, padding: "14px 16px", color: textColor }}>
-      {shown.map((l, i) => (
-        <div key={l.name}>
-          {i > 0 && <div style={{ height: 1, margin: "5px 0", background: withAlpha(textColor, 0.15) }} />}
-          <div style={{ padding: "4px 0" }}>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <span className="row-title" style={{ flex: 1, color: textColor }}>
-                {l.name}
+    <div className={styles.panel} style={sectionVars(colors)}>
+      {shown.map((l) => (
+        <div key={l.name} className={styles.entry}>
+          <div className={styles.nameRow}>
+            <span className={`row-title ${styles.name}`}>{l.name}</span>
+            {l.isOfficial && (
+              <span className={styles.official}>
+                <MdStar size={11} aria-hidden />
+                official
               </span>
-              {l.isOfficial && (
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 3, fontFamily: "var(--dm-mono)", fontSize: 9, fontWeight: 600, letterSpacing: 0.3 }}>
-                  <MdStar size={11} aria-hidden />
-                  official
-                </span>
-              )}
-            </div>
-            {/* No bar without a sourced figure: unknown is not zero. */}
-            {l.percentSpeakers != null && (
-              <div style={{ display: "flex", alignItems: "center", gap: 7, marginTop: 5 }}>
-                <div style={{ flex: 1, height: 5, borderRadius: 2.5, background: withAlpha(textColor, 0.15), overflow: "hidden" }}>
-                  <div
-                    style={{
-                      width: `${Math.min(100, Math.max(0, l.percentSpeakers))}%`,
-                      height: "100%",
-                      background: withAlpha(textColor, 0.85),
-                    }}
-                  />
-                </div>
-                <span style={{ fontFamily: "var(--dm-mono)", fontSize: 11, fontWeight: 700 }}>{formatPercent(l.percentSpeakers)}</span>
-              </div>
-            )}
-            {l.usageNote && (
-              <p
-                style={{
-                  marginTop: 3,
-                  fontFamily: "var(--dm-mono)",
-                  fontSize: 10,
-                  fontStyle: "italic",
-                  color: withAlpha(textColor, 0.75),
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                }}
-              >
-                {l.usageNote}
-              </p>
             )}
           </div>
+          {/* No bar without a sourced figure: unknown is not zero. */}
+          {l.percentSpeakers != null && (
+            <div className={styles.barRow}>
+              <div className={styles.track}>
+                <div className={styles.fill} style={cssVars({ "--percent": `${Math.min(100, Math.max(0, l.percentSpeakers))}%` })} />
+              </div>
+              <span className={styles.percent}>{formatPercent(l.percentSpeakers)}</span>
+            </div>
+          )}
+          {l.usageNote && <p className={styles.note}>{l.usageNote}</p>}
         </div>
       ))}
-      {sources.size > 0 && <SectionSource links={[...sources].map(([url, label]) => [label, url])} color={textColor} />}
+      {!anyPercent && <MissingCensus isoCode={isoCode} what="speaker" />}
+      {sources.size > 0 && <SectionSource links={[...sources].map(([url, label]) => [label, url])} color={colors.textColor} />}
     </div>
+  );
+}
+
+// No census to cite: say so, and point to the add/dispute form.
+function MissingCensus({ isoCode, what }: { isoCode: string; what: "language" | "speaker" }) {
+  return (
+    <p className={`s-body ${styles.missing}`}>
+      No {what} census data available for this country. Please{" "}
+      {/* Full load: contribute mode is read from the URL on mount. */}
+      <a href={contributeHref(isoCode)}>fill out this form</a> to add information about this country.
+    </p>
   );
 }

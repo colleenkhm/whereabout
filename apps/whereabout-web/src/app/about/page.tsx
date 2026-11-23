@@ -4,7 +4,6 @@ import ExternalLink from "@/components/ExternalLink";
 import PaperTexture from "@/components/PaperTexture";
 import SerratedSticker from "@/components/SerratedSticker";
 import SiteHeader from "@/components/SiteHeader";
-import { withAlpha } from "@/lib/color";
 import styles from "./About.module.css";
 
 export const metadata: Metadata = { title: "Sources & credits · whereabout" };
@@ -79,9 +78,6 @@ const CREDITS: Credit[] = [
   },
 ];
 
-// Globe tones for the card headers.
-const HEADS = ["#017b40", "#3a78aa", "#1a1520"];
-
 export default function About() {
   return (
     <PaperTexture>
@@ -91,7 +87,7 @@ export default function About() {
           {/* Beta note as an ink sticker; beside the title on desktop. */}
           <div className={styles.inner}>
             <div>
-              <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+              <div className="tk-eyebrow ink-soft">
                 ABOUT
               </div>
               <h1 className={styles.title}>Sources &amp; credits</h1>
@@ -103,7 +99,7 @@ export default function About() {
             <div>
               <SerratedSticker className={`s-body ${styles.sticker}`}>
                 <strong>whereabout</strong> is in beta. Information is still being collected and checked, so some countries are thinner
-                than others. If something is missing or wrong, head to <Link href="/contribute" style={{ textDecoration: "underline" }}>
+                than others. If something is missing or wrong, head to <Link href="/contribute" className={styles.inlineLink}>
                   Get involved
                 </Link> to add or dispute information.
               </SerratedSticker>
@@ -111,19 +107,18 @@ export default function About() {
           </div>
         </div>
         <div className={styles.wrap}>
-          {CREDITS.map((c, i) => {
-            const head = HEADS[i % HEADS.length];
+          {CREDITS.map((c) => {
             return (
               <section key={c.name} className={styles.card}>
                 <span className={styles.pin} aria-hidden />
-                <div className={styles.head} style={{ background: head, color: "#fff" }}>
+                <div className={styles.head}>
                   <h2 className="sec-name">{c.name}</h2>
-                  <div className="tk-eyebrow" style={{ marginTop: 6, color: withAlpha("#ffffff", 0.75) }}>
+                  <div className={`tk-eyebrow ${styles.usedFor}`}>
                     {c.usedFor.toUpperCase()}
                   </div>
                 </div>
                 <div className={styles.body}>
-                  <p className="s-body" style={{ fontSize: 14 }}>
+                  <p className={`s-body ${styles.small}`}>
                     {c.notice}
                   </p>
                   <div className={styles.links}>
@@ -137,10 +132,10 @@ export default function About() {
           })}
         </div>
         <div className={styles.byline}>
-          <div className="tf-label" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+          <div className="tf-label ink-soft">
             BUILT BY
           </div>
-          <div className="s-body" style={{ marginTop: 2, fontSize: 14 }}>
+          <div className={`s-body ${styles.small} ${styles.builder}`}>
             Colleen Murray
           </div>
         </div>

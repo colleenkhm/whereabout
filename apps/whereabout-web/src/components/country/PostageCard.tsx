@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { withAlpha, type SectionColors, type TicketColors } from "@/lib/color";
+import { cssVars, type SectionColors, type TicketColors } from "@/lib/color";
 import type { ContributeKind } from "@/lib/contribute";
 import styles from "./PostageCard.module.css";
 
@@ -45,18 +45,15 @@ export default function PostageCard({
     <>
       {mark && mark !== "none" && hasData && (
         // Solid chip; outline in the card's text color separates it from a same-color card.
-        <span
-          className={`tk-eyebrow ${styles.mark}`}
-          style={{ borderColor: body.textColor, background: `var(--stamp-${mark})` }}
-        >
+        <span className={`tk-eyebrow ${styles.mark} ${styles[mark]}`}>
           {mark === "add" ? "+ ADD" : "! DISPUTE"}
         </span>
       )}
-      <span className={`sec-name ${styles.title}`} style={{ color: body.textColor }}>
+      <span className={`sec-name ${styles.title}`}>
         {title}
       </span>
       {!hasData && !mark && (
-        <span className="src-row" style={{ fontSize: 11, marginTop: 3, color: withAlpha(body.textColor, 0.7) }}>
+        <span className={`src-row ${styles.soon}`}>
           Coming soon
         </span>
       )}
@@ -66,10 +63,10 @@ export default function PostageCard({
   const item =
     shape === "ticket" ? (
       <span className={styles.frame}>
-        <span className={styles.ticket} style={{ background: body.tint, color: body.textColor }}>
+        <span className={styles.ticket}>
           <span className={styles.main}>{label}</span>
-          <span className={styles.perf} style={{ "--perf": body.textColor } as React.CSSProperties} aria-hidden />
-          <span className={styles.stub} style={{ background: stub.tint, color: stub.textColor }}>
+          <span className={styles.perf} aria-hidden />
+          <span className={styles.stub}>
             <Icon className={styles.icon} aria-hidden />
           </span>
         </span>
@@ -84,15 +81,15 @@ export default function PostageCard({
       </span>
     );
 
-  const style = {
+  const style = cssVars({
     "--tilt": `${tilt}deg`,
     "--body": body.tint,
     "--body-ink": body.textColor,
     "--accent": stub.tint,
     "--accent-ink": stub.textColor,
     // White card: ink shadow even on dark pages.
-    ...(body.tint.toLowerCase() === "#ffffff" ? { "--drop": "var(--ink)" } : {}),
-  } as React.CSSProperties;
+    "--drop": body.tint.toLowerCase() === "#ffffff" ? "var(--ink)" : undefined,
+  });
   const className = `${styles.card} ${styles[`is-${shape}`] ?? ""} ${hasData ? styles.open : styles.empty}`;
   // Post-its stick on their own; clipboards hang by the clip; speech bubbles float.
   // Folded map: a second pin on the other fold peak.
@@ -167,12 +164,11 @@ export function PostageGrid({
   contribute?: boolean;
   children: React.ReactNode;
 }) {
-  const vars = {
+  const vars = cssVars({
     "--page-ink": page.textColor,
-    "--page-ink-soft": withAlpha(page.textColor, 0.7),
     // Dark page: white shadows and pin outlines so they show.
-    ...(page.textColor === "#ffffff" ? { "--board-shadow": "#ffffff" } : {}),
-  } as React.CSSProperties;
+    "--board-shadow": page.textColor === "#ffffff" ? "#ffffff" : undefined,
+  });
   return (
     <div className={styles.wrap} style={vars}>
       <div className={`tk-eyebrow ${styles.hint}`}>

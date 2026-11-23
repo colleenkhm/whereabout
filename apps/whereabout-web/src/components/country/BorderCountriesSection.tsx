@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { MdChevronRight } from "react-icons/md";
+import { cssVars } from "@/lib/color";
 import type { CountrySummary } from "@/lib/types";
+import section from "./Section.module.css";
+import styles from "./BorderCountriesSection.module.css";
 import SectionSource from "./SectionSource";
 
 type Landform = { label: string; description: string; mounds: [number, number, number][] };
@@ -57,28 +60,22 @@ export default function BorderCountriesSection({
 
   const names = new Map(allCountries.map((c) => [c.isoCode, c.nameCommon]));
   return (
-    <div>
-      {codes.map((code, i) => {
+    <div className={section.accent} style={cssVars({ "--accent": accent })}>
+      {codes.map((code) => {
         const name = names.get(code);
-        const rowStyle = {
-          display: "flex",
-          alignItems: "center",
-          padding: "13px 20px",
-          borderBottom: i < codes.length - 1 ? "1px solid var(--rule)" : "none",
-        };
         // Only a resolvable country links.
         return name ? (
-          <Link key={code} href={`/country/${code.toLowerCase()}`} style={rowStyle}>
-            <span className="row-title" style={{ flex: 1 }}>{name}</span>
-            <MdChevronRight size={16} color={accent} aria-hidden />
+          <Link key={code} href={`/country/${code.toLowerCase()}`} className={section.row}>
+            <span className={`row-title ${section.rowTitle}`}>{name}</span>
+            <MdChevronRight size={16} aria-hidden />
           </Link>
         ) : (
-          <div key={code} style={rowStyle}>
+          <div key={code} className={section.row}>
             <span className="row-title">{code}</span>
           </div>
         );
       })}
-      <div style={{ padding: "0 20px 13px" }}>
+      <div className={section.footer}>
         <SectionSource links={[["mledoze/countries", "https://github.com/mledoze/countries"]]} color={accent} />
       </div>
     </div>
@@ -97,8 +94,8 @@ function NoLandBorders({ landform, accent }: { landform: Landform; accent: strin
     return d;
   };
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "16px 20px" }}>
-      <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} style={{ flexShrink: 0 }} aria-hidden>
+    <div className={`${section.pad} ${styles.landform}`}>
+      <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} className={styles.art} aria-hidden>
         {landform.mounds.map(([cx, hw, mh]) => (
           <path
             key={cx}
@@ -113,7 +110,7 @@ function NoLandBorders({ landform, accent }: { landform: Landform; accent: strin
       </svg>
       <div>
         <div className="row-title">{landform.label}</div>
-        <p className="s-body" style={{ marginTop: 2, color: "var(--ink-3)" }}>
+        <p className={`s-body ${styles.description}`}>
           {landform.description}
         </p>
       </div>
