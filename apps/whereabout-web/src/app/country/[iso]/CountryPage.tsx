@@ -9,6 +9,7 @@ import {
   MdOutlineBadge,
   MdOutlineExplore,
   MdOutlineMap,
+  MdOutlineSchedule,
   MdOutlineShield,
   MdOutlineTipsAndUpdates,
   MdOutlineWbSunny,
@@ -27,9 +28,10 @@ import BorderCountriesSection from "@/components/country/BorderCountriesSection"
 import CitiesSection from "@/components/country/CitiesSection";
 import ContributeForm from "@/components/country/ContributeForm";
 import CountryHeader from "@/components/country/CountryHeader";
+import { LocalDetails } from "@/components/country/LocalFacts";
 import LanguageSection from "@/components/country/LanguageSection";
 import MapSection from "@/components/country/MapSection";
-import PostageCard, { POSTAGE_TILTS, PostageGrid } from "@/components/country/PostageCard";
+import PostageCard, { type CardShape, POSTAGE_TILTS, PostageGrid } from "@/components/country/PostageCard";
 import PostageSheet, { type SheetContent } from "@/components/country/PostageSheet";
 import PracticalNormsSection from "@/components/country/PracticalNormsSection";
 import TravelAdvisorySection from "@/components/country/TravelAdvisorySection";
@@ -39,6 +41,7 @@ import VisaSection from "@/components/country/VisaSection";
 interface CardSpec {
   title: string;
   icon: IconType;
+  shape: CardShape;
   hasData: boolean;
   sheet: (c: SectionColors) => React.ReactNode;
 }
@@ -76,18 +79,21 @@ export default function CountryPage({
   const specs: CardSpec[] = [
     {
       title: "Visa & Entry",
+      shape: "ticket",
       icon: MdOutlineBadge,
       hasData: true,
       sheet: (c) => <VisaSection visa={visa} accent={c.accentOnWhite} stateDeptUrl={advisory?.officialUrl ?? null} />,
     },
     {
       title: "Cities",
+      shape: "skyline",
       icon: MdLocationCity,
       hasData: bundle.cities.length > 0,
       sheet: (c) => <CitiesSection cities={bundle.cities} capital={facts.capital} accent={c.accentOnWhite} />,
     },
     {
       title: "Map",
+      shape: "foldedMap",
       icon: MdOutlineExplore,
       hasData: hasCoords,
       sheet: (c) => (
@@ -102,6 +108,7 @@ export default function CountryPage({
     },
     {
       title: "Border Countries",
+      shape: "globe",
       icon: MdOutlineMap,
       hasData: borders != null,
       sheet: (c) => (
@@ -110,36 +117,41 @@ export default function CountryPage({
     },
     {
       title: "Languages",
+      shape: "speech",
       icon: MdTranslate,
       hasData: facts.languages.length > 0,
       sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
     },
     {
       title: "Travel Advisory",
+      shape: "clipboard",
       icon: MdOutlineShield,
       hasData: advisory != null,
       sheet: (c) => <TravelAdvisorySection advisories={usAdvisories} accent={c.accentOnWhite} />,
     },
     {
       title: "Practical Norms",
+      shape: "postIt",
       icon: MdOutlineTipsAndUpdates,
       hasData: guide.practicalNorms.length > 0,
       sheet: (c) => <PracticalNormsSection norms={guide.practicalNorms} colors={c} />,
     },
     {
       title: "When to Visit",
+      shape: "calendar",
       icon: MdOutlineWbSunny,
       hasData: guide.bestTimes.length > 0,
       sheet: () => <BestTimesSection bestTimes={guide.bestTimes} palette={palette.tickets.map((t) => t.body)} />,
     },
     {
       title: "Resources",
+      shape: "lined",
       icon: MdLink,
       hasData: true,
       sheet: (c) => <AdditionalResourcesSection accent={c.accentOnWhite} />,
     },
     // Contribute mode only; the form is its only sheet.
-    ...(contribute ? [{ title: OTHER_SECTION, icon: MdOutlineChatBubbleOutline, hasData: true, sheet: () => null }] : []),
+    ...(contribute ? [{ title: OTHER_SECTION, icon: MdOutlineChatBubbleOutline, shape: "indexCard" as const, hasData: true, sheet: () => null }] : []),
   ];
 
   return (
@@ -151,13 +163,28 @@ export default function CountryPage({
         nativeNames={facts.nativeNames}
         // Contribute mode: name and stamp only.
         timezone={contribute ? null : facts.timezone}
-        latitude={facts.latitude}
+        latitude={contribute ? null : facts.latitude}
         exchangeRate={rate}
         currencyName={facts.currencyName}
         currencyCode={contribute ? null : facts.currencyCode}
         header={palette.header}
         nav={palette.nav}
-        fill={palette.page.tint}
+        onOpenDetails={() =>
+          setSheet({
+            title: "Local time & money",
+            icon: MdOutlineSchedule,
+            colors: INK_HEAD,
+            body: (
+              <LocalDetails
+                timezone={facts.timezone}
+                exchangeRate={rate}
+                currencyName={facts.currencyName}
+                currencyCode={facts.currencyCode}
+                accent={palette.header.accentOnWhite}
+              />
+            ),
+          })
+        }
       />
       <main>
         {contribute && <ContributeBanner isoCode={country.isoCode} name={country.nameCommon} />}
@@ -199,6 +226,7 @@ export default function CountryPage({
                 key={spec.title}
                 title={spec.title}
                 icon={spec.icon}
+                shape={spec.shape}
                 colors={colors}
                 hasData={enabled}
                 mark={contribute ? (spec.title === OTHER_SECTION ? "none" : (kind ?? "none")) : undefined}
@@ -209,11 +237,14 @@ export default function CountryPage({
           })}
         </PostageGrid>
       </main>
-      <SiteFooter accent={palette.header.tint} />
+      <SiteFooter />
       <PostageSheet sheet={sheet} onClose={() => setSheet(null)} />
     </PaperTexture>
   );
 }
+
+// Details sheet header matches the ink departures bar.
+const INK_HEAD: SectionColors = { tint: "#1a1520", textColor: "#ffffff", accentOnWhite: "#1a1520" };
 
 // Match the tickets' ADD/DISPUTE stamps.
 const stampColors = (v: string): SectionColors => ({ tint: v, textColor: "#ffffff", accentOnWhite: v });

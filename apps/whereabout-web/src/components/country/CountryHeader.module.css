@@ -1,79 +1,38 @@
-/* Logo row + masthead pinned while scrolling, all breakpoints. Above the tickets' pins. */
+/* Logo row + masthead pinned while scrolling, all breakpoints. Above the cards' pins. */
 .sticky {
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
+/* Color 2: the next flag color after the page's. */
 .masthead {
-  --mast-ink: var(--c2-ink);
   position: relative;
   overflow: hidden;
-  padding: 16px 20px 16px;
+  padding: 16px 20px;
   background: var(--c2);
-  color: var(--mast-ink);
-  /* Thick ink rule under the name; stays when the header sticks. */
-  border-bottom: 3px solid var(--ink);
+  color: var(--c2-ink);
 }
 
 .eyebrow {
-  color: color-mix(in srgb, var(--mast-ink) 55%, transparent);
+  color: color-mix(in srgb, var(--c2-ink) 55%, transparent);
 }
 
-.desktopOnly {
-  display: none;
-}
-
-/* Mobile: name + flag; facts in their own block below. */
 .inner {
   max-width: calc(var(--content-max) - 40px);
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas: "title flag";
   align-items: center;
 }
 
-.desktopFacts {
-  display: none;
-}
-
-.mobileFacts {
-  padding: 18px 20px 20px;
-  /* Thick ink rule, matching the offset shadows. */
-  border-bottom: 3px solid var(--ink);
-}
-
-.mobileFactsInner {
-  max-width: calc(var(--content-max) - 40px);
-  margin: 0 auto;
-}
-
-/* Facts lay out by their own width, not the viewport's. */
-.mobileFactsInner,
-.desktopFacts {
-  container-type: inline-size;
-}
-
-.facts {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  /* Top-aligned so the LOCAL TIME and $1 USD labels share a line. */
-  align-items: flex-start;
-  gap: 16px 24px;
-}
-
 .titleCol {
-  grid-area: title;
   min-width: 0;
-  /* Natural width, so the crowding check can measure it. */
-  justify-self: start;
 }
 
 .hemisphere {
   margin-top: 6px;
-  color: color-mix(in srgb, var(--mast-ink) 75%, transparent);
+  color: color-mix(in srgb, var(--c2-ink) 75%, transparent);
 }
 
 .name {
@@ -86,42 +45,19 @@
 }
 
 .flagCol {
-  grid-area: flag;
   position: relative;
   margin-left: 18px;
-}
-
-/* Banknote: outer border, inset frame line, corner code. */
-.bill {
-  position: relative;
-  display: inline-block;
-  margin-top: 5px;
-  padding: 8px 44px 8px 14px;
-  /* Outline and offset shadow in the masthead's text color, so they show on dark and light flags. */
-  border: 1.5px solid var(--fact-shadow, var(--ink));
-  border-radius: 4px;
-  box-shadow: 3px 3px 0 var(--fact-shadow, var(--ink));
-}
-
-.billFrame {
-  position: absolute;
-  inset: 3px;
-  border: 1px solid;
-  border-radius: 2px;
-  pointer-events: none;
-}
-
-.billCode {
-  position: absolute;
-  top: 6px;
-  right: 9px;
-  font-size: 8px;
-  letter-spacing: 1px;
 }
 
 /* Shadow lives on a wrapper; the mask would clip it. */
 .stampShadow {
   filter: drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
+}
+
+/* White masthead: 1px ink edge that follows the perforations, then the usual shadow. */
+.stampOutlined {
+  filter: drop-shadow(1px 0 0 var(--ink)) drop-shadow(-1px 0 0 var(--ink)) drop-shadow(0 1px 0 var(--ink))
+    drop-shadow(0 -1px 0 var(--ink)) drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
 }
 
 /* Hole grid centered on the edges bites half-circles; the solid layer fills the middle. */
@@ -177,201 +113,15 @@
   color: var(--ink-3);
 }
 
-/* Calendar left, centered against the label/clock/UTC stack on the right. */
-.timeRow {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.clockWrap {
-  margin-top: 5px;
-}
-
-.utc {
-  margin-top: 4px;
-  text-align: right;
-}
-
-.calendar {
-  display: flex;
-  flex-direction: column;
-  width: 52px;
-  height: 66px;
-  border: 1.5px solid var(--fact-shadow, var(--ink));
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 3px 3px 0 var(--fact-shadow, var(--ink));
-}
-
-.calMonth {
-  padding: 2px 0 1px;
-  font-family: var(--dm-mono);
-  font-size: 9.5px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-align: center;
-}
-
-.calDay {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--dm-mono);
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-}
-
-.calWeekday {
-  margin-top: 4px;
-  font-size: 9px;
-  letter-spacing: 1px;
-}
-
-/* Side by side (any breakpoint): calendar and clock become separate items so
-   space-evenly spaces every block equally. */
-@container (min-width: 560px) {
-  .timeRow {
-    display: contents;
-  }
-  .calendar {
-    align-self: center;
-  }
-}
-
-/* Too narrow for time and currency side by side: stack them in one centered
-   column as wide as the wider block, with both blocks spanning it edge to edge. */
-@container (max-width: 559px) {
-  .facts {
-    display: grid;
-    justify-content: center;
-  }
-  .currencyFact {
-    text-align: center;
-  }
-  /* Wider than the banknote, capped at the facts area's width. */
-  .timeRow {
-    justify-content: space-between;
-    justify-self: center;
-    width: min(100% + 64px, 100cqw);
-  }
-  .bill {
-    display: block;
-    text-align: left;
-  }
-}
-
-/* Digital readout: white digits on ink, white offset shadow (inverse of the other boxes). */
-.clock {
-  display: inline-flex;
-  align-items: baseline;
-  padding: 2px 10px 3px;
-  color: var(--white);
-  background: var(--ink);
-  border: 1.5px solid var(--white);
-  border-radius: 6px;
-  box-shadow: 3px 3px 0 var(--white);
-  font-family: var(--dm-mono);
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 1.2;
-  letter-spacing: 1px;
-  font-variant-numeric: tabular-nums;
-}
-
-.period {
-  margin-left: 6px;
-  font-size: 0.5em;
-  letter-spacing: 1px;
-}
-
-.colon {
-  margin: 0 1px;
-  animation: blink 2s steps(1) infinite;
-}
-
-@keyframes blink {
-  50% {
-    opacity: 0.25;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .colon {
-    animation: none;
-  }
-}
-
 @media (min-width: 900px) {
-  /* Room in the desktop row: bigger calendar. */
-  .calendar {
-    width: 72px;
-    height: 90px;
-    border-radius: 8px;
-  }
-  .calMonth {
-    padding: 3px 0 2px;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-  }
-  .calDay {
-    font-size: 32px;
-  }
-  .calWeekday {
-    margin-top: 5px;
-    font-size: 11px;
-    letter-spacing: 1.5px;
-  }
-  .mobileOnly {
-    display: none;
-  }
-  .desktopOnly {
-    display: block;
-  }
-  /* Clock box matches the banknote's height so labels, boxes and sub-lines align. */
-  .clock {
-    height: 66px;
-    padding: 0 14px;
-    font-size: 34px;
-    line-height: 63px;
-  }
-  .bill {
-    min-height: 66px;
-  }
   .name {
     font-size: 64px;
   }
   .masthead {
-    --mast-ink: var(--c1-ink);
-    padding: 16px 20px 36px;
-    background: var(--c1);
+    padding: 20px 20px 24px;
   }
-  .mobileFacts {
-    display: none;
-  }
-  /* Full-width row: name left, facts spread through the middle, stamp right. */
-  .inner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-areas: "title facts flag";
-    align-items: center;
-  }
-  .desktopFacts {
-    display: block;
-    grid-area: facts;
-    min-width: 0;
-  }
-  /* Reaches into the deeper bottom padding so the stamp sits evenly top to bottom. */
   .flagCol {
     margin-left: 28px;
-    margin-bottom: -20px;
-  }
-  .facts {
-    margin: 0 0 0 28px;
-    gap: 16px 28px;
   }
   .stamp {
     width: 112px;
@@ -388,19 +138,5 @@
   }
   .stampCode {
     font-size: 9.5px;
-  }
-  /* Doesn't all fit on one row: name + stamp, then the facts in a row below. */
-  .stacked {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "title flag"
-      "facts facts";
-    row-gap: 24px;
-  }
-  .stacked .facts {
-    margin-left: 0;
-  }
-  .stacked .flagCol {
-    margin-bottom: 0;
   }
 }
