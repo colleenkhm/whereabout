@@ -17,18 +17,6 @@ refactors/doc updates unless they're worth calling out.
 
 ## [Unreleased]
 
-### Changed
-- Country pages look like a bulletin board: the page is the flag's main
-  color, and each section is its own pinned object (a ticket for Visa &
-  Entry, a postcard with a skyline for Cities, a folded map, a globe for
-  Border Countries, a sticky note, a speech bubble for Languages, a
-  clipboard for Travel Advisory, a tear-off calendar for When to Visit, a notebook page for
-  Resources) in the flag's other colors. Local date, time and exchange rate moved to a slim black
-  airport-style bar under the country name, with a Convert link. On
-  tablets and desktop it also shows the UTC offset. On phones, tapping it
-  opens the full date, time zone, how far ahead or behind you it is, and
-  the rate both ways with common amounts.
-
 ### Added
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
@@ -40,12 +28,12 @@ refactors/doc updates unless they're worth calling out.
   page, and Sources & credits notes that information is still being
   collected, with a link to Get involved.
 - Get involved: a "Get involved" button (top right) opens a new page where you
-  can pick a country and add to or dispute its information. Each ticket is
+  can pick a country and add to or dispute its information. Each card is
   marked ADD or DISPUTE, and tapping it opens a short form: your
-  information, optional tips & things to know (on ADD tickets; Cities also
+  information, optional tips & things to know (on ADD cards; Cities also
   asks why it's recommended), an optional source, your email, and an
   opt-in to attach it to your account once accounts launch. A "Something
-  Else?" ticket takes anything that doesn't fit the others. DISPUTE forms
+  Else?" card takes anything that doesn't fit the others. DISPUTE forms
   open with the current information above them. ADD and DISPUTE pop-ups
   get a green or red header to match their stamp.
 - General feedback: a "Send general feedback" link under the add/dispute
@@ -54,29 +42,31 @@ refactors/doc updates unless they're worth calling out.
 - Get updates: a sign-up card on the Get involved page takes your email if
   you'd like occasional updates about whereabout, and every contribution
   and feedback form has an opt-in checkbox for the same.
-- On phones, the whereabout logo row and the country name + stamp stay
-  pinned to the top of the screen as the page scrolls.
+- A slim black airport-style bar under each country's name shows the local
+  date, time and exchange rate, with a Convert link. On desktop it also
+  shows the UTC offset and the currency's name. On phones, tapping it opens
+  the full date, time zone, how far ahead or behind you it is, and the rate
+  both ways with common amounts.
 
 ### Changed
-- On the home screen, the GET INVOLVED and SOURCES & CREDITS tags are white
-  with a black shadow.
+- Country pages look like a bulletin board. The page is the flag's main
+  color, the header under the logo row is the flag's next color, and each
+  section is its own pinned object in the flag's other colors: a ticket
+  for Visa & Entry, a postcard with a skyline for Cities, a folded map, a
+  globe for Border Countries, a speech bubble for Languages, a clipboard
+  for Travel Advisory, a sticky note for Practical Norms, a tear-off
+  calendar for When to Visit and a notebook page for Resources. Country
+  pages use small flag colors too, like China's yellow stars.
+- The whereabout logo row, the country name + stamp and the date/time bar
+  stay pinned to the top of the screen as a country page scrolls.
+- A card's pop-up header matches its accent color.
+- Every page except home ends in a black footer with a Sources & credits
+  link. On the home screen, the GET INVOLVED and SOURCES & CREDITS tags are
+  white with a black shadow.
 - The flags behind the home screen search now drift in rows, alternating
   direction.
-- A ticket's pop-up header now matches the color of its icon stub.
-- Country pages now use small flag colors too, like China's yellow stars,
-  so their tickets aren't all one color.
-- Yellow and gold tickets are softer: a lighter body and a paler stub,
-  instead of neon yellow with a muddy olive stub.
-- White tickets have a black stub instead of a gray one.
-- Dark tickets (the ones with a white shadow) no longer have a thin white
-  outline.
-- On country pages, the whereabout logo row now uses one of the flag's other
-  colors, so it reads apart from the country's colored header below it. The
-  perforated line under it is gone.
-- The flat gray behind a country's tickets is now a soft, muted version of
-  that country's header color.
-- The local-time clock and the currency banknote are filled with the same
-  soft, muted country color as the page, with black text and outlines.
+- The Sources & credits page puts its beta note on a black sticker beside
+  the title.
 
 ## [0.12.0] — 2026-11-23
 
