@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import ExternalLink from "@/components/ExternalLink";
 import PaperTexture from "@/components/PaperTexture";
 import SiteHeader from "@/components/SiteHeader";
@@ -95,6 +96,13 @@ export default function About() {
               <p className={`s-body ${styles.intro}`}>
                 Travel tips, norms and language notes are written by hand. The facts on this site come from these open
                 data sources listed below.
+              </p>
+              <p className={`s-body ${styles.intro}`}>
+                whereabout is in beta. Information is still being collected and checked, so some countries are thinner
+                than others. If something is missing or wrong, use <Link href="/contribute" style={{ textDecoration: "underline" }}>
+                  Contribute
+                </Link> to add it
+                or dispute it.
               </p>
             </div>
           </div>

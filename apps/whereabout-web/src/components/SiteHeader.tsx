@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { readableTextColor } from "@/lib/color";
+import BetaTag from "./BetaTag";
 import ContributeLink from "./ContributeLink";
 import LogoMark from "./LogoMark";
 import styles from "./SiteHeader.module.css";
@@ -48,6 +49,9 @@ export default function SiteHeader({ background }: { background?: string }) {
             }}
           >
             whereabout
+          </span>
+          <span style={{ marginLeft: 4 }}>
+            <BetaTag />
           </span>
         </Link>
         <ContributeLink />

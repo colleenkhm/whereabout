@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { MdOutlineEditNote } from "react-icons/md";
 import PaperTexture from "@/components/PaperTexture";
 import SiteFooter from "@/components/SiteFooter";
@@ -45,6 +46,10 @@ export default async function Contribute() {
             </div>
           </div>
         </section>
+
+        <p className={`s-body ${styles.feedbackLink}`}>
+          Not about one country? <Link href="/contribute/feedback">Send general feedback →</Link>
+        </p>
       </main>
       <SiteFooter />
     </PaperTexture>

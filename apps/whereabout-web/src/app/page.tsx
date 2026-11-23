@@ -1,5 +1,6 @@
 import { listCountries } from "@/lib/countryRepository";
 import PaperTexture from "@/components/PaperTexture";
+import BetaTag from "@/components/BetaTag";
 import ContributeLink from "@/components/ContributeLink";
 import SiteFooter from "@/components/SiteFooter";
 import CountrySearch from "./CountrySearch";
@@ -20,6 +21,9 @@ export default async function Home() {
         }}
       >
         <FlagBackdrop countries={countries} />
+        <div style={{ position: "absolute", top: 16, left: 16, zIndex: 1 }}>
+          <BetaTag variant="filled" />
+        </div>
         {/* Ink tag over the flags, so it reads on any flag. */}
         <div style={{ position: "absolute", top: 16, right: 16, zIndex: 1 }}>
           <ContributeLink variant="filled" />
@@ -38,7 +42,7 @@ export default async function Home() {
             <CountrySearch countries={countries} />
           </div>
         </main>
-        <SiteFooter />
+        <SiteFooter onFlags />
       </div>
     </PaperTexture>
   );
