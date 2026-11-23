@@ -54,29 +54,36 @@ export interface Contribution {
   email: string;
   certified: boolean;
   linkAccount: boolean;
+  wantsUpdates: boolean;
   city?: string;
   category?: string;
   website: string; // honeypot
 }
 
 // Null on success, else a message to show.
-export async function submitContribution(c: Contribution): Promise<string | null> {
+export const submitContribution = (c: Contribution) => invoke("submit-contribution", c);
+
+// Email-updates sign-up from the Contribute page. Null on success, else a message.
+export const subscribeToUpdates = (email: string, website: string) =>
+  invoke("subscribe-updates", { email, website });
+
+async function invoke(fn: string, payload: object): Promise<string | null> {
   try {
-    const { data, error } = await supabase().functions.invoke("submit-contribution", { body: c });
+    const { data, error } = await supabase().functions.invoke(fn, { body: payload });
     if (!error && data?.ok) return null;
     // Function errors carry their Response on error.context.
     const res = (error as { context?: Response } | null)?.context;
     const body = await res?.json?.().catch(() => null);
     // Real cause for devtools. No response usually = function not deployed (its 404 fails the CORS preflight).
     console.error(
-      "submit-contribution failed:",
+      `${fn} failed:`,
       res?.status ?? "no response (not deployed, or blocked by CORS)",
       body ?? error?.message ?? data,
     );
     // A 400 is the function's own message about the input; anything else stays generic.
     return res?.status === 400 && body?.error ? body.error : "Couldn't send that. Please try again.";
   } catch (e) {
-    console.error("submit-contribution threw:", e);
+    console.error(`${fn} threw:`, e);
     return "Couldn't send that. Please try again.";
   }
 }

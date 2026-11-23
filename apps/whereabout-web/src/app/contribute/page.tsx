@@ -7,8 +7,9 @@ import SiteHeader from "@/components/SiteHeader";
 import { listCountries } from "@/lib/countryRepository";
 import CountrySearch from "../CountrySearch";
 import styles from "./Contribute.module.css";
+import UpdatesSignup from "./UpdatesSignup";
 
-export const metadata: Metadata = { title: "Contribute · whereabout" };
+export const metadata: Metadata = { title: "Get involved · whereabout" };
 
 export default async function Contribute() {
   const countries = await listCountries();
@@ -17,7 +18,7 @@ export default async function Contribute() {
       <SiteHeader />
       <main className={styles.main}>
         <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
-          CONTRIBUTE
+          GET INVOLVED
         </div>
         <h1 className={styles.title}>Help fill in the map</h1>
 
@@ -50,6 +51,8 @@ export default async function Contribute() {
         <p className={`s-body ${styles.feedbackLink}`}>
           Not about one country? <Link href="/contribute/feedback">Send general feedback →</Link>
         </p>
+
+        <UpdatesSignup />
       </main>
       <SiteFooter />
     </PaperTexture>

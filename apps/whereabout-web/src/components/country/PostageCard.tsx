@@ -56,7 +56,7 @@ export default function PostageCard({
     </span>
   );
 
-  // Dark tickets (white text): white outline to match their perforation, ink-edged white shadow.
+  // Dark tickets (white text): ink-edged white shadow.
   const style = {
     "--tilt": `${tilt}deg`,
     ...(body.textColor === "#ffffff" ? { "--ink-edge": "#ffffff" } : {}),

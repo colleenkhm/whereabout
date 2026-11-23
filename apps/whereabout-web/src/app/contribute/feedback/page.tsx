@@ -15,7 +15,7 @@ export default function Feedback() {
       <SiteHeader />
       <main className={styles.main}>
         <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
-          CONTRIBUTE
+          GET INVOLVED
         </div>
         <h1 className={styles.title}>General feedback</h1>
 

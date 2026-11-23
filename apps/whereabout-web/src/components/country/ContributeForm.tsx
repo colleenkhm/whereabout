@@ -53,6 +53,7 @@ export default function ContributeForm({
   const [email, setEmail] = useState(loadEmail);
   const [certified, setCertified] = useState(false);
   const [linkAccount, setLinkAccount] = useState(false);
+  const [wantsUpdates, setWantsUpdates] = useState(false);
   const [city, setCity] = useState("");
   const [newCity, setNewCity] = useState("");
   const [category, setCategory] = useState("");
@@ -87,6 +88,7 @@ export default function ContributeForm({
       email: email.trim(),
       certified,
       linkAccount,
+      wantsUpdates,
       city: cities ? city : undefined,
       category: cities ? category : undefined,
       website,
@@ -110,7 +112,7 @@ export default function ContributeForm({
             : `${other ? "Your note" : kind === "add" ? "Your addition" : "Your dispute"} is in. Everything is checked by hand before the page changes.`}
         </p>
         <button type="button" className={styles.submit} style={button(colors)} onClick={onDone}>
-          BACK TO {feedback ? "CONTRIBUTE" : countryName.toUpperCase()}
+          BACK TO {feedback ? "GET INVOLVED" : countryName.toUpperCase()}
         </button>
       </div>
     );
@@ -218,6 +220,11 @@ export default function ContributeForm({
         value={website}
         onChange={(e) => setWebsite(e.target.value)}
       />
+
+      <label className={styles.check}>
+        <input type="checkbox" checked={wantsUpdates} onChange={(e) => setWantsUpdates(e.target.checked)} />
+        <span className="s-body">Email me occasional updates about whereabout.</span>
+      </label>
 
       <label className={styles.check}>
         <input type="checkbox" checked={linkAccount} onChange={(e) => setLinkAccount(e.target.checked)} />

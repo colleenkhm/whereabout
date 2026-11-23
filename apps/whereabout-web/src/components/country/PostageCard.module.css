@@ -70,13 +70,14 @@
 }
 
 /* Outline: an ink layer the ticket's shape grown by --edge, with the ticket inset by
-   --edge inside it, so the border is even through corners and notches. Pin sits outside. */
+   --edge inside it, so the border is even through corners and notches. Pin sits outside.
+   Always ink, even on dark tickets with a white shadow. */
 .frame {
   --n: calc(var(--notch) - var(--edge));
   position: absolute;
   inset: 0;
   border-radius: 10px;
-  background: var(--ink-edge);
+  background: var(--ink);
   -webkit-mask:
     radial-gradient(circle at var(--stub) var(--edge), transparent var(--n), #000 calc(var(--n) + 0.5px)) top / 100%
       51% no-repeat,

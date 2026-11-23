@@ -99,8 +99,8 @@ export default function About() {
               </p>
               <p className={`s-body ${styles.intro}`}>
                 whereabout is in beta. Information is still being collected and checked, so some countries are thinner
-                than others. If something is missing or wrong, use <Link href="/contribute" style={{ textDecoration: "underline" }}>
-                  Contribute
+                than others. If something is missing or wrong, head to <Link href="/contribute" style={{ textDecoration: "underline" }}>
+                  Get involved
                 </Link> to add it
                 or dispute it.
               </p>
@@ -137,7 +137,7 @@ export default function About() {
           <div className="tf-label" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
             BUILT BY
           </div>
-          <div className="tf-val" style={{ marginTop: 4 }}>
+          <div className="s-body" style={{ marginTop: 2, fontSize: 14 }}>
             Colleen Murray
           </div>
         </div>
