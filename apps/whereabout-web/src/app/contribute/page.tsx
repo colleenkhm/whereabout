@@ -29,7 +29,7 @@ export default async function Contribute() {
           </div>
           <div className={styles.body}>
             <p className="s-body">
-              Know something you'd like to pass along to other travelers, or spotted something wrong? Pick a country and you&apos;ll see its page
+              Know something you&apos;d like to pass along to other travelers, or spotted something wrong? Pick a country and you&apos;ll see its page
               as usual, with each section marked <b>ADD</b> or <b>DISPUTE</b>.
             </p>
             <ul className={`s-body ${styles.list}`}>
