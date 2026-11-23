@@ -9,10 +9,13 @@ export default function CitiesSection({
   cities,
   capital,
   accent,
+  onPick,
 }: {
   cities: City[];
   capital: string | null;
   accent: string;
+  // Contribute mode: rows become buttons that pick the city.
+  onPick?: (name: string) => void;
 }) {
   const sorted = [...cities].sort((a, b) => {
     if (a.isFeatured !== b.isFeatured) return a.isFeatured ? -1 : 1;
@@ -32,10 +35,13 @@ export default function CitiesSection({
         const meta = [city.name === capital && "Capital", city.population != null && formatPopulation(city.population)]
           .filter(Boolean)
           .join(" · ");
+        const Row = onPick ? "button" : "div";
         return (
-          <div
+          <Row
             key={city.id}
+            {...(onPick && { type: "button" as const, onClick: () => onPick(city.name) })}
             style={{
+              ...(onPick && PICK_RESET),
               display: "flex",
               alignItems: "center",
               gap: 10,
@@ -51,7 +57,12 @@ export default function CitiesSection({
               {city.isFeatured && <span style={{ color: "var(--butter-dark)", fontSize: 11, marginLeft: 5 }}>★</span>}
             </span>
             {meta && <span className="row-meta">{meta}</span>}
-          </div>
+            {onPick && (
+              <span aria-hidden style={{ color: accent, fontWeight: 600 }}>
+                ›
+              </span>
+            )}
+          </Row>
         );
       })}
       <div style={{ padding: "0 20px 13px" }}>
@@ -60,3 +71,14 @@ export default function CitiesSection({
     </div>
   );
 }
+
+const PICK_RESET: React.CSSProperties = {
+  width: "100%",
+  background: "none",
+  border: "none",
+  borderRadius: 0,
+  textAlign: "left",
+  font: "inherit",
+  color: "inherit",
+  cursor: "pointer",
+};
