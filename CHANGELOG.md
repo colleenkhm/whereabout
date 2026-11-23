@@ -21,6 +21,27 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+### Changed
+- Country-page section cards are pinned up like tickets, and dark cards
+  get a white outline to match their text. Titles are
+  slightly smaller so long ones like "Languages" fit on phones, and the
+  notches at the tear line are smaller.
+- The flag beside the country name is now a classic postage stamp:
+  round-hole perforations and the country's name in its own
+  language plus its country code printed underneath.
+- The country masthead spreads across the full width on desktop: name on
+  the left, local time and currency in the middle, stamp on the right.
+- Local time on the country page is now a minimal digital clock (12-hour,
+  with AM/PM) in the masthead's colors, with a blinking colon.
+- The exchange rate sits on a minimal framed banknote.
+- The black site header is gone from country pages. The logo row now
+  uses a deeper shade of the country's color (like the ticket stubs),
+  with a perforated line between it and the masthead, and the country
+  name is set larger. That shade also colors the Sources & credits
+  button, and a thin ink line runs under the masthead.
+- Section-card titles no longer clip at the bottom (e.g. the "y" in
+  "Visa & Entry").
+
 ## [0.11.0] — 2026-11-21
 
 ### Added

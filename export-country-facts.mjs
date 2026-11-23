@@ -28,7 +28,7 @@ const OUT_DIR = 'apps/whereabout-web/public/data';
 // Every data column; created_at/updated_at are row bookkeeping, not data.
 const COLUMNS = [
   'country_id', 'capital', 'population', 'currency_code', 'currency_name',
-  'calling_code', 'official_languages', 'latitude', 'longitude', 'hemisphere',
+  'calling_code', 'official_languages', 'native_names', 'latitude', 'longitude', 'hemisphere',
   'neighbors', 'region', 'subregion', 'timezone', 'flag_svg_url', 'climates',
   'source', 'last_imported_at',
 ];
