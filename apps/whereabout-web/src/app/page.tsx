@@ -34,7 +34,7 @@ export default async function Home() {
             minHeight: "max(560px, 100svh)",
           }}
         >
-          <div style={{ position: "relative", width: "100%", maxWidth: 640 }}>
+          <div style={{ position: "relative", width: "100%", maxWidth: 580 }}>
             <CountrySearch countries={countries} />
           </div>
         </main>
