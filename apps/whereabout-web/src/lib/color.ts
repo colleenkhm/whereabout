@@ -112,11 +112,25 @@ function deepen(hex: string): string {
 }
 
 // Stub accent: same hue, darker, saturation held so it doesn't go
-// muddy. White/black shift toward gray instead.
+// muddy. Light colors (yellows, golds) go paler instead of olive.
+// White pairs with ink; black shifts toward gray.
 function stubShade(hex: string): string {
   const hsl = hexToHsl(hex);
-  if (hsl.s < ACHROMATIC) return hslToHex({ h: 0, s: 0, l: hsl.l > 0.5 ? hsl.l - 0.16 : hsl.l + 0.18 });
+  if (hsl.s < ACHROMATIC) return hsl.l > 0.5 ? INK : hslToHex({ h: 0, s: 0, l: hsl.l + 0.18 });
+  if (luminance(hex) > LIGHT) return paler(hex, 0.65);
   return hslToHex({ h: hsl.h, s: Math.max(hsl.s, 0.5), l: hsl.l * 0.7 });
+}
+
+// Matches --ink.
+const INK = "#1a1520";
+
+// WCAG luminance above which a color counts as light.
+const LIGHT = 0.55;
+
+// Lightness moved t of the way to white, hue and saturation kept.
+function paler(hex: string, t: number): string {
+  const hsl = hexToHsl(hex);
+  return hslToHex({ ...hsl, l: hsl.l + (1 - hsl.l) * t });
 }
 
 // Same hue, pale and soft; fixed lightness so dark flags don't go gray.
@@ -125,7 +139,11 @@ function mutedPage(hex: string): SectionColors {
   return colorsFor(hslToHex({ h: hsl.h, s: hsl.s < ACHROMATIC ? 0 : Math.min(hsl.s, 0.45), l: 0.9 }));
 }
 
-const ticketFor = (hex: string): TicketColors => ({ body: colorsFor(hex), stub: colorsFor(stubShade(hex)) });
+// Light colors soften on the body too; the stub stays paler still.
+const ticketFor = (hex: string): TicketColors => ({
+  body: colorsFor(hexToHsl(hex).s >= ACHROMATIC && luminance(hex) > LIGHT ? paler(hex, 0.35) : hex),
+  stub: colorsFor(stubShade(hex)),
+});
 
 // First chromatic color, so white/black-first flags still get a hue.
 const headerSource = (colors: string[]) => colors.find((c) => hexToHsl(c).s >= ACHROMATIC) ?? colors[0];
