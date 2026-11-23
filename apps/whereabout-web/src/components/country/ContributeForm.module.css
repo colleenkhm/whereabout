@@ -112,6 +112,8 @@
 
 /* Ink tag, like the footer's. */
 .submit {
+  background: var(--tint, var(--ink));
+  color: var(--text, #fff);
   align-self: flex-start;
   padding: 11px 18px;
   border: 2px solid var(--ink);

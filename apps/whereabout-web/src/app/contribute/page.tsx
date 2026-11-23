@@ -17,7 +17,7 @@ export default async function Contribute() {
     <PaperTexture color="var(--ocean)">
       <SiteHeader />
       <main className={styles.main}>
-        <div className="tk-eyebrow" style={{ color: "rgba(26, 21, 32, 0.6)" }}>
+        <div className="tk-eyebrow ink-soft">
           GET INVOLVED
         </div>
         <h1 className={styles.title}>Help fill in the map</h1>
@@ -49,7 +49,7 @@ export default async function Contribute() {
         </section>
 
         <p className={`s-body ${styles.feedbackLink}`}>
-          Not about one country? <Link href="/contribute/feedback">Send general feedback →</Link>
+          Anything else to mention, or want to get even more involved? <Link href="/contribute/feedback">Send general feedback →</Link>
         </p>
 
         <UpdatesSignup />

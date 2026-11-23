@@ -108,6 +108,8 @@
 }
 
 .head {
+  background: var(--head);
+  color: #fff;
   padding: 14px 16px 12px;
   border-bottom: 1.4px solid var(--ink);
   border-radius: 10.6px 10.6px 0 0;
@@ -124,4 +126,34 @@
   margin-top: 10px;
   padding-top: 8px;
   border-top: 1px solid var(--rule);
+}
+
+/* Globe tones for the card headers, cycling. */
+.card:nth-of-type(3n + 1) {
+  --head: #017b40;
+}
+
+.card:nth-of-type(3n + 2) {
+  --head: #3a78aa;
+}
+
+.card:nth-of-type(3n) {
+  --head: #1a1520;
+}
+
+.usedFor {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.small {
+  font-size: 14px;
+}
+
+.builder {
+  margin-top: 2px;
+}
+
+.inlineLink {
+  text-decoration: underline;
 }

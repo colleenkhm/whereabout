@@ -1,21 +1,23 @@
-import { withAlpha } from "@/lib/color";
+import { cssVars } from "@/lib/color";
 import ExternalLink from "../ExternalLink";
+import styles from "./SectionSource.module.css";
 
-// Source footer for every section: notes left, links right.
+// Source footer for every section: notes left, links right. list: under a row list (see CSS).
 export default function SectionSource({
   links,
   color,
   notes = [],
+  list = false,
 }: {
   links: [string, string][];
   color: string;
   notes?: string[];
+  list?: boolean;
 }) {
-  const wrap = { display: "flex", flexWrap: "wrap", gap: "4px 12px" } as const;
   return (
-    <div style={{ marginTop: 10, paddingTop: 8, borderTop: `1px solid ${withAlpha(color, 0.15)}` }}>
+    <div className={`${styles.source} ${list ? styles.list : ""}`} style={cssVars({ "--src": color })}>
       {notes.length > 0 && (
-        <div style={wrap}>
+        <div className={styles.wrap}>
           {notes.map((n) => (
             <span key={n} className="src-row">
               {n}
@@ -24,7 +26,7 @@ export default function SectionSource({
         </div>
       )}
       {links.length > 0 && (
-        <div style={{ ...wrap, justifyContent: "flex-end", marginTop: notes.length ? 4 : 0 }}>
+        <div className={`${styles.wrap} ${styles.links}`}>
           {links.map(([label, url]) => (
             <ExternalLink key={url} label={label} url={url} color={color} />
           ))}

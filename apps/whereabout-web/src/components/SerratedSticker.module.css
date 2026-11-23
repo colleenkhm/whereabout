@@ -1,0 +1,4 @@
+/* Measured serrated polygon. */
+.sticker {
+  clip-path: var(--clip, none);
+}

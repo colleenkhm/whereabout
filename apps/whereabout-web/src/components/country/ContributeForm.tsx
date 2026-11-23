@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import type { SectionColors } from "@/lib/color";
+import { sectionVars, type SectionColors } from "@/lib/color";
 import {
   CITY_CATEGORIES,
   FEEDBACK_SECTION,
@@ -111,7 +111,7 @@ export default function ContributeForm({
             ? "Your feedback is in. Every note is read by hand."
             : `${other ? "Your note" : kind === "add" ? "Your addition" : "Your dispute"} is in. Everything is checked by hand before the page changes.`}
         </p>
-        <button type="button" className={styles.submit} style={button(colors)} onClick={onDone}>
+        <button type="button" className={styles.submit} style={sectionVars(colors)} onClick={onDone}>
           BACK TO {feedback ? "GET INVOLVED" : countryName.toUpperCase()}
         </button>
       </div>
@@ -237,12 +237,12 @@ export default function ContributeForm({
       </label>
 
       {error && (
-        <p className="s-body" role="alert" style={{ color: "var(--danger)" }}>
+        <p className="s-body error-text" role="alert">
           {error}
         </p>
       )}
 
-      <button type="submit" className={styles.submit} style={button(colors)} disabled={!ready}>
+      <button type="submit" className={styles.submit} style={sectionVars(colors)} disabled={!ready}>
         {status === "sending" ? "SENDING…" : other ? "SUBMIT" : kind === "add" ? "SUBMIT ADDITION" : "SUBMIT DISPUTE"}
       </button>
     </form>
@@ -277,7 +277,7 @@ export default function ContributeForm({
                   <option key={c.id} value={c.name} />
                 ))}
               </datalist>
-              <button type="submit" className={styles.submit} style={button(colors)} disabled={!newCity.trim()}>
+              <button type="submit" className={styles.submit} style={sectionVars(colors)} disabled={!newCity.trim()}>
                 NEXT
               </button>
             </div>
@@ -320,4 +320,3 @@ function Field({
   );
 }
 
-const button = (c: SectionColors) => ({ background: c.tint, color: c.textColor });

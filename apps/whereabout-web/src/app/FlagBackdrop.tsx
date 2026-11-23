@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { POSTAGE_TILTS } from "@/components/country/PostageCard";
+import { cssVars } from "@/lib/color";
 import { flagPngUrl } from "@/lib/flagPalette";
 import type { CountrySummary } from "@/lib/types";
 import styles from "./FlagBackdrop.module.css";
@@ -27,9 +28,7 @@ export default function FlagBackdrop({ countries }: { countries: CountrySummary[
                   <span
                     key={`${copy}-${c.isoCode}`}
                     className={styles.flag}
-                    style={
-                      { "--tilt": `${POSTAGE_TILTS[(r * perRow + i) % POSTAGE_TILTS.length] * 3}deg` } as React.CSSProperties
-                    }
+                    style={cssVars({ "--tilt": `${POSTAGE_TILTS[(r * perRow + i) % POSTAGE_TILTS.length] * 3}deg` })}
                   >
                     <span className={styles.art}>
                       <Image src={flagPngUrl(c.isoCode)} alt="" fill sizes="110px" loading="lazy" unoptimized />

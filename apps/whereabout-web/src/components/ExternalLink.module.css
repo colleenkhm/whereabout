@@ -1,0 +1,12 @@
+.link {
+  font-family: var(--dm-mono);
+  font-weight: 600;
+  font-size: 11.5px;
+  color: var(--link, var(--sky-dark));
+  white-space: normal;
+}
+
+.arrow {
+  margin-left: 2px;
+  vertical-align: -1px;
+}

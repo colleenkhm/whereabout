@@ -1,10 +1,15 @@
+"use client";
+
 import Link from "next/link";
-import { tagStyle, type TagVariant } from "./linkTags";
+import { usePathname } from "next/navigation";
+import { tagClass, type TagVariant } from "./linkTags";
 
 // "Get involved" tag (links to /contribute). Variant matches the bar it sits on; see linkTags.
+// Hidden on /contribute itself.
 export default function ContributeLink({ variant = "outline" }: { variant?: TagVariant }) {
+  if (usePathname()?.replace(/\/$/, "") === "/contribute") return null;
   return (
-    <Link href="/contribute" className="tf-link" style={tagStyle(variant)}>
+    <Link href="/contribute" className={tagClass(variant)}>
       GET INVOLVED
     </Link>
   );

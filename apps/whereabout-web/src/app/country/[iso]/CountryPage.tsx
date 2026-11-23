@@ -13,7 +13,6 @@ import {
   MdOutlineShield,
   MdOutlineTipsAndUpdates,
   MdOutlineWbSunny,
-  MdTranslate,
 } from "react-icons/md";
 import { type SectionColors, type SectionPalette, type TicketColors } from "@/lib/color";
 import { CONTRIBUTE_SECTIONS, OTHER_SECTION, useContributeMode } from "@/lib/contribute";
@@ -30,12 +29,14 @@ import ContributeForm from "@/components/country/ContributeForm";
 import CountryHeader from "@/components/country/CountryHeader";
 import { LocalDetails } from "@/components/country/LocalFacts";
 import LanguageSection from "@/components/country/LanguageSection";
+import TalkingIcon from "@/components/icons/TalkingIcon";
 import MapSection from "@/components/country/MapSection";
 import PostageCard, { type CardShape, POSTAGE_TILTS, PostageGrid } from "@/components/country/PostageCard";
 import PostageSheet, { type SheetContent } from "@/components/country/PostageSheet";
 import PracticalNormsSection from "@/components/country/PracticalNormsSection";
 import TravelAdvisorySection from "@/components/country/TravelAdvisorySection";
 import VisaSection from "@/components/country/VisaSection";
+import styles from "./CountryPage.module.css";
 
 // sheet: what the card opens.
 interface CardSpec {
@@ -107,6 +108,14 @@ export default function CountryPage({
       ),
     },
     {
+      title: "Languages",
+      shape: "speech",
+      icon: TalkingIcon,
+      // Always opens: no census data gets its own message.
+      hasData: true,
+      sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
+    },
+    {
       title: "Border Countries",
       shape: "globe",
       icon: MdOutlineMap,
@@ -114,13 +123,6 @@ export default function CountryPage({
       sheet: (c) => (
         <BorderCountriesSection isoCode={country.isoCode} codes={borders ?? []} allCountries={allCountries} accent={c.accentOnWhite} />
       ),
-    },
-    {
-      title: "Languages",
-      shape: "speech",
-      icon: MdTranslate,
-      hasData: facts.languages.length > 0,
-      sheet: (c) => <LanguageSection languages={facts.languages} isoCode={country.isoCode} colors={c} />,
     },
     {
       title: "Travel Advisory",
@@ -253,22 +255,11 @@ const STAMP_COLORS = { add: stampColors("var(--stamp-add)"), dispute: stampColor
 // Ink strip above the grid: which mode, and the way back out.
 function ContributeBanner({ isoCode, name }: { isoCode: string; name: string }) {
   return (
-    <div style={{ background: "var(--ink)", color: "var(--white)" }}>
-      <div
-        style={{
-          maxWidth: "calc(var(--content-max) - 40px)",
-          margin: "0 auto",
-          padding: "10px 20px",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          gap: "4px 16px",
-        }}
-      >
+    <div className={styles.banner}>
+      <div className={styles.bannerInner}>
         <span className="tk-eyebrow">CONTRIBUTING TO {name.toUpperCase()}</span>
         {/* Full load: mode is read from the URL on mount. */}
-        <a href={`/country/${isoCode.toLowerCase()}`} className="tf-link" style={{ textDecoration: "underline" }}>
+        <a href={`/country/${isoCode.toLowerCase()}`} className={`tf-link ${styles.done}`}>
           DONE
         </a>
       </div>

@@ -21,6 +21,33 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+## [0.14.0] — 2026-11-23
+
+### Added
+- Two new links under Resources: Radio Garden (live radio from around the
+  world) and OpenGuessr (a place-guessing game).
+
+### Changed
+- Languages always opens now. A country with no language census data, or
+  no speaker percentages, says so and links to the add/dispute form.
+- When to Visit shows at most four months, picked so each reason for
+  visiting gets at least one. Month squares no longer repeat their month
+  names or open with "Best months to visit —".
+- The Languages card has a new talking-head icon and sits right after Map.
+- Cities: the source link sits on the left under the list, clear of the
+  population numbers, with no extra rule below the last city.
+- "Get involved" and "Sources & credits" lift on hover, like the country
+  cards, so they read as links.
+- The BETA label and the Get involved / Sources & credits tags are now one
+  size everywhere, with BETA in bold. On dark country headers, Get
+  involved's shadow turns white so it stays visible.
+- Pushpins on the country board take the page's text color, so they
+  never blend into the page, and white cards keep an ink shadow on dark
+  pages.
+- The departures bar shows the currency name in capitals, matching the
+  rest of the line.
+- The Get involved button is hidden on the Get involved page itself.
+
 ## [0.13.0] — 2026-11-23
 
 ### Added

@@ -1,0 +1,16 @@
+.apply {
+  margin-top: 4px;
+  text-align: right;
+}
+
+.prohibited {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid var(--rule);
+  display: grid;
+  gap: 8px;
+}
+
+.declare {
+  margin-top: 3px;
+}

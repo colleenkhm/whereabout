@@ -1,0 +1,29 @@
+.source {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid color-mix(in srgb, var(--src) 15%, transparent);
+}
+
+/* Under a row list: the rows end the section, so no rule; links left, clear of the row values. */
+.list {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.links {
+  justify-content: flex-end;
+}
+
+.list .links {
+  justify-content: flex-start;
+}
+
+.wrap + .links {
+  margin-top: 4px;
+}

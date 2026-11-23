@@ -1,0 +1,16 @@
+.index {
+  width: 18px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.star {
+  color: var(--butter-dark);
+  font-size: 11px;
+  margin-left: 5px;
+}
+
+.chevron {
+  color: var(--accent);
+  font-weight: 600;
+}
