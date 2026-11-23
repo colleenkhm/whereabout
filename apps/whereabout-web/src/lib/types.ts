@@ -49,6 +49,8 @@ export interface CountryFacts {
   lastImportedAt: string | null;
   borderingCountryCodes: string[] | null;
   climates: Climate[];
+  // Language name -> country name in that language.
+  nativeNames: Record<string, string>;
 }
 
 export interface City {

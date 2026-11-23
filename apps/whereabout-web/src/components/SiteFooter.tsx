@@ -1,7 +1,9 @@
 import Link from "next/link";
+import { readableTextColor } from "@/lib/color";
 
 // Sources link (licenses need it findable everywhere). Ink tag like the search panel.
-export default function SiteFooter() {
+// accent: the country page's complementary color in place of ink.
+export default function SiteFooter({ accent }: { accent?: string }) {
   return (
     <footer style={{ position: "relative", padding: "28px 0", textAlign: "center" }}>
       <Link
@@ -9,10 +11,10 @@ export default function SiteFooter() {
         style={{
           display: "inline-block",
           padding: "10px 18px",
-          background: "var(--ink)",
+          background: accent ?? "var(--ink)",
           border: "2px solid var(--ink)",
           borderRadius: 4,
-          color: "#fff",
+          color: accent ? readableTextColor(accent) : "#fff",
           fontFamily: "var(--dm-mono)",
           fontSize: 13,
           fontWeight: 500,
