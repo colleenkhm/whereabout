@@ -19,7 +19,6 @@ import { fetchRate } from "@/lib/currency";
 import type { CountryBundle, CountrySummary, ExchangeRate } from "@/lib/types";
 import PaperTexture from "@/components/PaperTexture";
 import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
 import AdditionalResourcesSection from "@/components/country/AdditionalResourcesSection";
 import BestTimesSection from "@/components/country/BestTimesSection";
 import BorderCountriesSection from "@/components/country/BorderCountriesSection";
@@ -138,23 +137,23 @@ export default function CountryPage({
   ];
 
   return (
-    <PaperTexture>
-      <SiteHeader background={palette.headerAccent} />
+    <PaperTexture color={palette.page.tint}>
+      <CountryHeader
+        isoCode={country.isoCode}
+        name={country.nameCommon}
+        languages={facts.languages}
+        nativeNames={facts.nativeNames}
+        timezone={facts.timezone}
+        latitude={facts.latitude}
+        exchangeRate={rate}
+        currencyName={facts.currencyName}
+        currencyCode={facts.currencyCode}
+        header={palette.header}
+        nav={palette.nav}
+        fill={palette.page.tint}
+      />
       <main>
-        <CountryHeader
-          isoCode={country.isoCode}
-          name={country.nameCommon}
-          languages={facts.languages}
-          nativeNames={facts.nativeNames}
-          timezone={facts.timezone}
-          latitude={facts.latitude}
-          exchangeRate={rate}
-          currencyName={facts.currencyName}
-          currencyCode={facts.currencyCode}
-          header={palette.header}
-          accent={palette.headerAccent}
-        />
-        <PostageGrid>
+        <PostageGrid page={palette.page}>
           {specs.map((spec, i) => {
             const colors = ticketColor(palette.tickets, i, columns);
             return (
