@@ -1,5 +1,5 @@
 import type { IconType } from "react-icons";
-import { withAlpha, type TicketColors } from "@/lib/color";
+import { withAlpha, type SectionColors, type TicketColors } from "@/lib/color";
 import styles from "./PostageCard.module.css";
 
 // Small alternating tilt so the grid reads hand-placed.
@@ -61,10 +61,15 @@ export default function PostageCard({
   );
 }
 
-// "Tap"/"Click" hint plus the 2/3-column grid.
-export function PostageGrid({ children }: { children: React.ReactNode }) {
+// "Tap"/"Click" hint plus the 2/3-column grid. page: the background it sits on.
+export function PostageGrid({ page, children }: { page: SectionColors; children: React.ReactNode }) {
+  const vars = {
+    "--page-bg": page.tint,
+    "--page-ink": page.textColor,
+    "--page-ink-soft": withAlpha(page.textColor, 0.7),
+  } as React.CSSProperties;
   return (
-    <div className={styles.wrap}>
+    <div className={styles.wrap} style={vars}>
       <div className={`tk-eyebrow ${styles.hint}`}>
         <span className={styles.touch}>TAP</span>
         <span className={styles.mouse}>CLICK</span> TICKET FOR DETAILS

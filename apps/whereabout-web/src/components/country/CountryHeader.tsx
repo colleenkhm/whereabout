@@ -2,10 +2,11 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { withAlpha, type SectionColors } from "@/lib/color";
+import { readableTextColor, withAlpha, type SectionColors } from "@/lib/color";
 import { monthAbbrev } from "@/lib/format";
 import type { ExchangeRate, LanguageEntry } from "@/lib/types";
 import ExternalLink from "../ExternalLink";
+import SiteHeader from "../SiteHeader";
 import { sortLanguages } from "./LanguageSection";
 import styles from "./CountryHeader.module.css";
 
@@ -20,40 +21,62 @@ interface Props {
   currencyName: string | null;
   currencyCode: string | null;
   header: SectionColors;
-  accent: string;
+  nav: string;
+  // Clock and bill face: the muted page color.
+  fill: string;
 }
 
 // Masthead: flag, name, then local time and currency.
+// Mobile: logo row + name/stamp stick; facts scroll away below. Desktop: one static row.
 export default function CountryHeader(p: Props) {
   const ink = p.header.textColor;
-  const hasTime = p.timezone != null;
-  const hasCurrency = p.currencyCode != null;
+  const hasFacts = p.timezone != null || p.currencyCode != null;
+  const facts = hasFacts && <Facts {...p} ink={ink} />;
   return (
-    <div
-      className={styles.masthead}
-      style={{ background: p.header.tint }}
-    >
-      <div className={styles.inner}>
-        <div className={styles.titleCol}>
-          <div className="tk-eyebrow" style={{ color: withAlpha(ink, 0.55) }}>
-            DESTINATION
+    <>
+      <div className={styles.sticky}>
+        <SiteHeader background={p.nav} />
+        <div className={`${styles.masthead} ${hasFacts ? "" : styles.ruled}`} style={{ background: p.header.tint }}>
+          <div className={styles.inner}>
+            <div className={styles.titleCol}>
+              <div className="tk-eyebrow" style={{ color: withAlpha(ink, 0.55) }}>
+                DESTINATION
+              </div>
+              <h1 className={styles.name} style={{ color: ink }}>
+                {p.name}
+              </h1>
+            </div>
+            <div className={styles.desktopFacts}>{facts}</div>
+            <div className={styles.flagCol}>
+              <StampFlag isoCode={p.isoCode} label={nativeName(p.name, p.languages, p.nativeNames)} />
+            </div>
           </div>
-          <h1 className={styles.name} style={{ color: ink }}>
-            {p.name}
-          </h1>
         </div>
-        <div className={styles.flagCol}>
-          <StampFlag isoCode={p.isoCode} label={nativeName(p.name, p.languages, p.nativeNames)} />
-        </div>
-        {(hasTime || hasCurrency) && (
-          <div className={styles.facts} style={{ borderColor: withAlpha(ink, 0.2) }}>
-            {hasTime && <LocalTimeFact timezone={p.timezone!} latitude={p.latitude} ink={ink} />}
-            {hasCurrency && (
-              <CurrencyFact rate={p.exchangeRate} currencyName={p.currencyName} currencyCode={p.currencyCode!} ink={ink} />
-            )}
-          </div>
-        )}
       </div>
+      {/* Facts render in both slots; CSS shows one per layout. */}
+      {hasFacts && (
+        <div className={styles.mobileFacts} style={{ background: p.header.tint }}>
+          <div className={styles.mobileFactsInner}>{facts}</div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function Facts(p: Props & { ink: string }) {
+  const { ink } = p;
+  return (
+    <div className={styles.facts} style={{ borderColor: withAlpha(ink, 0.2) }}>
+      {p.timezone != null && <LocalTimeFact timezone={p.timezone} latitude={p.latitude} ink={ink} fill={p.fill} />}
+      {p.currencyCode != null && (
+        <CurrencyFact
+          rate={p.exchangeRate}
+          currencyName={p.currencyName}
+          currencyCode={p.currencyCode}
+          ink={ink}
+          fill={p.fill}
+        />
+      )}
     </div>
   );
 }
@@ -87,7 +110,8 @@ function nativeName(english: string, languages: LanguageEntry[], names: Record<s
   return (byRank && names[byRank.name]) ?? local[0]?.[1] ?? english;
 }
 
-function LocalTimeFact({ timezone, latitude, ink }: { timezone: string; latitude: number | null; ink: string }) {
+function LocalTimeFact(p: { timezone: string; latitude: number | null; ink: string; fill: string }) {
+  const { timezone, latitude, ink } = p;
   // Client-only clock (avoids a build-time time baked into HTML).
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
@@ -105,10 +129,10 @@ function LocalTimeFact({ timezone, latitude, ink }: { timezone: string; latitude
     latitude == null ? null : latitude === 0 ? "On the Equator" : latitude > 0 ? "Northern Hemisphere" : "Southern Hemisphere";
   return (
     <div className={styles.timeFact}>
-      <div className="tf-label" style={{ color: withAlpha(ink, 0.55) }}>
+      <div className={`tf-label ${styles.timeLabel}`} style={{ color: withAlpha(ink, 0.55) }}>
         LOCAL TIME
       </div>
-      <DigitalClock hour={local?.hour ?? null} minute={local?.minute ?? null} ink={ink} />
+      <DigitalClock hour={local?.hour ?? null} minute={local?.minute ?? null} fill={p.fill} />
       <div className={`tf-sub ${styles.timeSub}`} style={{ color: withAlpha(ink, 0.75) }}>
         {local && <div>{`${local.date} · ${local.utc}`}</div>}
         {hemisphere && <div>{hemisphere}</div>}
@@ -118,14 +142,17 @@ function LocalTimeFact({ timezone, latitude, ink }: { timezone: string; latitude
 }
 
 // Minimal 12-hour digital readout in the masthead ink, with a blinking colon.
-function DigitalClock({ hour, minute, ink }: { hour: number | null; minute: number | null; ink: string }) {
+// fill: muted page color, with readable (black) digits and outline.
+function DigitalClock(p: { hour: number | null; minute: number | null; fill: string }) {
+  const { hour, minute, fill } = p;
+  const text = readableTextColor(fill);
   const pad = (n: number | null) => (n == null ? "--" : String(n).padStart(2, "0"));
   const h12 = hour == null ? "--" : String(hour % 12 || 12);
   const period = hour == null ? "" : hour < 12 ? "AM" : "PM";
   return (
     <div
       className={styles.clock}
-      style={{ color: ink, borderColor: withAlpha(ink, 0.35), background: withAlpha(ink, 0.06) }}
+      style={{ color: text, borderColor: text, background: fill }}
       role="img"
       aria-label={hour == null ? "Local time" : `Local time ${h12}:${pad(minute)} ${period}`}
     >
@@ -138,27 +165,35 @@ function DigitalClock({ hour, minute, ink }: { hour: number | null; minute: numb
 }
 
 // Rate printed on a minimal banknote: framed, code in the corner.
-function CurrencyFact(p: { rate: ExchangeRate | null; currencyName: string | null; currencyCode: string; ink: string }) {
-  const { rate, ink } = p;
+// fill: muted page color, with readable (black) text and outline.
+function CurrencyFact(p: {
+  rate: ExchangeRate | null;
+  currencyName: string | null;
+  currencyCode: string;
+  ink: string;
+  fill: string;
+}) {
+  const { rate, ink, fill } = p;
+  const text = readableTextColor(fill);
   return (
-    <div>
+    <div className={styles.currencyFact}>
       <div className="tf-label" style={{ color: withAlpha(ink, 0.55) }}>
         $1 USD =
       </div>
       <div
         className={styles.bill}
         style={{
-          color: ink,
-          borderColor: withAlpha(ink, 0.45),
-          background: withAlpha(ink, 0.06),
+          color: text,
+          borderColor: text,
+          background: fill,
         }}
       >
-        <span className={styles.billFrame} style={{ borderColor: withAlpha(ink, 0.25) }} aria-hidden />
-        <span className={`tk-eyebrow ${styles.billCode}`} style={{ color: withAlpha(ink, 0.6) }} aria-hidden>
+        <span className={styles.billFrame} style={{ borderColor: withAlpha(text, 0.3) }} aria-hidden />
+        <span className={`tk-eyebrow ${styles.billCode}`} style={{ color: withAlpha(text, 0.7) }} aria-hidden>
           {p.currencyCode}
         </span>
         <div className="tf-val">{rate ? rateLabel(rate) : "—"}</div>
-        <div className="tf-sub" style={{ color: withAlpha(ink, 0.75) }}>
+        <div className="tf-sub" style={{ color: withAlpha(text, 0.8) }}>
           {p.currencyName ?? "Daily rate"}
         </div>
       </div>

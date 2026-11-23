@@ -1,30 +1,57 @@
+/* Mobile: logo row + name/stamp pinned while scrolling. Above the tickets' pins. */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
 .masthead {
   position: relative;
   overflow: hidden;
-  padding: 16px 20px 20px;
-  /* Thin ink rule, same weight as the ticket outlines' ink. */
-  border-bottom: 1.4px solid var(--ink);
+  padding: 16px 20px 16px;
 }
 
-/* Mobile: name + flag, facts below a rule. */
+/* Mobile: name + flag; facts in their own block below. */
 .inner {
   max-width: calc(var(--content-max) - 40px);
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "title flag"
-    "facts facts";
+  grid-template-areas: "title flag";
   align-items: center;
 }
 
+/* No facts block below to carry the ink rule. */
+.ruled {
+  border-bottom: 1.4px solid var(--ink);
+}
+
+.desktopFacts {
+  display: none;
+}
+
+.mobileFacts {
+  padding: 0 20px 20px;
+  /* Thin ink rule, same weight as the ticket outlines' ink. */
+  border-bottom: 1.4px solid var(--ink);
+}
+
+.mobileFactsInner {
+  max-width: calc(var(--content-max) - 40px);
+  margin: 0 auto;
+}
+
+/* Facts lay out by their own width, not the viewport's. */
+.mobileFactsInner,
+.desktopFacts {
+  container-type: inline-size;
+}
+
 .facts {
-  grid-area: facts;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px 24px;
-  margin-top: 16px;
   padding-top: 14px;
   border-top: 1px solid;
 }
@@ -147,6 +174,35 @@
   margin-top: 2px;
 }
 
+/* Too narrow for time and currency side by side: stack them, date beside the clock. */
+@container (max-width: 439px) {
+  .facts {
+    flex-direction: column;
+  }
+  .timeFact {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 18px;
+    align-items: center;
+  }
+  .timeLabel {
+    grid-column: 1 / -1;
+  }
+  .timeSub {
+    justify-content: center;
+    gap: 2px;
+    margin-top: 1px;
+    text-align: right;
+  }
+  .currencyFact {
+    align-self: center;
+    text-align: center;
+  }
+  .bill {
+    text-align: left;
+  }
+}
+
 /* Digital readout: mono digits in a thin ink frame. */
 .clock {
   display: inline-flex;
@@ -193,8 +249,15 @@
   .name {
     font-size: 64px;
   }
+  .sticky {
+    position: static;
+  }
   .masthead {
     padding: 16px 20px 36px;
+    border-bottom: 1.4px solid var(--ink);
+  }
+  .mobileFacts {
+    display: none;
   }
   /* Full-width row: name left, facts spread through the middle, stamp right. */
   .inner {
@@ -202,8 +265,15 @@
     grid-template-areas: "title facts flag";
     align-items: center;
   }
+  .desktopFacts {
+    display: block;
+    grid-area: facts;
+    min-width: 0;
+  }
+  /* Reaches into the deeper bottom padding so the stamp sits evenly top to bottom. */
   .flagCol {
     margin-left: 28px;
+    margin-bottom: -20px;
   }
   .facts {
     margin: 0 0 0 28px;
@@ -213,19 +283,19 @@
     gap: 16px 28px;
   }
   .stamp {
-    width: 96px;
-    height: 96px;
-    padding: 8px 8px 0;
+    width: 112px;
+    height: 112px;
+    padding: 9px 9px 0;
   }
   .flag {
-    width: 76px;
-    height: 50px;
+    width: 90px;
+    height: 60px;
   }
   .stampName {
-    margin-top: 8px;
-    font-size: 11px;
+    margin-top: 9px;
+    font-size: 12px;
   }
   .stampCode {
-    font-size: 8.5px;
+    font-size: 9.5px;
   }
 }

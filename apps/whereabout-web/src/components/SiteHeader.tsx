@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { readableTextColor, withAlpha } from "@/lib/color";
+import { readableTextColor } from "@/lib/color";
 import LogoMark from "./LogoMark";
 import styles from "./SiteHeader.module.css";
 
 // Site-wide nav: logo mark + wordmark, links home. Not on the home page.
-// colors: blend into a masthead below (country page); default is the ink bar.
-// background: the country's deeper shade, sitting above its masthead; default is the ink bar.
+// background: a flag color contrasting the masthead below (country page); default is the ink bar.
 export default function SiteHeader({ background }: { background?: string }) {
   const text = background ? readableTextColor(background) : "#fff";
   return (
@@ -13,7 +12,7 @@ export default function SiteHeader({ background }: { background?: string }) {
       className={background ? styles.blended : undefined}
       style={
         background
-          ? ({ "--bg": background, "--divider": withAlpha(text, 0.4) } as React.CSSProperties)
+          ? ({ "--bg": background } as React.CSSProperties)
           : { background: "var(--ink)", padding: "16px 20px" }
       }
     >
