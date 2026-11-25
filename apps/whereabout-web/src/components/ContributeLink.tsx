@@ -9,7 +9,7 @@ import { tagClass, type TagVariant } from "./linkTags";
 export default function ContributeLink({ variant = "outline" }: { variant?: TagVariant }) {
   if (usePathname()?.replace(/\/$/, "") === "/contribute") return null;
   return (
-    <Link href="/contribute" className={tagClass(variant)}>
+    <Link href="/contribute" className={tagClass(variant)} data-umami-event="get-involved">
       GET INVOLVED
     </Link>
   );

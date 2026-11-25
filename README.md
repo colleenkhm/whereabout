@@ -85,3 +85,4 @@ All `.env*` files are gitignored.
 | `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` | production deploy |
 | `DEV_SUPABASE_URL`, `DEV_SUPABASE_PUBLISHABLE_KEY` | staging deploy |
 | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | staging deploy |
+| `UMAMI_WEBSITE_ID` | production deploy (analytics; optional, unset = no tracking) |

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { track } from "@/lib/analytics";
 import { sectionVars, type SectionColors } from "@/lib/color";
 import {
   CITY_CATEGORIES,
@@ -99,6 +100,8 @@ export default function ContributeForm({
       return;
     }
     saveEmail(email.trim());
+    // Success only; no text or email sent to Umami.
+    track(feedback ? "feedback-submit" : "contribution-submit", feedback ? undefined : { kind, section });
     setStatus("sent");
   }
 
