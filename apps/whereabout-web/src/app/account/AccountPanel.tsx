@@ -117,7 +117,9 @@ function SignInForm() {
           {status === "sending" ? "SENDING…" : "SEND LINK"}
         </button>
       </div>
-      <span className="src-row">No password needed.</span>
+      <span className="src-row">
+        No password to remember, reuse or leak. Each link works once and expires after an hour.
+      </span>
       {error && (
         <p className="s-body error-text" role="alert">
           {error}
