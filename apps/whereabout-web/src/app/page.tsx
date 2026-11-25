@@ -1,6 +1,7 @@
 import { listCountries } from "@/lib/countryRepository";
 import PaperTexture from "@/components/PaperTexture";
 import BetaTag from "@/components/BetaTag";
+import { AccountLink } from "@/components/AccountsGate";
 import ContributeLink from "@/components/ContributeLink";
 import SiteFooter from "@/components/SiteFooter";
 import CountrySearch from "./CountrySearch";
@@ -20,6 +21,7 @@ export default async function Home() {
         {/* Ink tag over the flags, so it reads on any flag. */}
         <div className={`${styles.corner} ${styles.right}`}>
           <ContributeLink variant="filled" />
+          <AccountLink variant="filled" />
         </div>
         <main className={styles.main}>
           <div className={styles.search}>

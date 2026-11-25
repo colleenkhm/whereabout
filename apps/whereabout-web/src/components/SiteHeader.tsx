@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { cssVars, readableTextColor } from "@/lib/color";
+import { AccountLink } from "./AccountsGate";
 import BetaTag from "./BetaTag";
 import ContributeLink from "./ContributeLink";
 import LogoMark from "./LogoMark";
@@ -20,7 +21,10 @@ export default function SiteHeader({ background }: { background?: string }) {
             <BetaTag />
           </span>
         </Link>
-        <ContributeLink variant={background ? "outline" : "white"} />
+        <div className={styles.links}>
+          <ContributeLink variant={background ? "outline" : "white"} />
+          <AccountLink variant={background ? "outline" : "white"} />
+        </div>
       </div>
     </header>
   );
