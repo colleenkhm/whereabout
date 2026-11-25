@@ -76,6 +76,17 @@ Local runs always use the dev Supabase project.
 
   Re-link to dev afterwards so the default target stays dev.
 
+- **Feature flags** live in `apps/whereabout-web/src/lib/features.ts`
+  and are baked in at build time. Each is off unless its env var is
+  `"true"`. Staging and CI turn them on; the prod build leaves them unset,
+  so gated code ships to prod only when the var is added to
+  `deploy-web.yml`. Add the var to `apps/whereabout-web/.env.local` to
+  turn a flag on locally.
+
+  | Flag | Env var | Gates |
+  | --- | --- | --- |
+  | `accounts` | `NEXT_PUBLIC_FEATURE_ACCOUNTS` | Accounts UI and sign-in |
+
 All `.env*` files are gitignored.
 
 ### GitHub secrets
