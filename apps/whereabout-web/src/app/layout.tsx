@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
 
 const fraunces = localFont({
@@ -28,10 +29,23 @@ export const metadata: Metadata = {
   description: "Hand-curated travel facts, country by country.",
 };
 
+// Umami Cloud; unset outside prod builds.
+const umamiWebsiteId = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${dmSans.variable} ${dmMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        {umamiWebsiteId && (
+          <Script
+            src="https://cloud.umami.is/script.js"
+            data-website-id={umamiWebsiteId}
+            data-domains="www.whereabout.world"
+            strategy="afterInteractive"
+          />
+        )}
+      </body>
     </html>
   );
 }
