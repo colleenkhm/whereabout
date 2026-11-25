@@ -21,6 +21,13 @@ refactors/doc updates unless they're worth calling out.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 
+## [0.14.1] — 2026-11-25
+
+### Added
+- Anonymous visit counts (Umami), so we can see which countries and cards
+  get used. No cookies, nothing tied to who you are, and form text and
+  emails are never sent.
+
 ## [0.14.0] — 2026-11-23
 
 ### Added
