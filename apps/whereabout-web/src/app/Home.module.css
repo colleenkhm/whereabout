@@ -18,6 +18,8 @@
 
 .right {
   right: 16px;
+  display: flex;
+  gap: 8px;
 }
 
 .main {

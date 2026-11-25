@@ -87,6 +87,11 @@ Local runs always use the dev Supabase project.
   | --- | --- | --- |
   | `accounts` | `NEXT_PUBLIC_FEATURE_ACCOUNTS` | Accounts UI and sign-in |
 
+  Import accounts components only through
+  `src/components/AccountsGate.tsx`. Checking the flag inside a server
+  component hides the UI but still ships its code (see HANDOFF.md
+  2026-11-25, account creation).
+
 All `.env*` files are gitignored.
 
 ### GitHub secrets
