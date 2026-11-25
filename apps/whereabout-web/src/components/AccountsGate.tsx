@@ -9,3 +9,4 @@ const Off = () => null;
 
 export const AccountLink = on ? dynamic(() => import("./AccountLink")) : Off;
 export const AccountPanel = on ? dynamic(() => import("@/app/account/AccountPanel")) : Off;
+export const CountryMarks = on ? dynamic(() => import("./country/CountryMarks")) : Off;

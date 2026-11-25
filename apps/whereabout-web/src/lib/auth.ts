@@ -38,7 +38,31 @@ export function useUser(): User | null | undefined {
   return user;
 }
 
-export async function sendMagicLink(email: string): Promise<string | null> {
+// Where to go after the magic link signs someone in (e.g. back to a country page).
+// localStorage, not the redirect URL: the link opens in a new tab, and Supabase's redirect list stays exact.
+const RETURN_KEY = "whereabout-return-to";
+
+// Same-site paths only.
+export const safeReturnPath = (path: string | null): string | null =>
+  path && /^\/(?![/\\])/.test(path) ? path : null;
+
+export function takeReturnPath(): string | null {
+  try {
+    const path = localStorage.getItem(RETURN_KEY);
+    localStorage.removeItem(RETURN_KEY);
+    return safeReturnPath(path);
+  } catch {
+    return null;
+  }
+}
+
+export async function sendMagicLink(email: string, returnTo?: string | null): Promise<string | null> {
+  try {
+    if (returnTo) localStorage.setItem(RETURN_KEY, returnTo);
+    else localStorage.removeItem(RETURN_KEY);
+  } catch {
+    // Storage blocked: sign-in still works, just lands on /account.
+  }
   const { error } = await authClient().auth.signInWithOtp({
     email,
     options: { emailRedirectTo: `${window.location.origin}/account` },

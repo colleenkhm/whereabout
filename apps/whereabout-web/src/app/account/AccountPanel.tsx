@@ -1,16 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import form from "@/components/country/ContributeForm.module.css";
 import { track } from "@/lib/analytics";
-import { sendMagicLink, signOut, useUser } from "@/lib/auth";
+import { safeReturnPath, sendMagicLink, signOut, takeReturnPath, useUser } from "@/lib/auth";
 import styles from "../contribute/Contribute.module.css";
+import MarkedCountries from "./MarkedCountries";
 
 // Sign in / create account by magic link, or the signed-in view.
 export default function AccountPanel() {
   const user = useUser();
+  const router = useRouter();
+
+  // Back to where sign-in started (e.g. a country page), once the link signs them in.
+  useEffect(() => {
+    if (!user) return;
+    const back = takeReturnPath();
+    if (back) router.replace(back);
+  }, [user, router]);
+
   return (
+    <>
     <section className={styles.option}>
       <div className={`${styles.head} ${styles.inkHead}`}>
         <MdOutlineAccountCircle size={22} aria-hidden />
@@ -26,6 +38,8 @@ export default function AccountPanel() {
         )}
       </div>
     </section>
+    {user && <MarkedCountries />}
+    </>
   );
 }
 
@@ -63,8 +77,12 @@ function linkErrorFromUrl(): string | null {
     : null;
 }
 
+// Set by a country page's VISITED / INTERESTED tags when signed out.
+const returnPathFromUrl = () => safeReturnPath(new URLSearchParams(window.location.search).get("next"));
+
 // Client-only: rendered after the session check, so window exists.
 function SignInForm() {
+  const [returnTo] = useState(returnPathFromUrl);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(linkErrorFromUrl);
@@ -75,7 +93,7 @@ function SignInForm() {
     if (!ready) return;
     setStatus("sending");
     setError(null);
-    const err = await sendMagicLink(email.trim());
+    const err = await sendMagicLink(email.trim(), returnTo);
     if (err) {
       setError(err);
       setStatus("idle");
@@ -89,7 +107,7 @@ function SignInForm() {
     return (
       <div className={styles.stack}>
         <p className="s-body">
-          Check <b>{email.trim()}</b> for a sign-in link. Open it in this browser to finish signing in.
+          Check <b>{email.trim()}</b> for a sign-in link. Open it in this browser to finish signing in{returnTo ? " and go back to that country" : ""}.
         </p>
         <span className="src-row">No email? Check spam, or wait a minute and try again.</span>
       </div>
@@ -98,6 +116,7 @@ function SignInForm() {
 
   return (
     <form onSubmit={submit} noValidate className={styles.stack}>
+      {returnTo && <p className="s-body"><b>Sign in to mark countries as visited or interested.</b></p>}
       <label htmlFor="account-email" className="s-body">
         Enter your email and we&apos;ll send you a link to sign in. New here? The same link creates your account.
       </label>

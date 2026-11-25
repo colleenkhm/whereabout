@@ -1,0 +1,30 @@
+.groupHead {
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.countries {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Ink-edged luggage-tag chip, crisp offset shadow like the cards. */
+.country {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1.4px solid var(--ink);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.flag {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
