@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { MdOutlineMarkEmailUnread } from "react-icons/md";
+import { track } from "@/lib/analytics";
 import { saveEmail, subscribeToUpdates } from "@/lib/contribute";
 import form from "@/components/country/ContributeForm.module.css";
 import styles from "./Contribute.module.css";
@@ -26,6 +27,7 @@ export default function UpdatesSignup() {
       return;
     }
     saveEmail(email.trim());
+    track("updates-signup");
     setStatus("sent");
   }
 

@@ -100,7 +100,13 @@ export default function PostageCard({
     </>
   );
   return hasData ? (
-    <button className={className} style={style} onClick={onOpen}>
+    <button
+      className={className}
+      style={style}
+      onClick={onOpen}
+      data-umami-event={mark ? "contribute-card" : "open-card"}
+      data-umami-event-card={title}
+    >
       {item}
       {pin}
     </button>
