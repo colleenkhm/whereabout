@@ -51,7 +51,13 @@
 
 .convert {
   pointer-events: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  letter-spacing: inherit;
   color: var(--logo-sky);
+  cursor: pointer;
 }
 
 /* Wraps between parts, never inside one, so the full rate always shows. */
@@ -221,4 +227,36 @@
 
 .unavailable {
   margin-top: 6px;
+}
+
+/* Converter. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.amount {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--dm-mono);
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: var(--white);
+  border: 1.4px solid var(--ink);
+  border-radius: 4px;
+  outline: none;
+}
+
+.amount:focus-visible {
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.equals {
+  margin: 6px 0;
+  font-family: var(--dm-mono);
+  font-size: 18px;
+  text-align: center;
+  color: var(--ink-3);
 }

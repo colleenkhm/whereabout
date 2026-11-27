@@ -22,6 +22,7 @@ interface Props {
   header: SectionColors;
   nav: string;
   onOpenDetails: () => void;
+  onOpenConverter: () => void;
 }
 
 // Logo row (color 1), masthead (color 2) and the ink departures bar all stick.
@@ -51,7 +52,7 @@ export default function CountryHeader(p: Props) {
             </div>
           </div>
         </div>
-        {hasFacts && <DeparturesBar {...p} onOpen={p.onOpenDetails} />}
+        {hasFacts && <DeparturesBar {...p} onOpen={p.onOpenDetails} onConvert={p.onOpenConverter} />}
       </div>
     </>
   );
