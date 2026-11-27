@@ -27,6 +27,23 @@ export async function setCountryMark(userId: string, isoCode: string, kind: Mark
   return !error;
 }
 
+// Adds and clears one kind in bulk (profile setup). Returns false on failure.
+export async function saveMarks(userId: string, kind: MarkKind, before: Set<string>, after: Set<string>): Promise<boolean> {
+  const table = authClient().from("country_marks");
+  const added = [...after].filter((c) => !before.has(c));
+  const removed = [...before].filter((c) => !after.has(c));
+  if (added.length) {
+    const rows = added.map((country_id) => ({ user_id: userId, country_id, kind }));
+    const { error } = await table.upsert(rows, { ignoreDuplicates: true });
+    if (error) return false;
+  }
+  if (removed.length) {
+    const { error } = await table.delete().eq("user_id", userId).eq("kind", kind).in("country_id", removed);
+    if (error) return false;
+  }
+  return true;
+}
+
 export async function fetchAllMarks(): Promise<MarkedCountry[] | null> {
   const { data, error } = await authClient()
     .from("country_marks")

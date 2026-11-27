@@ -11,12 +11,15 @@ import styles from "./CountrySearch.module.css";
 const fold = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
 // contribute: results open the add/dispute version of the country page, and the panel stays white (it sits in a white card). Home is the ink variant.
+// onSelect: results pick a country instead of navigating (white panel too).
 export default function CountrySearch({
   countries,
   contribute = false,
+  onSelect,
 }: {
   countries: CountrySummary[];
   contribute?: boolean;
+  onSelect?: (country: CountrySummary) => void;
 }) {
   const [query, setQuery] = useState("");
   const results = useMemo(() => {
@@ -26,12 +29,12 @@ export default function CountrySearch({
   const open = query.trim() !== "";
 
   return (
-    <div className={`${styles.search} ${open ? styles.isOpen : ""} ${contribute ? "" : styles.dark}`}>
+    <div className={`${styles.search} ${open ? styles.isOpen : ""} ${contribute || onSelect ? "" : styles.dark}`}>
       <label className={styles.field}>
         <MdSearch size={24} className={styles.icon} aria-hidden />
         <input
           type="search"
-          placeholder={contribute ? "Which country?" : "Where to?"}
+          placeholder={onSelect ? "Add a place" : contribute ? "Which country?" : "Where to?"}
           aria-label="Search countries"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -52,7 +55,18 @@ export default function CountrySearch({
               return (
                 <li key={c.isoCode}>
                   {/* Full load into contribute mode, which is read from the URL on mount. */}
-                  {contribute ? (
+                  {onSelect ? (
+                    <button
+                      type="button"
+                      className={`${styles.row} ${styles.pick}`}
+                      onClick={() => {
+                        onSelect(c);
+                        setQuery("");
+                      }}
+                    >
+                      {row}
+                    </button>
+                  ) : contribute ? (
                     <a href={contributeHref(c.isoCode)} className={styles.row}>
                       {row}
                     </a>

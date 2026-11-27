@@ -84,6 +84,15 @@
   padding: 12px 16px;
 }
 
+/* Picker rows are buttons. */
+.pick {
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
 .row:hover,
 .row:focus-visible {
   background: rgba(0, 0, 0, 0.06);
