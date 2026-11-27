@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { cssVars, isWhitish, readableTextColor, type SectionColors } from "@/lib/color";
 import type { ExchangeRate, LanguageEntry } from "@/lib/types";
+import { CountryMarks } from "../AccountsGate";
 import SiteHeader from "../SiteHeader";
 import { DeparturesBar } from "./LocalFacts";
 import { sortLanguages } from "./LanguageSection";
@@ -39,6 +40,7 @@ export default function CountryHeader(p: Props) {
               <div className={`tk-eyebrow ${styles.eyebrow}`}>DESTINATION</div>
               <h1 className={styles.name}>{p.name}</h1>
               {hemisphere && <div className={`tf-sub ${styles.hemisphere}`}>{hemisphere}</div>}
+              {hasFacts && <CountryMarks isoCode={p.isoCode} />}
             </div>
             <div className={styles.flagCol}>
               <StampFlag

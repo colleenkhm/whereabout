@@ -18,9 +18,12 @@ refactors/doc updates unless they're worth calling out.
 ## [Unreleased]
 
 ### Added
-- Sign in or create an account with an emailed link, from a new Sign in
+- Sign in or create an account with a code sent by email, from a new Sign in
   link in the header. Staging only (behind the `accounts` flag); not
   visible on prod yet.
+- Mark a country as Visited and/or Interested from the top of its page,
+  and see your marked countries on the Account page. Staging only
+  (behind the `accounts` flag); not visible on prod yet.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 

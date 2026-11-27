@@ -1,0 +1,35 @@
+/* Sits under the country name, on the masthead's color 2. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Same box as the header tags (linkTags), in the masthead's text color. Type: tf-link. */
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 8px;
+  border: 2px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--c2-ink);
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Marked: filled, inverted. */
+.on {
+  background: var(--c2-ink);
+  color: var(--c2);
+  border-color: var(--c2-ink);
+}
+
+.error {
+  font-size: 13px;
+  color: var(--c2-ink);
+}

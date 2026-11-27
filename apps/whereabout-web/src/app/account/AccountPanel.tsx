@@ -1,31 +1,37 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import form from "@/components/country/ContributeForm.module.css";
 import { track } from "@/lib/analytics";
-import { sendMagicLink, signOut, useUser } from "@/lib/auth";
+import { safeReturnPath, sendSignInCode, signOut, useUser, verifySignInCode } from "@/lib/auth";
 import styles from "../contribute/Contribute.module.css";
+import own from "./Account.module.css";
+import MarkedCountries from "./MarkedCountries";
 
-// Sign in / create account by magic link, or the signed-in view.
+// Sign in / create account with an emailed code, or the signed-in view.
 export default function AccountPanel() {
   const user = useUser();
   return (
-    <section className={styles.option}>
-      <div className={`${styles.head} ${styles.inkHead}`}>
-        <MdOutlineAccountCircle size={22} aria-hidden />
-        <h2 className="sec-name">{user ? "Signed in" : "Sign in or create an account"}</h2>
-      </div>
-      <div className={styles.body}>
-        {user === undefined ? (
-          <p className="s-body">Loading…</p>
-        ) : user ? (
-          <SignedIn email={user.email ?? ""} />
-        ) : (
-          <SignInForm />
-        )}
-      </div>
-    </section>
+    <>
+      <section className={styles.option}>
+        <div className={`${styles.head} ${styles.inkHead}`}>
+          <MdOutlineAccountCircle size={22} aria-hidden />
+          <h2 className="sec-name">{user ? "Signed in" : "Sign in or create an account"}</h2>
+        </div>
+        <div className={styles.body}>
+          {user === undefined ? (
+            <p className="s-body">Loading…</p>
+          ) : user ? (
+            <SignedIn email={user.email ?? ""} />
+          ) : (
+            <SignInForm />
+          )}
+        </div>
+      </section>
+      {user && <MarkedCountries />}
+    </>
   );
 }
 
@@ -55,51 +61,118 @@ function SignedIn({ email }: { email: string }) {
   );
 }
 
-// Expired or reused magic link comes back with error_description.
-function linkErrorFromUrl(): string | null {
-  const params = new URLSearchParams(window.location.search + window.location.hash.replace(/^#/, "&"));
-  return params.get("error_description")
-    ? "That sign-in link has expired or was already used. Please request a new one."
-    : null;
-}
+// Set by a country page's VISITED / INTERESTED tags when signed out.
+const returnPathFromUrl = () => safeReturnPath(new URLSearchParams(window.location.search).get("next"));
 
-// Client-only: rendered after the session check, so window exists.
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Supabase's code length is a project setting (6–10 digits).
+const CODE = /^\d{6,10}$/;
+
+// Two steps: email, then the code from the email. Client-only (after the session check), so window exists.
 function SignInForm() {
+  const router = useRouter();
+  const [returnTo] = useState(returnPathFromUrl);
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
-  const [error, setError] = useState<string | null>(linkErrorFromUrl);
-  const ready = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) && status === "idle";
+  const [code, setCode] = useState("");
+  const [step, setStep] = useState<"email" | "code">("email");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [resent, setResent] = useState(false);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!ready) return;
-    setStatus("sending");
+  async function sendCode(e?: React.FormEvent) {
+    e?.preventDefault();
+    if (!EMAIL.test(email.trim()) || busy) return;
+    setBusy(true);
     setError(null);
-    const err = await sendMagicLink(email.trim());
+    const err = await sendSignInCode(email.trim());
+    setBusy(false);
     if (err) {
       setError(err);
-      setStatus("idle");
       return;
     }
-    track("magic-link-sent");
-    setStatus("sent");
+    track("sign-in-code-sent");
+    setResent(step === "code");
+    setStep("code");
   }
 
-  if (status === "sent") {
+  async function verify(e: React.FormEvent) {
+    e.preventDefault();
+    if (!CODE.test(code) || busy) return;
+    setBusy(true);
+    setError(null);
+    const err = await verifySignInCode(email.trim(), code);
+    if (err) {
+      setBusy(false);
+      setError(err);
+      return;
+    }
+    track("sign-in");
+    // Otherwise the panel switches to the signed-in view on its own.
+    if (returnTo) router.replace(returnTo);
+  }
+
+  const errorLine = error && (
+    <p className="s-body error-text" role="alert">
+      {error}
+    </p>
+  );
+
+  if (step === "code") {
     return (
-      <div className={styles.stack}>
-        <p className="s-body">
-          Check <b>{email.trim()}</b> for a sign-in link. Open it in this browser to finish signing in.
-        </p>
-        <span className="src-row">No email? Check spam, or wait a minute and try again.</span>
-      </div>
+      <form onSubmit={verify} noValidate className={styles.stack}>
+        <label htmlFor="account-code" className="s-body">
+          We emailed a sign-in code to <b>{email.trim()}</b>. Enter it here.
+        </label>
+        <div className={form.inline}>
+          <input
+            id="account-code"
+            className={form.input}
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+            placeholder="123456"
+            maxLength={10}
+            autoFocus
+            required
+          />
+          <button type="submit" className={form.submit} disabled={!CODE.test(code) || busy}>
+            {busy ? "CHECKING…" : "SIGN IN"}
+          </button>
+        </div>
+        <span className="src-row">
+          {resent ? "New code sent. " : "No email? Check spam. "}
+          <button type="button" className={`src-row ${own.textButton}`} onClick={() => sendCode()} disabled={busy}>
+            Send a new code
+          </button>
+          {" · "}
+          <button
+            type="button"
+            className={`src-row ${own.textButton}`}
+            onClick={() => {
+              setStep("email");
+              setCode("");
+              setError(null);
+              setResent(false);
+            }}
+          >
+            Use a different email
+          </button>
+        </span>
+        {errorLine}
+      </form>
     );
   }
 
   return (
-    <form onSubmit={submit} noValidate className={styles.stack}>
+    <form onSubmit={sendCode} noValidate className={styles.stack}>
+      {returnTo && (
+        <p className="s-body">
+          <b>Sign in to mark countries as visited or interested.</b>
+        </p>
+      )}
       <label htmlFor="account-email" className="s-body">
-        Enter your email and we&apos;ll send you a link to sign in. New here? The same link creates your account.
+        Enter your email and we&apos;ll send you a code to sign in. New here? The same code creates your account.
       </label>
       <div className={form.inline}>
         <input
@@ -113,18 +186,12 @@ function SignInForm() {
           maxLength={254}
           required
         />
-        <button type="submit" className={form.submit} disabled={!ready}>
-          {status === "sending" ? "SENDING…" : "SEND LINK"}
+        <button type="submit" className={form.submit} disabled={!EMAIL.test(email.trim()) || busy}>
+          {busy ? "SENDING…" : "SEND CODE"}
         </button>
       </div>
-      <span className="src-row">
-        No password to remember, reuse or leak. Each link works once and expires after an hour.
-      </span>
-      {error && (
-        <p className="s-body error-text" role="alert">
-          {error}
-        </p>
-      )}
+      <span className="src-row">No password to remember, reuse or leak. Each code works once and expires after an hour.</span>
+      {errorLine}
     </form>
   );
 }
