@@ -200,6 +200,14 @@ export const fallbackPalette: SectionPalette = {
   tickets: ["#e4704f", "#e9b949", "#5fa8a0", "#f2a477", "#8fa4d8", "#9dbb86", "#e39aae", "#b49bd6", "#d9bc8c"].map(ticketFor),
 };
 
+// Postcard grounds (#96): flag colors that carry white text; else a deep shade of the first hue.
+export function postcardColors(colors: string[]): string[] {
+  const usable = colors.filter((c) => hexToHsl(c).s >= ACHROMATIC && readableTextColor(c) === "#ffffff");
+  if (usable.length) return usable;
+  const first = headerSource(colors);
+  return [first ? deepen(first) : INK];
+}
+
 export function advisoryColor(level: number): string {
   return level === 1 ? "var(--ok)" : level === 2 ? "var(--butter-dark)" : level === 3 ? "var(--rose-dark)" : "var(--danger)";
 }

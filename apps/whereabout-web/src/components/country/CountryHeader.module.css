@@ -49,70 +49,6 @@
   margin-left: 18px;
 }
 
-/* Shadow lives on a wrapper; the mask would clip it. */
-.stampShadow {
-  filter: drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
-}
-
-/* White masthead: 1px ink edge that follows the perforations, then the usual shadow. */
-.stampOutlined {
-  filter: drop-shadow(1px 0 0 var(--ink)) drop-shadow(-1px 0 0 var(--ink)) drop-shadow(0 1px 0 var(--ink))
-    drop-shadow(0 -1px 0 var(--ink)) drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
-}
-
-/* Hole grid centered on the edges bites half-circles; the solid layer fills the middle. */
-.stamp {
-  --pitch: 6px;
-  --hole: 1.9px;
-  width: 76px;
-  height: 78px;
-  padding: 7px 7px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #fffdf8;
-  color: var(--ink);
-  -webkit-mask:
-    radial-gradient(circle, transparent var(--hole), #000 calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2)
-      calc(var(--pitch) / -2) / var(--pitch) var(--pitch) round,
-    linear-gradient(#000 0 0) center / calc(100% - var(--pitch)) calc(100% - var(--pitch)) no-repeat;
-  mask:
-    radial-gradient(circle, transparent var(--hole), #000 calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2)
-      calc(var(--pitch) / -2) / var(--pitch) var(--pitch) round,
-    linear-gradient(#000 0 0) center / calc(100% - var(--pitch)) calc(100% - var(--pitch)) no-repeat;
-}
-
-/* Thin printed frame line around the art. */
-.flag {
-  width: 58px;
-  height: 38px;
-  margin-top: 2px;
-  object-fit: cover;
-  outline: 1px solid rgba(26, 21, 32, 0.25);
-  outline-offset: 2px;
-}
-
-/* Printed margin: native name, then code. */
-.stampName {
-  max-width: 100%;
-  margin-top: 6px;
-  font-family: var(--fraunces);
-  font-weight: 700;
-  font-size: 9px;
-  line-height: 1.15;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.stampCode {
-  margin-top: 1px;
-  font-size: 7.5px;
-  letter-spacing: 1.2px;
-  color: var(--ink-3);
-}
-
 @media (min-width: 900px) {
   .name {
     font-size: 64px;
@@ -122,21 +58,5 @@
   }
   .flagCol {
     margin-left: 28px;
-  }
-  .stamp {
-    width: 112px;
-    height: 112px;
-    padding: 9px 9px 0;
-  }
-  .flag {
-    width: 90px;
-    height: 60px;
-  }
-  .stampName {
-    margin-top: 9px;
-    font-size: 12px;
-  }
-  .stampCode {
-    font-size: 9.5px;
   }
 }

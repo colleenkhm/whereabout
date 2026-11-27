@@ -10,12 +10,21 @@ import type { CountrySummary } from "@/lib/types";
 import { safeReturnPath, sendSignInCode, signOut, useUser, verifySignInCode } from "@/lib/auth";
 import styles from "../contribute/Contribute.module.css";
 import own from "./Account.module.css";
-import { Avatar, useAvatarUrl } from "./Avatar";
+import PaperTexture from "@/components/PaperTexture";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
 import MarkedCountries from "./MarkedCountries";
 import ProfileSetup from "./ProfileSetup";
+import ProfileView from "./ProfileView";
 
 // Sign in / create account with an emailed code, then profile setup, then the signed-in view.
-export default function AccountPanel({ countries }: { countries: CountrySummary[] }) {
+export default function AccountPanel({
+  countries,
+  postcardColors,
+}: {
+  countries: CountrySummary[];
+  postcardColors: Record<string, string[]>;
+}) {
   const user = useUser();
   const router = useRouter();
   // Read once on the client; the panel renders nothing user-specific on the server.
@@ -43,84 +52,99 @@ export default function AccountPanel({ countries }: { countries: CountrySummary[
 
   if (user && current && (needsSetup || editing)) {
     return (
-      <ProfileSetup
-        userId={user.id}
-        profile={current}
+      <Shell>
+        <ProfileSetup
+          userId={user.id}
+          profile={current}
+          countries={countries}
+          onDone={(p) => {
+            setProfile({ userId: user.id, profile: p });
+            setEditing(false);
+          }}
+        />
+      </Shell>
+    );
+  }
+
+  // Finished profile: the dashboard (unless a redirect back is about to happen).
+  if (user && current && !returnTo) {
+    return (
+      <ProfileView
+        profileId={user.id}
+        viewer={user}
         countries={countries}
-        onDone={(p) => {
-          setProfile({ userId: user.id, profile: p });
-          setEditing(false);
-        }}
+        postcardColors={postcardColors}
+        onEdit={() => setEditing(true)}
+        footer={
+          <>
+            <MarkedCountries />
+            <SignedInFooter email={user.email ?? ""} profile={current} />
+          </>
+        }
       />
     );
   }
 
   return (
-    <>
+    <Shell>
       <section className={styles.option}>
         <div className={`${styles.head} ${styles.inkHead}`}>
           <MdOutlineAccountCircle size={22} aria-hidden />
           <h2 className="sec-name">{user ? "Signed in" : "Sign in or create an account"}</h2>
         </div>
         <div className={styles.body}>
-          {user === undefined || (user && current === undefined) ? (
-            <p className="s-body">Loading…</p>
-          ) : user && current === null ? (
-            <p className="s-body error-text" role="alert">
-              Couldn&apos;t load your profile. Please refresh to try again.
-            </p>
-          ) : user && current ? (
-            <SignedIn email={user.email ?? ""} profile={current} onEdit={() => setEditing(true)} />
+          {user === undefined || user ? (
+            current === null ? (
+              <p className="s-body error-text" role="alert">
+                Couldn&apos;t load your profile. Please refresh to try again.
+              </p>
+            ) : (
+              <p className="s-body">Loading…</p>
+            )
           ) : (
             <SignInForm returnTo={returnTo} />
           )}
         </div>
       </section>
-      {user && current && <MarkedCountries />}
-    </>
+    </Shell>
   );
 }
 
-function SignedIn({ email, profile, onEdit }: { email: string; profile: Profile; onEdit: () => void }) {
-  const [busy, setBusy] = useState(false);
-  const url = useAvatarUrl(profile.avatarPath);
+// Signed-out and setup states: the plain account page.
+function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className={styles.stack}>
-      <div className={own.photoRow}>
-        <Avatar url={url} size={64} />
-        <p className="s-body">
-          {profile.displayName && (
-            <>
-              <b>{profile.displayName}</b>
-              <br />
-            </>
-          )}
-          {email}
-          <br />
-          <span className="src-row">
-            {profile.visibility === "private" ? "Profile visible to: only you" : "Profile visible to: anyone with your link"}
-          </span>
-        </p>
-      </div>
-      <div className={own.actions}>
-        <button type="button" className={form.submit} onClick={onEdit} disabled={busy}>
-          EDIT PROFILE
-        </button>
-        <button
-          type="button"
-          className={`src-row ${own.textButton}`}
-          disabled={busy}
-          onClick={async () => {
-            setBusy(true);
-            await signOut();
-            track("sign-out");
-            setBusy(false);
-          }}
-        >
-          {busy ? "Signing out…" : "Sign out"}
-        </button>
-      </div>
-    </div>
+    <PaperTexture color="var(--ocean)">
+      <SiteHeader />
+      <main className={styles.main}>
+        <div className="tk-eyebrow ink-soft">ACCOUNT</div>
+        <h1 className={styles.title}>Your whereabout</h1>
+        {children}
+      </main>
+      <SiteFooter />
+    </PaperTexture>
+  );
+}
+
+function SignedInFooter({ email, profile }: { email: string; profile: Profile }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <p className={`src-row ${own.footRow}`}>
+      <span>Signed in as {email}</span>
+      <span>{profile.visibility === "private" ? "Visible to: you and companions" : "Visible to: anyone with your link"}</span>
+      <button
+        type="button"
+        className={`src-row ${own.textButton}`}
+        disabled={busy}
+        onClick={async () => {
+          setBusy(true);
+          await signOut();
+          track("sign-out");
+          setBusy(false);
+        }}
+      >
+        {busy ? "Signing out…" : "Sign out"}
+      </button>
+    </p>
   );
 }
 

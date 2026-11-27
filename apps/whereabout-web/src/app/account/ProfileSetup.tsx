@@ -5,22 +5,25 @@ import { MdClose, MdOutlineBadge } from "react-icons/md";
 import form from "@/components/country/ContributeForm.module.css";
 import { track } from "@/lib/analytics";
 import { fetchAllMarks, saveMarks, type MarkKind } from "@/lib/countryMarks";
-import { NAME_MAX, removeAvatar, updateProfile, uploadAvatar, type Profile, type Visibility } from "@/lib/profile";
+import { cssVars } from "@/lib/color";
+import { HOME_BASE_MAX, NAME_MAX, removeAvatar, updateProfile, uploadAvatar, type Profile, type Visibility } from "@/lib/profile";
+import { THEME_IDS, THEMES, type ThemeId } from "@/lib/themes";
 import type { CountrySummary } from "@/lib/types";
 import CountrySearch from "../CountrySearch";
 import styles from "../contribute/Contribute.module.css";
 import own from "./Account.module.css";
+import prof from "./Profile.module.css";
 import { Avatar, useAvatarUrl } from "./Avatar";
 
-const STEPS = ["name", "privacy", "photo", "visited", "interested"] as const;
+const STEPS = ["name", "privacy", "photo", "theme", "visited", "interested"] as const;
 type Step = (typeof STEPS)[number];
 
 const VISIBILITY: { value: Visibility; label: string; hint: string }[] = [
-  { value: "private", label: "Only me", hint: "Your profile and countries stay private." },
+  { value: "private", label: "Only me and my travel companions", hint: "Your trips and countries stay private. Someone with your link sees only your name, so they can add you." },
   {
     value: "link",
     label: "Anyone with my link",
-    hint: "When shareable profiles arrive, people you send your link to can see your name, photo and countries.",
+    hint: "People you send your link to can see your name, photo, trips and companions.",
   },
 ];
 
@@ -49,6 +52,8 @@ export default function ProfileSetup({
 }) {
   const [step, setStep] = useState<Step>("name");
   const [name, setName] = useState(profile.displayName ?? "");
+  const [homeBase, setHomeBase] = useState(profile.homeBase ?? "");
+  const [theme, setTheme] = useState<ThemeId>(profile.theme);
   const [visibility, setVisibility] = useState<Visibility>(profile.visibility);
   const [avatarPath, setAvatarPath] = useState(profile.avatarPath);
   // Saved marks, and the in-progress picks for each kind.
@@ -80,7 +85,7 @@ export default function ProfileSetup({
     const completedAt = profile.completedAt ?? new Date().toISOString();
     if (!profile.completedAt && !(await updateProfile(userId, { profile_completed_at: completedAt }))) return false;
     if (!profile.completedAt) track("profile-completed");
-    onDone({ displayName: trimmed, visibility, avatarPath, completedAt });
+    onDone({ displayName: trimmed, visibility, avatarPath, completedAt, homeBase: homeBase.trim() || null, theme });
     return true;
   }
 
@@ -91,7 +96,8 @@ export default function ProfileSetup({
     setBusy(true);
     setError(null);
     let ok = true;
-    if (step === "name") ok = await updateProfile(userId, { display_name: trimmed });
+    if (step === "name") ok = await updateProfile(userId, { display_name: trimmed, home_base: homeBase.trim() || null });
+    else if (step === "theme") ok = await updateProfile(userId, { theme });
     else if (step === "privacy") ok = await updateProfile(userId, { visibility });
     else if ((step === "visited" || step === "interested") && saved) {
       ok = await saveMarks(userId, step, saved[step], picked[step]);
@@ -145,6 +151,18 @@ export default function ProfileSetup({
               autoFocus
               required
             />
+            <label htmlFor="profile-home" className="s-body">
+              <b>Home base</b> (optional)
+            </label>
+            <input
+              id="profile-home"
+              className={form.input}
+              autoComplete="address-level2"
+              value={homeBase}
+              onChange={(e) => setHomeBase(e.target.value)}
+              maxLength={HOME_BASE_MAX}
+              placeholder="St. Louis"
+            />
           </>
         )}
 
@@ -169,12 +187,29 @@ export default function ProfileSetup({
                 </span>
               </label>
             ))}
-            <span className="src-row">Profiles aren&apos;t shared anywhere yet. Change this any time.</span>
+            <span className="src-row">Change this any time.</span>
           </fieldset>
         )}
 
         {step === "photo" && (
           <PhotoStep userId={userId} path={avatarPath} onChange={setAvatarPath} busy={busy} setBusy={setBusy} setError={setError} />
+        )}
+
+        {step === "theme" && (
+          <fieldset className={own.fieldset}>
+            <legend className="s-body">
+              <b>Pick a color for your profile</b>
+            </legend>
+            <div className={prof.themes}>
+              {THEME_IDS.map((id) => (
+                <label key={id} className={prof.themeOption} style={cssVars({ "--main": THEMES[id].main, "--accent": THEMES[id].accent })}>
+                  <input type="radio" name="theme" value={id} checked={theme === id} onChange={() => setTheme(id)} />
+                  <span className={prof.swatch} aria-hidden />
+                  <span className={prof.themeLabel}>{THEMES[id].label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
         )}
 
         {(step === "visited" || step === "interested") && (

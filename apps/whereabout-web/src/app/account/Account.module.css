@@ -107,3 +107,11 @@
   cursor: pointer;
   font: inherit;
 }
+
+/* Profile footer: who's signed in, visibility, sign out. */
+.footRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  color: var(--ink-2);
+}

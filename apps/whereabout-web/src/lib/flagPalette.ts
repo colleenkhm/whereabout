@@ -2,7 +2,7 @@
 // palette_generator: flags are flat blocks, so pixel-count clustering
 // finds the same field colors.
 import { PNG } from "pngjs";
-import { hexToHsl, hexToRgb, rgbToHex, type Rgb } from "./color";
+import { hexToHsl, hexToRgb, postcardColors, rgbToHex, type Rgb } from "./color";
 
 export const flagPngUrl = (iso: string) => `https://flagcdn.com/w160/${iso.toLowerCase()}.png`;
 
@@ -32,7 +32,27 @@ function isBlend(c: Rgb, larger: Rgb[]): boolean {
   return false;
 }
 
-export async function extractFlagBaseColors(iso: string): Promise<string[] | null> {
+// One extraction per flag per build worker; several pages ask for every country.
+const cache = new Map<string, Promise<string[] | null>>();
+export function extractFlagBaseColors(iso: string): Promise<string[] | null> {
+  const key = iso.toUpperCase();
+  let hit = cache.get(key);
+  if (!hit) {
+    hit = extract(key);
+    cache.set(key, hit);
+  }
+  return hit;
+}
+
+// Postcard grounds for every country, keyed by ISO code.
+export async function allPostcardColors(isoCodes: string[]): Promise<Record<string, string[]>> {
+  const entries = await Promise.all(
+    isoCodes.map(async (iso) => [iso, postcardColors((await extractFlagBaseColors(iso)) ?? [])] as const),
+  );
+  return Object.fromEntries(entries);
+}
+
+async function extract(iso: string): Promise<string[] | null> {
   try {
     const res = await fetch(flagPngUrl(iso));
     if (!res.ok) return null;

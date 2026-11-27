@@ -1,0 +1,128 @@
+/* Shadow lives on a wrapper; the mask would clip it. */
+.shadow {
+  display: inline-block;
+  vertical-align: top;
+  filter: drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
+}
+
+/* Light background: 1px ink edge that follows the perforations, then the usual shadow. */
+.outlined {
+  filter: drop-shadow(1px 0 0 var(--ink)) drop-shadow(-1px 0 0 var(--ink)) drop-shadow(0 1px 0 var(--ink))
+    drop-shadow(0 -1px 0 var(--ink)) drop-shadow(1px 2px 1.5px rgba(0, 0, 0, 0.35));
+}
+
+/* Hole grid centered on the edges bites half-circles; the solid layer fills the middle. */
+.stamp {
+  --pitch: 6px;
+  --hole: 1.9px;
+  width: 76px;
+  height: 78px;
+  padding: 7px 7px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fffdf8;
+  color: var(--ink);
+  -webkit-mask:
+    radial-gradient(circle, transparent var(--hole), #000 calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2)
+      calc(var(--pitch) / -2) / var(--pitch) var(--pitch) round,
+    linear-gradient(#000 0 0) center / calc(100% - var(--pitch)) calc(100% - var(--pitch)) no-repeat;
+  mask:
+    radial-gradient(circle, transparent var(--hole), #000 calc(var(--hole) + 0.5px)) calc(var(--pitch) / -2)
+      calc(var(--pitch) / -2) / var(--pitch) var(--pitch) round,
+    linear-gradient(#000 0 0) center / calc(100% - var(--pitch)) calc(100% - var(--pitch)) no-repeat;
+}
+
+/* Thin printed frame line around the art. */
+.art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 58px;
+  height: 38px;
+  margin-top: 2px;
+  object-fit: cover;
+  outline: 1px solid rgba(26, 21, 32, 0.25);
+  outline-offset: 2px;
+}
+
+.art > img,
+.flagImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Art fills the paper (photo stamp). */
+.fill {
+  padding-bottom: 7px;
+}
+
+.fill .art {
+  width: 100%;
+  height: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Printed margin: name, then code. */
+.name {
+  max-width: 100%;
+  margin-top: 6px;
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 9px;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.code {
+  margin-top: 1px;
+  font-size: 7.5px;
+  letter-spacing: 1.2px;
+  color: var(--ink-3);
+}
+
+/* Small: art only (postcard corner). */
+.sm {
+  --pitch: 5px;
+  --hole: 1.5px;
+  width: 46px;
+  height: 36px;
+  padding: 6px;
+  justify-content: center;
+}
+
+.sm .art {
+  width: 32px;
+  height: 21px;
+  margin-top: 0;
+  outline-offset: 1px;
+}
+
+@media (min-width: 900px) {
+  .md {
+    width: 112px;
+    height: 112px;
+    padding: 9px 9px 0;
+  }
+  .md.fill {
+    padding-bottom: 9px;
+  }
+  .md:not(.fill) .art {
+    width: 90px;
+    height: 60px;
+  }
+  .md .name {
+    margin-top: 9px;
+    font-size: 12px;
+  }
+  .md .code {
+    font-size: 9.5px;
+  }
+}

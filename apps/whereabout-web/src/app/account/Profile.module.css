@@ -1,0 +1,472 @@
+/* Profile dashboard (#96). --main / --accent come from the chosen theme. */
+.root {
+  --card: #fffdf8;
+  --light: #fbf6ec;
+  flex: 1;
+  color: var(--ink);
+}
+
+/* Masthead: same shape as a country page's, in the theme's main color. */
+.masthead {
+  padding: 18px 20px;
+  background: var(--main);
+  color: var(--light);
+}
+
+.inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.mastRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+}
+
+.eyebrow {
+  color: color-mix(in srgb, var(--light) 70%, transparent);
+}
+
+.name {
+  margin-top: 10px;
+  font-family: var(--fraunces);
+  font-weight: 900;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.homeBase {
+  margin-top: 8px;
+}
+
+.mastActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* Light-on-main outlined button. */
+.ghost {
+  padding: 7px 12px;
+  border: 1.4px solid var(--light);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--light);
+  font-family: var(--dm-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 1.4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Filled: the one action that matters (add companion, accept). */
+.ghostFilled {
+  background: var(--light);
+  color: var(--main);
+}
+
+.ghost:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.mastNote {
+  color: color-mix(in srgb, var(--light) 80%, transparent);
+}
+
+.photoIcon {
+  color: var(--ink-3);
+}
+
+/* Ink stats strip. */
+.stats {
+  padding: 13px 20px;
+  background: var(--ink);
+  color: var(--light);
+  text-align: center;
+  font-family: var(--dm-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 1.8px;
+}
+
+.body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 22px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.textButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--dm-mono);
+  font-size: 11.5px;
+  letter-spacing: 1.4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.textButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Companion circles: ink edge, crisp offset shadow, card and main alternating. */
+.circles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border: 1.6px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 17px;
+  text-decoration: none;
+}
+
+.circles li:nth-child(even) .circle {
+  background: var(--main);
+  color: var(--light);
+}
+
+.circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Stamp filter grid. */
+.stamps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 14px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stampButton {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 4px 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transition: transform 140ms ease-out;
+}
+
+.stampButton[aria-pressed="false"] {
+  opacity: 0.6;
+}
+
+.stampButton[aria-pressed="true"] {
+  transform: translateY(-3px) rotate(-2deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stampButton {
+    transition: none;
+  }
+}
+
+.allIcon {
+  color: var(--main);
+}
+
+.year {
+  margin-bottom: 12px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Postcard: flag ground, ink edge, offset shadow, a slight tilt. */
+.postcard {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 12px 14px 14px;
+  border: 1.6px solid var(--ink);
+  border-radius: 8px;
+  background: var(--ground);
+  color: #fff;
+  box-shadow: 4px 4px 0 var(--ink);
+  text-align: left;
+  font: inherit;
+  transform: rotate(-0.6deg);
+}
+
+.cards > :nth-child(even) .postcard {
+  transform: rotate(0.6deg);
+}
+
+button.postcard {
+  cursor: pointer;
+}
+
+.photo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 1.25;
+  overflow: hidden;
+  border: 1.6px dashed rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+}
+
+.photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoHint {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.cardStamps {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+.cardFoot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.greetings {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.place {
+  margin-top: 4px;
+  font-family: var(--fraunces);
+  font-weight: 900;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.tripName {
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Round postmark. */
+.postmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 62px;
+  height: 62px;
+  border: 1.8px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  transform: rotate(-10deg);
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.05;
+}
+
+.postmark span:first-child {
+  font-family: var(--dm-mono);
+  font-weight: 500;
+  font-size: 9.5px;
+  letter-spacing: 1px;
+}
+
+/* "+ Where to next?": dashed card, same edge and shadow as the postcards. */
+.next {
+  width: 100%;
+  padding: 26px 16px;
+  border: 1.8px dashed var(--ink);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.empty {
+  color: var(--ink-2);
+}
+
+.foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--ink-2);
+}
+
+@media (min-width: 900px) {
+  .name {
+    font-size: 56px;
+  }
+  .place {
+    font-size: 38px;
+  }
+  .postmark {
+    width: 76px;
+    height: 76px;
+    font-size: 18px;
+  }
+}
+
+/* ---- Sheets ---- */
+
+.sheetBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px 24px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.people {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.personName {
+  flex: 1;
+  min-width: 0;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.personActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.small {
+  padding: 6px 10px;
+  font-size: 11.5px;
+}
+
+/* Theme picker: main color tile with its accent chip, ink edge. */
+.themes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.themeOption {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1.4px solid var(--ink);
+  border-radius: 6px;
+  background: var(--main);
+  color: #fbf6ec;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+}
+
+.themeOption:has(input:checked) {
+  box-shadow: 0 0 0 3px #fbf6ec, 0 0 0 4.6px var(--ink);
+}
+
+.themeOption:has(input:focus-visible) {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.themeOption input {
+  position: absolute;
+  opacity: 0;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 1.4px solid var(--ink);
+  border-radius: 4px;
+  background: var(--accent);
+}
+
+.themeLabel {
+  font-family: var(--fraunces);
+  font-weight: 700;
+  font-size: 16px;
+}

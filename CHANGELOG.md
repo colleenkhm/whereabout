@@ -33,6 +33,15 @@ refactors/doc updates unless they're worth calling out.
   to visit. Everything but the name can be skipped, and Edit profile on
   the Account page brings the steps back. Staging only (behind the
   `accounts` flag); not visible on prod yet.
+- Your traveler profile on the Account page: name, home base, photo on a
+  stamp, trip and companion counts, and a postcard for every trip, grouped
+  by year. Add or edit trips (countries, dates, a name and a photo) with
+  "Where to next?", and filter postcards by tapping a country's stamp. Pick
+  one of eight profile colors in setup. Share your link to add travel
+  companions: they send a request, you accept. Companions can see each
+  other's trips; "Anyone with my link" opens your profile to everyone you
+  send it to. Staging only (behind the `accounts` flag); not visible on
+  prod yet.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 

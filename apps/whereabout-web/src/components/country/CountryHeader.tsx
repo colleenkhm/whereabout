@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import { cssVars, isWhitish, readableTextColor, type SectionColors } from "@/lib/color";
 import type { ExchangeRate, LanguageEntry } from "@/lib/types";
 import { CountryMarks } from "../AccountsGate";
 import SiteHeader from "../SiteHeader";
+import { FlagStamp } from "../Stamp";
 import { DeparturesBar } from "./LocalFacts";
 import { sortLanguages } from "./LanguageSection";
 import styles from "./CountryHeader.module.css";
@@ -44,7 +44,7 @@ export default function CountryHeader(p: Props) {
               {hasFacts && <CountryMarks isoCode={p.isoCode} />}
             </div>
             <div className={styles.flagCol}>
-              <StampFlag
+              <FlagStamp
                 isoCode={p.isoCode}
                 label={nativeName(p.name, p.languages, p.nativeNames)}
                 outlined={isWhitish(p.nav)}
@@ -55,27 +55,6 @@ export default function CountryHeader(p: Props) {
         {hasFacts && <DeparturesBar {...p} onOpen={p.onOpenDetails} onConvert={p.onOpenConverter} />}
       </div>
     </>
-  );
-}
-
-// Flag on a classic postage stamp: white paper, round-hole perforations. Sizes via CSS.
-// outlined: ink edge so a white stamp shows on a white masthead.
-function StampFlag({ isoCode, label, outlined }: { isoCode: string; label: string; outlined: boolean }) {
-  return (
-    <div className={`${styles.stampShadow} ${outlined ? styles.stampOutlined : ""}`}>
-      <div className={styles.stamp}>
-        <Image
-          className={styles.flag}
-          src={`https://flagcdn.com/w160/${isoCode.toLowerCase()}.png`}
-          alt=""
-          width={68}
-          height={46}
-          unoptimized
-        />
-        <span className={styles.stampName}>{label}</span>
-        <span className={`tk-eyebrow ${styles.stampCode}`}>{isoCode}</span>
-      </div>
-    </div>
   );
 }
 
