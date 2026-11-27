@@ -24,6 +24,11 @@ refactors/doc updates unless they're worth calling out.
 - Mark a country as Visited and/or Interested from the top of its page,
   and see your marked countries on the Account page. Staging only
   (behind the `accounts` flag); not visible on prod yet.
+- Set up your profile after creating an account: your name, who can see
+  your profile, a profile photo, and the countries you've visited or want
+  to visit. Everything but the name can be skipped, and Edit profile on
+  the Account page brings the steps back. Staging only (behind the
+  `accounts` flag); not visible on prod yet.
 - "Holidays" section on the country page — public holidays, sourced from
   Nager.Date. Data is imported; the section isn't in the app yet.
 

@@ -1,18 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import form from "@/components/country/ContributeForm.module.css";
 import { track } from "@/lib/analytics";
+import { fetchProfile, type Profile } from "@/lib/profile";
+import type { CountrySummary } from "@/lib/types";
 import { safeReturnPath, sendSignInCode, signOut, useUser, verifySignInCode } from "@/lib/auth";
 import styles from "../contribute/Contribute.module.css";
 import own from "./Account.module.css";
+import { Avatar, useAvatarUrl } from "./Avatar";
 import MarkedCountries from "./MarkedCountries";
+import ProfileSetup from "./ProfileSetup";
 
-// Sign in / create account with an emailed code, or the signed-in view.
-export default function AccountPanel() {
+// Sign in / create account with an emailed code, then profile setup, then the signed-in view.
+export default function AccountPanel({ countries }: { countries: CountrySummary[] }) {
   const user = useUser();
+  const router = useRouter();
+  // Read once on the client; the panel renders nothing user-specific on the server.
+  const [returnTo] = useState(() => (typeof window === "undefined" ? null : returnPathFromUrl()));
+  const [profile, setProfile] = useState<{ userId: string; profile: Profile | null } | null>(null);
+  const [editing, setEditing] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    let live = true;
+    fetchProfile(user.id).then((p) => live && setProfile({ userId: user.id, profile: p }));
+    return () => {
+      live = false;
+    };
+  }, [user]);
+
+  // Loaded profile for the current user; undefined while loading.
+  const current = user && profile?.userId === user.id ? profile.profile : undefined;
+  const needsSetup = current != null && !current.completedAt;
+
+  // Back to the page that sent them here, once setup is out of the way.
+  useEffect(() => {
+    if (returnTo && current?.completedAt && !editing) router.replace(returnTo);
+  }, [returnTo, current, editing, router]);
+
+  if (user && current && (needsSetup || editing)) {
+    return (
+      <ProfileSetup
+        userId={user.id}
+        profile={current}
+        countries={countries}
+        onDone={(p) => {
+          setProfile({ userId: user.id, profile: p });
+          setEditing(false);
+        }}
+      />
+    );
+  }
+
   return (
     <>
       <section className={styles.option}>
@@ -21,31 +63,52 @@ export default function AccountPanel() {
           <h2 className="sec-name">{user ? "Signed in" : "Sign in or create an account"}</h2>
         </div>
         <div className={styles.body}>
-          {user === undefined ? (
+          {user === undefined || (user && current === undefined) ? (
             <p className="s-body">Loading…</p>
-          ) : user ? (
-            <SignedIn email={user.email ?? ""} />
+          ) : user && current === null ? (
+            <p className="s-body error-text" role="alert">
+              Couldn&apos;t load your profile. Please refresh to try again.
+            </p>
+          ) : user && current ? (
+            <SignedIn email={user.email ?? ""} profile={current} onEdit={() => setEditing(true)} />
           ) : (
-            <SignInForm />
+            <SignInForm returnTo={returnTo} />
           )}
         </div>
       </section>
-      {user && <MarkedCountries />}
+      {user && current && <MarkedCountries />}
     </>
   );
 }
 
-function SignedIn({ email }: { email: string }) {
+function SignedIn({ email, profile, onEdit }: { email: string; profile: Profile; onEdit: () => void }) {
   const [busy, setBusy] = useState(false);
+  const url = useAvatarUrl(profile.avatarPath);
   return (
     <div className={styles.stack}>
-      <p className="s-body">
-        You&apos;re signed in as <b>{email}</b>.
-      </p>
-      <div>
+      <div className={own.photoRow}>
+        <Avatar url={url} size={64} />
+        <p className="s-body">
+          {profile.displayName && (
+            <>
+              <b>{profile.displayName}</b>
+              <br />
+            </>
+          )}
+          {email}
+          <br />
+          <span className="src-row">
+            {profile.visibility === "private" ? "Profile visible to: only you" : "Profile visible to: anyone with your link"}
+          </span>
+        </p>
+      </div>
+      <div className={own.actions}>
+        <button type="button" className={form.submit} onClick={onEdit} disabled={busy}>
+          EDIT PROFILE
+        </button>
         <button
           type="button"
-          className={form.submit}
+          className={`src-row ${own.textButton}`}
           disabled={busy}
           onClick={async () => {
             setBusy(true);
@@ -54,7 +117,7 @@ function SignedIn({ email }: { email: string }) {
             setBusy(false);
           }}
         >
-          {busy ? "SIGNING OUT…" : "SIGN OUT"}
+          {busy ? "Signing out…" : "Sign out"}
         </button>
       </div>
     </div>
@@ -69,9 +132,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CODE = /^\d{6,10}$/;
 
 // Two steps: email, then the code from the email. Client-only (after the session check), so window exists.
-function SignInForm() {
-  const router = useRouter();
-  const [returnTo] = useState(returnPathFromUrl);
+function SignInForm({ returnTo }: { returnTo: string | null }) {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const [step, setStep] = useState<"email" | "code">("email");
@@ -107,8 +168,7 @@ function SignInForm() {
       return;
     }
     track("sign-in");
-    // Otherwise the panel switches to the signed-in view on its own.
-    if (returnTo) router.replace(returnTo);
+    // The panel takes over from here: setup for new accounts, then back to returnTo.
   }
 
   const errorLine = error && (
