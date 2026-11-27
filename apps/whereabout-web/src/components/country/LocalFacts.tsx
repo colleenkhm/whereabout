@@ -14,7 +14,7 @@ export interface LocalFactsProps {
 }
 
 // Airport-board strip. Mobile: DETAILS under the left, CONVERT under the right. Wider: one line, no DETAILS.
-export function DeparturesBar(p: LocalFactsProps & { onOpen: () => void }) {
+export function DeparturesBar(p: LocalFactsProps & { onOpen: () => void; onConvert: () => void }) {
   const now = useNow();
   const local = now && p.timezone ? localTime(now, p.timezone) : null;
   const parts = [
@@ -44,7 +44,7 @@ export function DeparturesBar(p: LocalFactsProps & { onOpen: () => void }) {
       : []),
   ];
   const rate = p.exchangeRate;
-  // Mobile: full-cover button opens details; CONVERT is a real link stacked above it.
+  // Mobile: full-cover button opens details; CONVERT is its own button stacked above it.
   // Tablet and up: no sheet, UTC offset inline instead.
   return (
     <div className={styles.board}>
@@ -62,14 +62,9 @@ export function DeparturesBar(p: LocalFactsProps & { onOpen: () => void }) {
             DETAILS +
           </span>
           {rate && (
-            <a
-              className={styles.convert}
-              href={`https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=${rate.currencyCode}`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              CONVERT ↗
-            </a>
+            <button className={styles.convert} onClick={p.onConvert} data-umami-event="open-converter">
+              CONVERT +
+            </button>
           )}
         </span>
       </div>
@@ -121,7 +116,7 @@ export function LocalDetails(p: LocalFactsProps & { accent: string }) {
               </table>
               <SectionSource
                 notes={[`Rate updated ${new Date(rate.fetchedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`]}
-                links={[["Convert", `https://www.xe.com/currencyconverter/convert/?Amount=1&From=USD&To=${rate.currencyCode}`]]}
+                links={[]}
                 color={p.accent}
               />
             </>
@@ -134,6 +129,69 @@ export function LocalDetails(p: LocalFactsProps & { accent: string }) {
       )}
     </div>
   );
+}
+
+// Two linked fields: typing in either side fills the other.
+export function CurrencyConverter({ rate, currencyName, accent }: { rate: ExchangeRate; currencyName: string | null; accent: string }) {
+  const [edit, setEdit] = useState<{ side: "usd" | "local"; text: string }>({ side: "usd", text: "1" });
+  const amount = parseAmount(edit.text);
+  const other =
+    amount == null ? "" : edit.side === "usd" ? fixed(amount * rate.rateFromUsd) : fixed(amount / rate.rateFromUsd);
+  const usd = edit.side === "usd" ? edit.text : other;
+  const local = edit.side === "local" ? edit.text : other;
+  return (
+    <div className={styles.details}>
+      <section>
+        <label className={styles.field}>
+          <span className="s-label">US DOLLAR · USD</span>
+          <input
+            className={styles.amount}
+            inputMode="decimal"
+            autoComplete="off"
+            value={usd}
+            placeholder="0"
+            onChange={(e) => setEdit({ side: "usd", text: e.target.value })}
+          />
+        </label>
+        <div className={styles.equals} aria-hidden>
+          =
+        </div>
+        <label className={styles.field}>
+          <span className="s-label">
+            {[currencyName?.toUpperCase(), rate.currencyCode].filter(Boolean).join(" · ")}
+          </span>
+          <input
+            className={styles.amount}
+            inputMode="decimal"
+            autoComplete="off"
+            value={local}
+            placeholder="0"
+            onChange={(e) => setEdit({ side: "local", text: e.target.value })}
+          />
+        </label>
+        <div className={styles.rates}>
+          <span>$1 USD = {rateLabel(rate)}</span>
+          <span>{inverseLabel(rate)}</span>
+        </div>
+        <SectionSource
+          notes={[`Rate updated ${new Date(rate.fetchedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}`]}
+          links={[]}
+          color={accent}
+        />
+      </section>
+    </div>
+  );
+}
+
+// "1,250.5" -> 1250.5; null for blank or junk.
+function parseAmount(text: string): number | null {
+  const n = Number(text.replace(/[,\s]/g, ""));
+  return text.trim() === "" || !Number.isFinite(n) ? null : n;
+}
+
+// Plain digits so the result stays editable; whole numbers at 100+.
+function fixed(n: number): string {
+  return String(Number(n.toFixed(Math.abs(n) >= 100 ? 0 : 2)));
 }
 
 // Client-only clock (avoids a build-time time baked into HTML).

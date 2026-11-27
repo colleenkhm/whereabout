@@ -18,6 +18,10 @@ refactors/doc updates unless they're worth calling out.
 ## [Unreleased]
 
 ### Added
+- A currency converter on every country page: tap CONVERT on the time and
+  currency bar, type an amount in US dollars or the local currency, and the
+  other side fills in. Uses the live rate loaded with the page, so you no
+  longer leave the site to convert.
 - Sign in or create an account with a code sent by email, from a new Sign in
   link in the header. Staging only (behind the `accounts` flag); not
   visible on prod yet.

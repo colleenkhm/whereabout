@@ -7,6 +7,7 @@ import {
   MdLocationCity,
   MdOutlineChatBubbleOutline,
   MdOutlineBadge,
+  MdOutlineCurrencyExchange,
   MdOutlineExplore,
   MdOutlineMap,
   MdOutlineSchedule,
@@ -27,7 +28,7 @@ import BorderCountriesSection from "@/components/country/BorderCountriesSection"
 import CitiesSection from "@/components/country/CitiesSection";
 import ContributeForm from "@/components/country/ContributeForm";
 import CountryHeader from "@/components/country/CountryHeader";
-import { LocalDetails } from "@/components/country/LocalFacts";
+import { CurrencyConverter, LocalDetails } from "@/components/country/LocalFacts";
 import LanguageSection from "@/components/country/LanguageSection";
 import TalkingIcon from "@/components/icons/TalkingIcon";
 import MapSection from "@/components/country/MapSection";
@@ -185,6 +186,15 @@ export default function CountryPage({
                 accent={palette.header.accentOnWhite}
               />
             ),
+          })
+        }
+        onOpenConverter={() =>
+          rate &&
+          setSheet({
+            title: "Currency converter",
+            icon: MdOutlineCurrencyExchange,
+            colors: INK_HEAD,
+            body: <CurrencyConverter rate={rate} currencyName={facts.currencyName} accent={palette.header.accentOnWhite} />,
           })
         }
       />
