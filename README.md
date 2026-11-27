@@ -92,6 +92,12 @@ Local runs always use the dev Supabase project.
   component hides the UI but still ships its code (see HANDOFF.md
   2026-11-25, account creation).
 
+  **Before turning `accounts` on in prod:** deploy `send-auth-email` to
+  prod and enable its Send Email hook there (setup steps are at the top of
+  `supabase/functions/send-auth-email/index.ts`). Skip
+  `AUTH_EMAIL_SUBJECT_PREFIX`, which is dev only. Without the hook,
+  prod sends Supabase's link-only email, and sign-in by code can't work.
+
 All `.env*` files are gitignored.
 
 ### GitHub secrets

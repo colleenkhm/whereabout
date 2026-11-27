@@ -1,3 +1,18 @@
+/* Inline link-style action ("Send a new code"). */
+.textButton {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.textButton:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 .groupHead {
   margin-bottom: 8px;
   color: var(--ink);

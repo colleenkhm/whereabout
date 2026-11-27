@@ -17,9 +17,8 @@ export function authClient(): SupabaseClient {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      // Magic link lands on /account?code=…; the client exchanges it.
-      detectSessionInUrl: true,
-      flowType: "pkce",
+      // Sign-in is by emailed code, never a link back to the site.
+      detectSessionInUrl: false,
       storageKey: "whereabout-auth",
     },
   });
@@ -38,39 +37,25 @@ export function useUser(): User | null | undefined {
   return user;
 }
 
-// Where to go after the magic link signs someone in (e.g. back to a country page).
-// localStorage, not the redirect URL: the link opens in a new tab, and Supabase's redirect list stays exact.
-const RETURN_KEY = "whereabout-return-to";
-
 // Same-site paths only.
 export const safeReturnPath = (path: string | null): string | null =>
   path && /^\/(?![/\\])/.test(path) ? path : null;
 
-export function takeReturnPath(): string | null {
-  try {
-    const path = localStorage.getItem(RETURN_KEY);
-    localStorage.removeItem(RETURN_KEY);
-    return safeReturnPath(path);
-  } catch {
-    return null;
-  }
-}
-
-export async function sendMagicLink(email: string, returnTo?: string | null): Promise<string | null> {
-  try {
-    if (returnTo) localStorage.setItem(RETURN_KEY, returnTo);
-    else localStorage.removeItem(RETURN_KEY);
-  } catch {
-    // Storage blocked: sign-in still works, just lands on /account.
-  }
-  const { error } = await authClient().auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: `${window.location.origin}/account` },
-  });
+// Emails a one-time code; also creates the account on first use.
+export async function sendSignInCode(email: string): Promise<string | null> {
+  const { error } = await authClient().auth.signInWithOtp({ email });
   if (!error) return null;
   return error.status === 429
-    ? "Too many sign-in emails. Please wait a few minutes and try again."
-    : "Couldn't send the sign-in link. Please try again.";
+    ? "We're sending a lot of sign-in codes right now. Please try again in a few minutes."
+    : "Couldn't send a code. Please try again.";
+}
+
+export async function verifySignInCode(email: string, code: string): Promise<string | null> {
+  const { error } = await authClient().auth.verifyOtp({ email, token: code, type: "email" });
+  if (!error) return null;
+  return error.status === 429
+    ? "Too many tries. Please wait a minute and try again."
+    : "That code is wrong or has expired. Check it, or send a new one.";
 }
 
 export async function signOut(): Promise<void> {
